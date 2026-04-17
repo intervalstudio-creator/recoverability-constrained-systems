@@ -186,3 +186,126 @@ This case demonstrates that:
 - centralized dependency creates structural risk  
 - absence of appeal or re-entry is sufficient to reject the system  
 - recoverability constraints require multi-platform redundancy  
+
+---
+
+## Case 3 — Medical Result Communication Delay or Misreporting
+
+### Case summary
+A patient requires a diagnostic test result for clinical decision-making.
+
+The test is performed, but:
+
+- the result is not delivered in time, or
+- the result is communicated incorrectly (e.g., by non-clinical staff), or
+- access to the result is delayed or blocked
+
+### System state
+
+System components:
+
+- patient
+- laboratory system
+- communication interface (receptionist / phone / report system)
+- clinical decision pathway
+
+Observed issues:
+
+- result exists but is not accessible in time
+- communication is mediated by non-authoritative channel
+- no guarantee of accuracy in transmission
+
+### Boundary evaluation
+
+- Can the correct state be detected in time? → NO / UNKNOWN  
+- Can action be taken in time? → NO  
+- Can recovery occur if information is wrong? → NO  
+
+### Failure classification
+
+- communication delay
+- information integrity failure
+- dependency on non-clinical relay
+- response blockage due to missing data
+
+### Decision
+
+- NON-ADMISSIBLE  
+
+→ clinical decision must not proceed under uncertain or delayed result conditions  
+
+### Required action
+
+- direct access to verified result required  
+- escalation to laboratory or clinician  
+- bypass unreliable communication channel  
+
+### Validated operational conclusion
+
+This case demonstrates that:
+
+- delay in critical information is equivalent to loss of detection  
+- incorrect communication introduces unrecoverable risk  
+- non-authoritative transmission channels are non-admissible  
+- recoverability requires direct, verifiable access to clinical data in time
+
+- ---
+
+## Case 4 — Infrastructure Failure: Power Loss Without Recoverable Backup
+
+### Case summary
+A system dependent on continuous electrical power experiences an outage.
+
+A backup system (generator, battery, or redundancy) is either:
+
+- not present
+- not activated in time
+- insufficient to sustain required operation
+
+### System state
+
+System components:
+
+- primary power source
+- backup power system
+- dependent system (device, infrastructure, or service)
+
+Observed conditions:
+
+- loss of primary power
+- delayed or failed backup activation
+- insufficient backup duration
+
+### Boundary evaluation
+
+- Can the system maintain operation in time? → NO  
+- Can response occur before failure? → NO  
+- Can recovery restore continuity in time? → NO  
+
+### Failure classification
+
+- infrastructure dependency failure  
+- insufficient redundancy  
+- response delay beyond recoverability window  
+- continuity failure under load or outage  
+
+### Decision
+
+- NON-ADMISSIBLE  
+
+→ system must not rely on this configuration for continuity-critical operation  
+
+### Required action
+
+- implement redundant, independent power sources  
+- ensure automatic activation within required time  
+- validate backup duration against worst-case scenarios  
+
+### Validated operational conclusion
+
+This case demonstrates that:
+
+- backup systems must be executable in time, not just present  
+- delayed activation is equivalent to absence  
+- insufficient duration is equivalent to failure  
+- infrastructure without guaranteed recoverability is non-admissible  
