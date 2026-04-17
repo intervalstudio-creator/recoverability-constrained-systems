@@ -1,4 +1,10 @@
-Recoverability-Constrained Systems — execution-ready system for admissible action under irreversibility constraints.
+Recoverability-Constrained Systems — Execution-Ready System for Admissible Action Under Irreversibility Constraints
+
+System (Authoritative Structural Index — MI-001):
+https://doi.org/10.5281/zenodo.19583410
+
+Operational Closure and Failure Atlas:
+https://doi.org/10.5281/zenodo.19582586
 
 # Recoverability-Constrained Systems
 
