@@ -112,3 +112,77 @@ This case demonstrates that:
 - uncertainty in state is sufficient to trigger escalation
 - non-specialists can detect boundary violations using the recoverability rule
 - the recoverability condition converts uncertainty into actionable intervention
+
+---
+
+## Case 2 — Research Platform Account Termination Without Recovery Path (Figshare)
+
+### Source
+- Operational case DOI: https://doi.org/10.5281/zenodo.19597602
+
+### Case summary
+A research account containing over 120 interdependent publications forming a unified system was disabled by the hosting platform.
+
+The platform:
+
+- removed access to all hosted materials
+- provided no appeal mechanism
+- offered only metadata and file export
+
+### System state
+The platform functioned as a critical dependency for:
+
+- access
+- verification
+- citation integrity
+- continuity of the research corpus
+
+System characteristics:
+
+- single-point dependency
+- non-fragmentable document structure
+- continuity dependent on persistent access
+
+### Boundary evaluation
+
+- Can access be restored in time? → NO  
+- Can escalation resolve the state? → NO  
+- Can the system recover continuity? → NO  
+
+### Failure classification
+
+- access and reachability failure  
+- re-entry failure  
+- dependency collapse  
+- escalation resolution failure  
+- non-bypassable control  
+- recoverability condition failure  
+
+### Decision
+
+- RECOVERABILITY = NOT ESTABLISHABLE  
+- NON-ADMISSIBLE  
+
+→ continuation of reliance on this platform is not allowed  
+
+### Action taken
+
+- system reconstituted using:
+  - Zenodo
+  - GitHub
+  - independent storage
+
+### Outcome
+
+- removal of single-point dependency  
+- restoration of access pathways  
+- re-establishment of continuity  
+
+### Validated operational conclusion
+
+This case demonstrates that:
+
+- any platform without bounded-time recovery is non-admissible  
+- centralized dependency creates structural risk  
+- absence of appeal or re-entry is sufficient to reject the system  
+- recoverability constraints require multi-platform redundancy  
