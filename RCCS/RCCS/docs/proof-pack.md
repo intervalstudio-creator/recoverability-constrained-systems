@@ -308,4 +308,60 @@ This case demonstrates that:
 - backup systems must be executable in time, not just present  
 - delayed activation is equivalent to absence  
 - insufficient duration is equivalent to failure  
-- infrastructure without guaranteed recoverability is non-admissible  
+- infrastructure without guaranteed recoverability is non-admissible
+
+- ---
+
+## Case 5 — Healthcare System Delay: Waiting List Without Guaranteed Timely Intervention
+
+### Case summary
+A patient requires specialist care, diagnostic imaging, or surgical intervention but is placed on a waiting list without guaranteed timing or continuous monitoring.
+
+### System state
+
+System components:
+
+- patient
+- healthcare system
+- scheduling / allocation system
+
+Observed conditions:
+
+- known need for intervention
+- delayed or undefined response time
+- absence of continuous reassessment
+- no guaranteed escalation pathway
+
+### Boundary evaluation
+
+- Can harm be prevented in time? → UNKNOWN / NO  
+- Can action occur before deterioration? → NO  
+- Can recovery reverse harm if delay causes damage? → UNKNOWN / NO  
+
+### Failure classification
+
+- time failure
+- response delay beyond recoverability window
+- absence of active monitoring
+- dependency on passive scheduling system
+
+### Decision
+
+- NON-ADMISSIBLE  
+
+→ system must not rely on waiting state for continuity-critical care  
+
+### Required action
+
+- escalation required  
+- alternative pathway required  
+- continuous reassessment required  
+
+### Validated operational conclusion
+
+This case demonstrates that:
+
+- delay is equivalent to loss of recoverability  
+- passive waiting is not a neutral state  
+- absence of guaranteed timing is sufficient to trigger non-admissibility  
+- healthcare systems must actively maintain recoverability during delay  
