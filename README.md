@@ -29,6 +29,7 @@ This repository contains:
 
 All components are governed by a single admissibility condition and must be interpreted together.
 
+- RCCS validated proof cases
 ---
 
 ## Start
