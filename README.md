@@ -1,2 +1,44 @@
-# recoverability-constrained-systems
+Recoverability-Constrained Systems — execution-ready system for admissible action under irreversibility constraints.
+
+# Recoverability-Constrained Systems
+
 Execution-ready bundle for Recoverability-Constrained Systems across communication, continuity, and operational deployment.
+
+---
+
+## Invariant
+
+A system may act only while recoverability can be established in time under real conditions.
+
+If this cannot be established:
+
+- continuation is non-admissible  
+- execution does not occur  
+
+---
+
+## Structure
+
+This repository contains:
+
+- RCCS (communication-domain implementation)
+- Continuity Engine (execution substrate)
+- Master Documents (authoritative framework)
+- Deployment and operational protocols
+- Preserved source artifacts
+
+All components are governed by a single admissibility condition and must be interpreted together.
+
+---
+
+## Start
+
+Open:
+
+`README_FINAL_START_HERE.md`
+
+---
+
+## Canonical DOI
+
+https://doi.org/10.5281/zenodo.19583410
