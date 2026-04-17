@@ -41,7 +41,8 @@ It integrates:
 - communication-domain boundary evaluation
 
 This does not modify the invariant or core system logic.
-It completes execution under real-world constraints.
+It completes execution under real-world constraints.}
+Includes validated real-world proof cases in `docs/proof-pack.md`.
 
 ## Communication-domain boundary evaluation
 
