@@ -1,0 +1,16 @@
+Recoverability-Constrained Communication System
+
+A message may propagate only while truth remains recoverable in time under real conditions.
+
+Test a platform:
+- Can a claim be verified in time?
+- Can it be challenged in time?
+- Can correction reach the same audience?
+- Does communication still work if WiFi, platform access, or a single device fails?
+
+If not:
+-> that platform is operating beyond recoverability
+
+RCCS removes virality without accountability.
+It enforces persistent identity, structured challenge, visible message state, correction-based propagation,
+and execution continuity across human, paper, and offline runtime forms.

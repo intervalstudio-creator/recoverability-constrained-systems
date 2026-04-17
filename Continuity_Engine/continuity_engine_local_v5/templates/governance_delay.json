@@ -1,0 +1,39 @@
+{
+  "title": "Governance escalation delay under unreachable authority",
+  "domain": "governance",
+  "summary": "A continuity-critical escalation exists on paper but cannot reach a real accountable entity within the recoverability window.",
+  "irreversible_outcomes": ["delayed intervention", "loss of bounded-time correction"],
+  "time_to_irreversibility_minutes": 90,
+  "entities": [
+    {"name": "Operator", "type": "human", "availability": 1.0, "reachable": true, "verifiable": true},
+    {"name": "Duty Manager", "type": "team", "availability": 0.2, "reachable": false, "verifiable": true},
+    {"name": "Escalation Platform", "type": "interface", "availability": 0.6, "reachable": true, "verifiable": false}
+  ],
+  "dependencies": [
+    {"source": "Operator", "target": "Duty Manager", "kind": "authority", "criticality": 0.95, "fallback_exists": false},
+    {"source": "Operator", "target": "Escalation Platform", "kind": "communication", "criticality": 0.7, "fallback_exists": false}
+  ],
+  "intervals": [
+    {"name": "detection", "current_minutes": 10, "max_minutes": 10},
+    {"name": "interpretation", "current_minutes": 10, "max_minutes": 10},
+    {"name": "decision", "current_minutes": 15, "max_minutes": 15},
+    {"name": "response", "current_minutes": 30, "max_minutes": 20},
+    {"name": "enforcement", "current_minutes": 20, "max_minutes": 15}
+  ],
+  "recovery_paths": [
+    {
+      "name": "authority handoff",
+      "executable": true,
+      "bounded_minutes": 30,
+      "required_entities": ["Duty Manager"],
+      "required_resources": [],
+      "degraded_mode_valid": false
+    }
+  ],
+  "pressure": 0.55,
+  "resonance": 0.25,
+  "future_state_preserved": true,
+  "signal_sources": [
+    {"name": "manager_ack", "source": "Escalation Platform", "current_value": false, "verifiable": false, "stale": true, "conflicted": true, "observed_minutes_ago": 45, "max_age_minutes": 5}
+  ]
+}

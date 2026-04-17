@@ -1,0 +1,27 @@
+Subject: Recoverability-Constrained Communication System - Execution-Complete Safe Alternative to Viral Platforms
+
+Current platforms allow irreversible misinformation because messages spread before truth can be recovered.
+RCCS defines a communication channel where a message may propagate only while it can be verified,
+challenged, corrected, and still executed under real conditions.
+
+This merged edition adds the execution-complete layer:
+- human communication fallback
+- paper continuity
+- offline peer-to-peer runtime
+
+This means the communication model does not collapse when infrastructure, platforms, or single devices fail.
+
+Included:
+- master overview
+- system specification
+- UI and UX model
+- MVP implementation specification
+- governance protocol
+- API and database schema
+- architecture
+- publication and institutional communication blocks
+
+Core invariant:
+A message may propagate only while its validity remains recoverable in time under real conditions.
+If not:
+-> propagation does not occur

@@ -1,0 +1,126 @@
+{
+  "name": "RCCS API",
+  "version": "1.1.0",
+  "invariant": "A message may propagate only while its validity remains recoverable in time under real conditions.",
+  "execution_forms": [
+    "human",
+    "paper",
+    "offline_runtime"
+  ],
+  "entities": {
+    "identity": [
+      "id",
+      "type",
+      "verification_status",
+      "trust_state",
+      "created_at"
+    ],
+    "message": [
+      "id",
+      "author_id",
+      "claim",
+      "context",
+      "reference_url",
+      "state",
+      "propagation_level",
+      "carrier",
+      "ack_required",
+      "created_at"
+    ],
+    "challenge": [
+      "id",
+      "message_id",
+      "challenger_id",
+      "challenge_type",
+      "reason",
+      "state",
+      "created_at"
+    ],
+    "resolution": [
+      "id",
+      "message_id",
+      "outcome",
+      "summary",
+      "resolved_at"
+    ],
+    "exposure": [
+      "id",
+      "message_id",
+      "viewer_id",
+      "seen_at",
+      "correction_delivered"
+    ],
+    "acknowledgment": [
+      "id",
+      "message_id",
+      "actor_id",
+      "ack_type",
+      "created_at"
+    ],
+    "relay": [
+      "id",
+      "message_id",
+      "from_actor_id",
+      "to_actor_id",
+      "carrier",
+      "created_at"
+    ]
+  },
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/identities/register"
+    },
+    {
+      "method": "POST",
+      "path": "/messages"
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{id}"
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{id}/challenge"
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{id}/support"
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{id}/resolve"
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{id}/acknowledge"
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{id}/relay"
+    },
+    {
+      "method": "GET",
+      "path": "/feed"
+    },
+    {
+      "method": "GET",
+      "path": "/identities/{id}"
+    }
+  ],
+  "feed_rules": {
+    "default": "local_only",
+    "elevation": [
+      "no unresolved critical challenges",
+      "bounded contradiction rate",
+      "identity integrity preserved",
+      "correction reachability preserved"
+    ],
+    "suppression": [
+      "invalid state",
+      "unverified plus critical contestation",
+      "correction failure",
+      "acknowledgment failure on continuity-critical messages"
+    ]
+  }
+}

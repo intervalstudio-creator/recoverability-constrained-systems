@@ -1,0 +1,55 @@
+{
+  "title": "Identity recovery under offline fallback",
+  "domain": "identity",
+  "summary": "Remote identity service is unavailable, but a local fallback path may preserve continuity.",
+  "irreversible_outcomes": ["Extended lockout", "Loss of account access during critical window"],
+  "time_to_irreversibility_minutes": 120,
+  "entities": [
+    {"name": "User", "type": "human", "availability": 1.0, "reachable": true, "verifiable": true},
+    {"name": "Local Support", "type": "team", "availability": 0.9, "reachable": true, "verifiable": true},
+    {"name": "Remote Identity API", "type": "external_dependency", "availability": 0.2, "reachable": false, "verifiable": false}
+  ],
+  "dependencies": [
+    {"source": "User", "target": "Remote Identity API", "kind": "dependency", "criticality": 0.9, "fallback_exists": true},
+    {"source": "User", "target": "Local Support", "kind": "fallback", "criticality": 0.7, "fallback_exists": true}
+  ],
+  "intervals": [
+    {"name": "detection", "current_minutes": 5, "max_minutes": 10},
+    {"name": "interpretation", "current_minutes": 5, "max_minutes": 10},
+    {"name": "decision", "current_minutes": 10, "max_minutes": 15},
+    {"name": "response", "current_minutes": 10, "max_minutes": 20},
+    {"name": "enforcement", "current_minutes": 10, "max_minutes": 20},
+    {"name": "restoration", "current_minutes": 20, "max_minutes": 30},
+    {"name": "verification", "current_minutes": 10, "max_minutes": 15}
+  ],
+  "recovery_paths": [
+    {
+      "name": "Local manual recovery",
+      "executable": true,
+      "bounded_minutes": 20,
+      "required_entities": ["Local Support"],
+      "required_resources": [],
+      "degraded_mode_valid": true
+    }
+  ],
+  "pressure": 0.2,
+  "resonance": 0.1,
+  "future_state_preserved": true,
+  "connectivity": {
+    "mode": "offline",
+    "network_required_for_primary_path": true,
+    "network_required_for_local_use": false,
+    "fallback_local_mode_available": true,
+    "remote_sync_enabled": false,
+    "certificate_dependencies": [
+      {
+        "name": "identity_api_client_cert",
+        "required_for": "client_auth",
+        "status": "unreachable",
+        "renewable_in_time": false,
+        "fallback_exists": true,
+        "continuity_critical": true
+      }
+    ]
+  }
+}

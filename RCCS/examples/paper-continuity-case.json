@@ -1,0 +1,11 @@
+{
+  "state_visible": true,
+  "time_to_irreversibility": 45,
+  "time_to_detection": 5,
+  "time_to_response": 10,
+  "time_to_recovery": 40,
+  "dependencies_ok": true,
+  "challengeable": true,
+  "correctable": false,
+  "expected": "NON_ADMISSIBLE_DO_NOT_PROPAGATE"
+}
