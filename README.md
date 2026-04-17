@@ -11,6 +11,18 @@ https://doi.org/10.5281/zenodo.19582586
 Execution-ready bundle for Recoverability-Constrained Systems across communication, continuity, and operational deployment.
 
 ---
+## Execution Layer (Runnable)
+
+AEX — Admissibility Execution Layer
+
+Minimal executable system to evaluate real-world decisions in time.
+
+→ If harm cannot be detected, acted on, or recovered in time:
+→ STOP / ESCALATE / CONTAIN
+
+Run it here:
+https://github.com/intervalstudio-creator/recoverability-constrained-systems/tree/main/AEX
+---
 
 ## Invariant
 
