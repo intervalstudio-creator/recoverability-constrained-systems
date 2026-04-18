@@ -28,20 +28,23 @@ under a single invariant.
 
 Canonical Structure (Read in Order)
 
-1. MI-001 — Master Index (Authoritative Structural Index)
+MI-001 — Master Index (Authoritative Structural Index)
 https://doi.org/10.5281/zenodo.19583410
 
-2. CE-004 — Minimal Executable Core and Adversarial Structural Closure
+CE-004 — Minimal Executable Core and Adversarial Structural Closure
 https://doi.org/10.5281/zenodo.19643189
 
-3. CE-003 — Recoverability Condition for Admissible Action
+CE-003 — Recoverability Condition for Admissible Action
 https://doi.org/10.5281/zenodo.19637081
 
-4. LD-002 — Recoverability-Constrained Admissibility Act (RCAA)
+LD-002 — Recoverability-Constrained Admissibility Act (RCAA)
 https://doi.org/10.5281/zenodo.19637946
 
-5. EX-006 — Execution Closure Layer (Detection, Enforcement, and Actuation)
+EX-006 — Execution Closure Layer (Detection, Enforcement, and Actuation)
 https://doi.org/10.5281/zenodo.19643413
+
+PB-005 — Universal Admissibility Evaluation Standard (UAES)
+https://doi.org/10.5281/zenodo.19644299
 
 Run the System (Immediate Use)
 
@@ -58,6 +61,7 @@ Continuity_Engine/continuity_engine_local_v5/
 Then follow:
 
 INSTALL_AND_RUN.md
+
 Execution Rule
 
 A system may continue only if all of the following are established in time under real conditions:
@@ -132,6 +136,9 @@ https://doi.org/10.5281/zenodo.19637946
 
 EX-006
 https://doi.org/10.5281/zenodo.19643413
+
+PB-005
+https://doi.org/10.5281/zenodo.19644299
 
 Final
 
