@@ -1,45 +1,92 @@
-# ULTIMATE RECOVERY BUNDLE — START HERE
+# Recoverability-Constrained Systems — Start Here
 
-This package consolidates the main execution-ready materials into one bundle so nothing critical remains split across separate downloads.
+---
 
-## Top-level contents
+## Core Condition
 
-- `RCCS/`
-  - Recoverability-Constrained Communication System
-  - structured execution repo
-  - original preserved RCCS artifacts included
-- `Continuity_Engine/`
-  - Continuity Engine installer and related package contents
-- `Master_Documents/`
-  - authoritative Master Index PDF
-  - Minimal Execution Pack PDF
-- `Preserved_Source_Bundles/`
-  - original zip bundles preserved without loss
+A system may act only while recoverability can be established in time under real conditions.
 
-## Recommended order
+If this cannot be established:
 
-1. Read `Master_Documents/Recoverability-Constrained_Systems_Master_Index.pdf`
-2. Read `Master_Documents/Recoverability-Constrained_Systems_Minimal_Execution_Pack.pdf`
-3. Open `RCCS/README.md`
-4. Open the Continuity Engine package contents
-5. Use preserved source bundles only if you need exact prior packaged forms
+→ continuation is non-admissible  
+→ execution does not occur  
 
-## Purpose
+---
 
-This bundle is intended to reduce fragmentation and preserve:
+## Use This Immediately
 
-- authoritative framework logic
-- RCCS execution repository
-- continuity engine package
-- prior packaged artifact forms
+To evaluate any system, decision, or situation:
+
+Ask:
+
+- Can it be detected in time under real conditions?  
+- Can it be acted on in time?  
+- Can it be recovered in time if wrong?  
+
+If any answer is:
+
+- No  
+- Unknown  
+
+→ STOP / ESCALATE / CONTAIN  
+
+Unknown = non-admissible  
+
+---
+
+## What This Repository Contains
+
+- **RCCS** — communication system implementation and validated cases  
+- **Continuity Engine** — execution substrate  
+- **Master Documents** — authoritative framework (Master Index, core records)  
+- **Preserved Source Bundles** — original artifacts without loss  
+
+All components follow the same admissibility condition.
+
+---
+
+## If You Want to Understand the System
+
+Read:
+
+- Master Index  
+- Minimal Executable Core  
+- Execution Closure Layer  
+
+---
+
+## If You Want to Go Deeper
+
+- Open `RCCS/README.md`  
+- Explore the Continuity Engine  
+- Review preserved source bundles if needed  
+
+---
 
 ## Important
 
-This bundle preserves materials together, but real-world deployment still depends on:
+This system does not depend on installation to be used.
 
-- installation
-- testing
-- proof under real conditions
-- execution in the target environment
+Real-world deployment depends on:
 
-No partial interpretation is valid.
+- detection in time  
+- action in time  
+- recovery in time  
+
+If these cannot be established:
+
+→ execution does not occur  
+
+---
+
+## Final
+
+This is not a collection of files.
+
+It is a constraint on continuation.
+
+If recoverability cannot be established in time under real conditions:
+
+→ execution does not occur  
+
+No further condition applies.
