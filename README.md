@@ -1,11 +1,21 @@
 # Recoverability-Constrained Systems  
 ## Execution Layer and Live Admissibility Engine
 
-**Live Demo**  
-https://intervalstudio-creator.github.io/recoverability-constrained-systems/
+---
 
-**Authoritative Master Index (DOI)**  
-https://doi.org/10.5281/zenodo.19583410
+## Entry Points
+
+- **Live Execution (Demo)**  
+  https://intervalstudio-creator.github.io/recoverability-constrained-systems/
+
+- **Authoritative Master Index (DOI)**  
+  https://doi.org/10.5281/zenodo.19583410  
+
+- **Documented Real Case (NHS Transport Failure)**  
+  https://zenodo.org/records/19600917  
+
+- **Website**  
+  https://intervalstudio.org  
 
 ---
 
@@ -18,7 +28,33 @@ If this cannot be established:
 - continuation is non-admissible  
 - execution does not occur  
 
-This condition applies to all domains, all actors, and all paths of continuation, including known, unknown, missing, latent, emergent, and adversarial conditions.
+This condition applies to all domains, all actors, and all paths of continuation, including known, unknown, missing, latent, emergent, adversarial, and future conditions.
+
+---
+
+## System Layers
+
+The system operates as a unified, non-fragmentable architecture:
+
+1. **Invariant Layer**  
+   Defines admissibility condition (recoverability constraint)  
+
+2. **Structural Layer**  
+   Master Index and formal system definition  
+
+3. **Execution Layer**  
+   Runtime systems enforcing admissibility  
+
+4. **Interface Layer**  
+   Live demo, tools, and interaction surfaces  
+
+5. **Domain Layer**  
+   Real-world implementations (healthcare, infrastructure, legal, identity, etc.)  
+
+6. **Preservation Layer**  
+   Redundant copies ensuring continuity and non-loss  
+
+No layer may contradict or override the invariant.
 
 ---
 
@@ -107,13 +143,27 @@ To deploy or replicate:
 
 ---
 
-## Repository Structure
+## System Architecture (Top-Level)
 
-- `index.html` — live recoverability engine  
-- `Master_Documents/` — system definition and architecture  
-- `RCCS/` — domain implementations and cases  
-- `Continuity_Engine/` — runtime and execution components  
-- `Preserved_Source_Bundles/` — continuity-preserving archives  
+The repository is organized as a single system:
+
+- **Core Definition**  
+  `Master_Documents/` — authoritative system definition  
+
+- **Execution Layer**  
+  `index.html` — live admissibility engine  
+
+- **Runtime Systems**  
+  `Continuity_Engine/` — execution components  
+
+- **Domain Implementations**  
+  `RCCS/` — applied systems and cases  
+
+- **Preservation Layer**  
+  `Preserved_Source_Bundles/` — continuity-preserving archives  
+
+- **Operational Interfaces**  
+  `INSTALL_AND_RUN.md`, `DEPLOYMENT_CHECKLIST.md`  
 
 ---
 
@@ -121,7 +171,7 @@ To deploy or replicate:
 
 The authoritative definition of the system is the Master Index:
 
-https://doi.org/10.5281/zenodo.19583410
+https://doi.org/10.5281/zenodo.19583410  
 
 This repository does not override or redefine the system.
 
