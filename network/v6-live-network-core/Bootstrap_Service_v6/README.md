@@ -37,3 +37,6 @@ This service enables nodes to discover each other and form a coordinated network
 ```bash
 pip install -r requirements.txt
 python bootstrap_server.py --port 9000
+
+Windows:
+run_bootstrap_windows.bat
