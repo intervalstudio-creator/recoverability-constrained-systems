@@ -1,85 +1,48 @@
-# Continuity Node v6
+# Continuity Node v6 — Bootstrap-Aware Network Node
 
-Distributed execution node operating under recoverability constraints.
+This node upgrades the previous node packages by connecting to a live bootstrap service.
 
-Each node evaluates, propagates, and enforces admissible continuation in real time.
+## Added in v6
+- bootstrap registration
+- live peer discovery through bootstrap
+- heartbeat to bootstrap
+- peer sync through discovered nodes
+- local-first messaging and relay queue
+- export/import/backup
+- acknowledgments
+- event log
 
----
-
-## Purpose
-
-- run local execution environment  
-- exchange messages with peers  
-- synchronize state across network  
-- enforce continuation boundary  
-
----
-
-## Core Principle
-
-A system may act only while recoverability can be established in time under real conditions.
-
-If this cannot be established:
-
-→ continuation is non-admissible  
-→ execution does not occur  
-
----
-
-## Capabilities
-
-- local-first operation  
-- peer discovery via bootstrap  
-- message propagation  
-- relay queue and retry logic  
-- state synchronization  
-- independent enforcement  
-
----
-
-## Key Files
-
-- `node.py` — main node service  
-- `data/messages.json` — local messages  
-- `data/peers.json` — known peers  
-- `data/relay_queue.json` — pending propagation  
-- `requirements.txt` — dependencies  
-
----
-
-## Run
-
+## Install
 ```bash
 pip install -r requirements.txt
+```
+
+## Start bootstrap first
+```bash
+python bootstrap_server.py --port 9000
+```
+
+## Run node
+```bash
 python node.py --port 8080 --name node-1 --bootstrap http://127.0.0.1:9000
+```
 
-Run additional nodes:
+## Run more nodes
+```bash
 python node.py --port 8081 --name node-2 --bootstrap http://127.0.0.1:9000
+python node.py --port 8082 --name node-3 --bootstrap http://127.0.0.1:9000
+```
 
-Interface
+Open:
+- http://127.0.0.1:8080
+- http://127.0.0.1:8081
+- http://127.0.0.1:8082
 
-Open in browser:
+## Fast local test
+1. Start bootstrap
+2. Start 2 or 3 nodes
+3. Post on node 1
+4. Click Sync Now on the others
 
-http://127.0.0.1:8080
-
-Behavior
-Nodes register with bootstrap
-Discover peers dynamically
-Exchange and propagate messages
-Maintain local and shared state
-
-If network is unavailable:
-
-→ node continues locally
-→ synchronization resumes when connectivity returns
-
-Role in System
-
-There is no central controller.
-
-Each node independently enforces the same boundary condition.
-
-The network extends coordination.
-
-It does not override admissibility.
-
+## Rule
+If you cannot detect, act, and recover in time → stop.
