@@ -31,6 +31,20 @@ Release assets include:
 - Recoverability-Constrained-Systems_RCEC-v2_Unified-Runtime_Publication-Bundle.zip
 - Recoverability-Constrained-Systems_RCEC-v2_AEX_Minimal-Execution-Layer_Publication-Bundle.zip
 
+
+---
+## Live Network Layer (v6)
+
+This repository now includes a live coordinated network layer:
+
+- Bootstrap service for node registration and peer discovery
+- Continuity nodes with relay, sync, and distributed coordination
+
+Path:
+`/network/v6-live-network-core/`
+
+This is the first live network coordination layer of the system.
+
 ---
 
 ## System Definition
