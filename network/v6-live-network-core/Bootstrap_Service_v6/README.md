@@ -1,42 +1,33 @@
-# Bootstrap Service v6
+# Continuity Network v6 — Bootstrap Service
 
-Entry point for the distributed network layer.
+This is the first live network layer for the continuity network.
 
-This service enables nodes to discover each other and form a coordinated network.
+## What it does
+- node registration
+- peer directory
+- heartbeat / liveness
+- network-visible bootstrap discovery
+- no central messaging authority, only coordination
 
----
-
-## Purpose
-
-- register active nodes  
-- maintain a live registry  
-- provide peer discovery  
-- enable network formation  
-
----
-
-## How it works
-
-1. A node starts and connects to the bootstrap service  
-2. The node registers its address  
-3. The bootstrap stores it in the registry  
-4. Other nodes query the registry to discover peers  
-
----
-
-## Key Files
-
-- `bootstrap_server.py` — main service  
-- `registry.json` — active nodes  
-- `requirements.txt` — dependencies  
-
----
-
-## Run
-
+## Install
 ```bash
 pip install -r requirements.txt
-python bootstrap_server.py --port 9000
+```
 
-Windows:
-run_bootstrap_windows.bat
+## Run
+```bash
+python bootstrap_server.py --port 9000
+```
+
+Open:
+- http://127.0.0.1:9000
+
+## Endpoints
+- `/api/register`
+- `/api/heartbeat`
+- `/api/peers`
+- `/api/health`
+
+## Purpose
+This is not the whole production stack.
+It is the first required live coordination service so nodes can discover each other beyond manual configuration.
