@@ -19,6 +19,20 @@
 
 ---
 
+## Latest Release (v2.0.0)
+
+Cross-domain publication bundles, including the first domain-level energy and microgrid implementation (RCEC v2):
+
+- GitHub Release:
+  https://github.com/intervalstudio-creator/recoverability-constrained-systems/releases/tag/v2.0.0
+
+Release assets include:
+
+- Recoverability-Constrained-Systems_RCEC-v2_Unified-Runtime_Publication-Bundle.zip
+- Recoverability-Constrained-Systems_RCEC-v2_AEX_Minimal-Execution-Layer_Publication-Bundle.zip
+
+---
+
 ## System Definition
 
 A system may act only while recoverability can be established, in time and under real conditions, as sufficient to prevent irreversible transition.
@@ -99,6 +113,8 @@ It provides:
 It is not a standalone definition of the system.
 
 All components are valid only insofar as they preserve identical admissibility outcomes under the invariant defined in the Master Index.
+
+This repository is cross-domain. Energy and microgrid control (RCEC v2) is included as a domain-level implementation within the broader unified execution system.
 
 ---
 
