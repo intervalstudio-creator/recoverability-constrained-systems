@@ -195,6 +195,13 @@ All implementations, demonstrations, and derived artifacts must preserve identic
 
 ---
 
+## Domain Implementations
+
+- Communication Systems (RCCS):
+https://github.com/intervalstudio-creator/recoverability-constrained-communication-system
+
+---
+
 ## Continuity Condition
 
 If any required condition, path, dependency, or recovery mechanism cannot be established in time under real conditions:
