@@ -81,6 +81,14 @@ function loadMedicationCase() {
   document.getElementById("recovery_path_verified").checked = false;
   document.getElementById("critical_unknowns_present").checked = true;
   document.getElementById("dependency_unavailable").checked = true;
+
+  // Set medication defaults in the visible form
+  document.getElementById("medication_class").value = "benzodiazepine";
+  document.getElementById("dose_known").checked = true;
+  document.getElementById("duration_known").checked = true;
+  document.getElementById("monitoring_present").checked = false;
+  document.getElementById("access_continuity").checked = false;
+  document.getElementById("recovery_path_exists").checked = false;
 }
 
 /* =========================
@@ -92,18 +100,20 @@ async function submitEvent() {
   if (event.domain === "pharmacology") {
     const medicationInput = {
       case_type: "medication_withdrawal",
-      medication_class: "benzodiazepine",
-      dose_known: true,
-      duration_known: true,
+      medication_class: document.getElementById("medication_class").value,
+      dose_known: document.getElementById("dose_known").checked,
+      duration_known: document.getElementById("duration_known").checked,
+      monitoring_present: document.getElementById("monitoring_present").checked,
+      access_continuity: document.getElementById("access_continuity").checked,
+      recovery_path_exists: document.getElementById("recovery_path_exists").checked,
+
+      // existing logical defaults for current medication model
       patient_state_known: false,
       co_medications_known: false,
-      monitoring_present: false,
-      access_continuity: false,
       intervention_available: true,
       withdrawal_risk_bounded: false,
       time_to_irreversibility_known: true,
-      response_within_window: true,
-      recovery_path_exists: false
+      response_within_window: true
     };
 
     const result = await fetch(API + "/api/medication/evaluate", {
