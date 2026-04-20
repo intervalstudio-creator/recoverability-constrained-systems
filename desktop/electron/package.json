@@ -1,0 +1,52 @@
+{
+  "name": "boundary",
+  "version": "3.3.0",
+  "private": true,
+  "description": "Boundary autonomous execution platform",
+  "main": "main.js",
+  "productName": "Boundary",
+  "scripts": {
+    "start": "electron .",
+    "build-win": "electron-builder --win nsis",
+    "build-mac": "electron-builder --mac dmg"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "org.interval.boundary",
+    "productName": "Boundary",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js"
+    ],
+    "extraResources": [
+      {
+        "from": "../../dist-backend/win/boundary-backend",
+        "to": "backend/win",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../../dist-backend/mac/boundary-backend",
+        "to": "backend/mac",
+        "filter": ["**/*"]
+      }
+    ],
+    "asar": true,
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
