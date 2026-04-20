@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Boundary</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <h1>Boundary</h1>
+      <p class="tag">Recoverability execution platform</p>
+      <button onclick="loadCase('healthcare')">Load NHS Case</button>
+      <button onclick="setMode('online')">Online Mode</button>
+      <button onclick="setMode('offline')">Offline Mode</button>
+      <button onclick="refreshStatus()">Refresh Status</button>
+    </aside>
+    <main class="main">
+      <section class="panel">
+        <h2>Case Input</h2>
+        <label>Domain <input id="domain" value="healthcare"></label>
+        <label>Boundary detectable <input id="boundary_detectable" type="checkbox" checked></label>
+        <label>Response possible in time <input id="response_possible_in_time" type="checkbox"></label>
+        <label>Recovery path verified <input id="recovery_path_verified" type="checkbox"></label>
+        <label>Critical unknowns present <input id="critical_unknowns_present" type="checkbox" checked></label>
+        <label>Dependency unavailable <input id="dependency_unavailable" type="checkbox" checked></label>
+        <button class="primary" onclick="runCycle()">Run Cycle</button>
+      </section>
+      <section class="panel">
+        <h2>Decision</h2>
+        <pre id="decision">No decision yet.</pre>
+      </section>
+      <section class="panel">
+        <h2>Runtime / Observability</h2>
+        <pre id="status">Loading...</pre>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

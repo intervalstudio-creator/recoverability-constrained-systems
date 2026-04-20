@@ -1,227 +1,63 @@
-# Recoverability-Constrained Systems  
-## Execution Layer and Live Admissibility Engine
-
----
-
-## Entry Points
-
-- **Live Execution (Demo)**  
-  https://intervalstudio-creator.github.io/recoverability-constrained-systems/
-
-- **Authoritative Master Index (DOI)**  
-  https://doi.org/10.5281/zenodo.19583410  
-
-- **Documented Real Case (NHS Transport Failure)**  
-  https://zenodo.org/records/19600917  
-
-- **Website**  
-  https://intervalstudio.org  
-
----
-
-## Latest Release (v2.0.0)
-
-Cross-domain publication bundles, including the first domain-level energy and microgrid implementation (RCEC v2):
-
-- GitHub Release:
-  https://github.com/intervalstudio-creator/recoverability-constrained-systems/releases/tag/v2.0.0
-
-Release assets include:
-
-- Recoverability-Constrained-Systems_RCEC-v2_Unified-Runtime_Publication-Bundle.zip
-- Recoverability-Constrained-Systems_RCEC-v2_AEX_Minimal-Execution-Layer_Publication-Bundle.zip
-
-
----
-## Live Network Layer (v6)
-
-This repository now includes a live coordinated network layer:
-
-- Bootstrap service for node registration and peer discovery
-- Continuity nodes with relay, sync, and distributed coordination
-
-Path:
-`/network/v6-live-network-core/`
-
-This is the first live network coordination layer of the system.
-
----
-
-## System Definition
-
-A system may act only while recoverability can be established, in time and under real conditions, as sufficient to prevent irreversible transition.
-
-If this cannot be established:
-
-- continuation is non-admissible  
-- execution does not occur  
-
-This condition applies to all domains, all actors, and all paths of continuation, including known, unknown, missing, latent, emergent, adversarial, and future conditions.
-
----
-
-## System Layers
-
-The system operates as a unified, non-fragmentable architecture:
-
-1. **Invariant Layer**  
-   Defines admissibility condition (recoverability constraint)  
-
-2. **Structural Layer**  
-   Master Index and formal system definition  
-
-3. **Execution Layer**  
-   Runtime systems enforcing admissibility  
-
-4. **Interface Layer**  
-   Live demo, tools, and interaction surfaces  
-
-5. **Domain Layer**  
-   Real-world implementations (healthcare, infrastructure, legal, identity, etc.)  
-
-6. **Preservation Layer**  
-   Redundant copies ensuring continuity and non-loss  
-
-No layer may contradict or override the invariant.
-
----
-
-## Live Recoverability Boundary Engine
-
-This repository includes a deployed execution surface:
-
-https://intervalstudio-creator.github.io/recoverability-constrained-systems/
-
-### Capabilities
-
-- multi-case evaluation (NHS, offshore, legal, identity)  
-- timeline simulation against recoverability window  
-- visual boundary condition diagram  
-- decision output: **CONTINUE / STOP / NON-EXECUTABLE**  
-- reason codes and decision trace  
-- audit output for real-world evaluation  
-
----
-
-## Documented Real-World Case
-
-NHS transport-related continuity failure:
-
-https://zenodo.org/records/19600917
-
-This case demonstrates non-admissible continuation after loss of recoverability under real conditions.
-
----
-
-## Repository Role
-
-This repository serves as an **execution and deployment surface** for Recoverability-Constrained Systems.
-
-It provides:
-
-- runtime evaluation tools  
-- deployable system components  
-- real-world case testing environments  
-- integration reference for operational deployment  
-
-It is not a standalone definition of the system.
-
-All components are valid only insofar as they preserve identical admissibility outcomes under the invariant defined in the Master Index.
-
-This repository is cross-domain. Energy and microgrid control (RCEC v2) is included as a domain-level implementation within the broader unified execution system.
-
----
-
-## Core Principle
-
-No distinction is permitted between representation and execution.
-
-Any condition that cannot be:
-
-- detected  
-- verified  
-- interpreted  
-- enforced  
-- and executed  
-
-in time under real conditions is treated as absent.
-
----
-
-## Usage
-
-The live engine can be used to:
-
-1. evaluate real-world failure scenarios  
-2. demonstrate loss of admissibility under delay or constraint  
-3. identify the exact point where recoverability collapses  
-4. determine required system response (restriction, escalation, halt)  
-
----
-
-## Deployment
-
-The system is deployed via GitHub Pages.
-
-To deploy or replicate:
-
-1. ensure `index.html` is in the repository root  
-2. go to **Settings → Pages**  
-3. select **Deploy from branch**  
-4. choose `main` branch and `/ (root)`  
-5. save  
-
----
-
-## System Architecture (Top-Level)
-
-The repository is organized as a single system:
-
-- **Core Definition**  
-  `Master_Documents/` — authoritative system definition  
-
-- **Execution Layer**  
-  `index.html` — live admissibility engine  
-
-- **Runtime Systems**  
-  `Continuity_Engine/` — execution components  
-
-- **Domain Implementations**  
-  `RCCS/` — applied systems and cases  
-
-- **Preservation Layer**  
-  `Preserved_Source_Bundles/` — continuity-preserving archives  
-
-- **Operational Interfaces**  
-  `INSTALL_AND_RUN.md`, `DEPLOYMENT_CHECKLIST.md`  
-
----
-
-## Authority and Scope
-
-The authoritative definition of the system is the Master Index:
-
-https://doi.org/10.5281/zenodo.19583410  
-
-This repository does not override or redefine the system.
-
-All implementations, demonstrations, and derived artifacts must preserve identical admissibility outcomes under the invariant.
-
----
-
-## Domain Implementations
-
-- Communication Systems (RCCS):
-https://github.com/intervalstudio-creator/recoverability-constrained-communication-system
-
----
-
-## Continuity Condition
-
-If any required condition, path, dependency, or recovery mechanism cannot be established in time under real conditions:
-
-→ admissibility cannot be established  
-→ continuation is non-admissible  
-→ execution does not occur  
-
-No further condition applies.
+# Boundary Full Platform v3.1
+
+Boundary is an executable recoverability platform for continuation, escalation,
+restriction, containment, and halt decisions under real conditions.
+
+This all-in-one package includes:
+- core decision engine
+- execution layer
+- runtime telemetry intake
+- external integrations (email / SMS / incident / webhook / device)
+- observability + dead-letter queue
+- enterprise / NHS deployment profiles
+- local web UI
+- install scripts
+- Electron desktop wrapper source
+- GitHub auto-release workflow for installers
+
+## Important
+
+This is a **production-style integrated starter system**.
+It is unified, runnable, and structured for GitHub deployment, but it is **not**
+clinical certification, industrial control certification, or signed installer output.
+
+## Quick start
+
+### Mac / Linux
+```bash
+bash scripts/install_and_run.sh
+```
+
+### Windows
+Run:
+```bat
+scripts\install_and_run.bat
+```
+
+Then open:
+- http://127.0.0.1:8787
+
+## Manual start
+```bash
+python api/server.py
+```
+
+## Key files
+- `api/server.py`
+- `app/index.html`
+- `engine/execution_layer.py`
+- `engine/external_actuation_observed.py`
+- `configs/profiles/enterprise.json`
+- `configs/profiles/nhs.json`
+- `.github/workflows/release-installers.yml`
+
+## Environment setup
+
+Copy `.env.example` to `.env` and fill in real provider credentials if you want:
+- SMTP email
+- Twilio SMS
+- PagerDuty incidents
+- webhook / device actuation
+
+If you leave credentials empty, the system still runs locally, but external actions
+will fail gracefully and go to the dead-letter queue.

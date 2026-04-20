@@ -1,0 +1,24 @@
+{
+  "generic": {
+    "minimums": [
+      "reachable_contact",
+      "bounded_escalation_path",
+      "fallback_path"
+    ]
+  },
+  "healthcare": {
+    "minimums": [
+      "contactable_path",
+      "transport_path",
+      "care_handoff",
+      "escalation_path"
+    ]
+  },
+  "identity": {
+    "minimums": [
+      "challenge_path",
+      "reentry_path",
+      "multi_source_verification"
+    ]
+  }
+}
