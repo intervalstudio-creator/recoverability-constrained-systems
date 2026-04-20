@@ -77,7 +77,7 @@ function loadCase(domain) {
 }
 
 /* =========================
-   MEDICATION CASE (NEW)
+   MEDICATION CASE
 ========================= */
 function loadMedicationCase() {
   document.getElementById("domain").value = "pharmacology";
@@ -91,58 +91,15 @@ function loadMedicationCase() {
 }
 
 /* =========================
-   MEDICATION ENGINE
-========================= */
-function evaluateMedication(input) {
-  let reasons = [];
-
-  if (!input.patient_state_known) reasons.push("STATE_UNKNOWN");
-  if (!input.monitoring_present) reasons.push("NO_MONITORING");
-  if (!input.access_continuity) reasons.push("ACCESS_BREAK");
-  if (!input.withdrawal_risk_bounded) reasons.push("WITHDRAWAL_UNBOUNDED");
-  if (!input.recovery_path_exists) reasons.push("NO_RECOVERY_PATH");
-
-  const canAct =
-    input.intervention_available &&
-    input.response_within_window &&
-    input.time_to_irreversibility_known;
-
-  if (reasons.length === 0) {
-    return {
-      decision: "CONTINUE",
-      admissible: true,
-      action: "CONTINUE_WITH_MONITORING",
-      reasons: []
-    };
-  }
-
-  if (canAct) {
-    return {
-      decision: "STOP",
-      admissible: false,
-      action: "STABILIZE_ESCALATE_CONTAIN",
-      reasons
-    };
-  }
-
-  return {
-    decision: "NON-EXECUTABLE",
-    admissible: false,
-    action: "EMERGENCY_NON_EXECUTABLE_STATE",
-    reasons
-  };
-}
-
-/* =========================
    SUBMIT EVENT
 ========================= */
 async function submitEvent() {
   const event = buildEvent();
 
-  // 🔴 Medication handled locally
+  // Medication handled by backend
   if (event.domain === "pharmacology") {
-
-    const input = {
+    const medicationInput = {
+      case_type: "medication_withdrawal",
       medication_class: "benzodiazepine",
       dose_known: true,
       duration_known: true,
@@ -157,18 +114,23 @@ async function submitEvent() {
       recovery_path_exists: false
     };
 
-    const result = evaluateMedication(input);
+    const result = await fetch(API + "/api/medication/evaluate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(medicationInput)
+    }).then(r => r.json());
 
     document.getElementById("decision").textContent =
       JSON.stringify(result, null, 2);
 
+    refreshStatus();
     return;
   }
 
-  // 🔵 Default backend
+  // Default backend execution
   const result = await fetch(API + "/api/events", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(event)
   }).then(r => r.json());
 
@@ -186,7 +148,7 @@ async function startAuto() {
 
   await fetch(API + "/api/auto/start", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ interval_seconds })
   });
 
