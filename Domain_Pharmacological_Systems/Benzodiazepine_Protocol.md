@@ -1,20 +1,20 @@
 # Recoverability-Constrained Benzodiazepine Protocol
 
-## Core Rule
+Benzodiazepines may only be continued while recoverability can be maintained in time under real conditions.
 
-Only use if recoverability is maintained.
-
-## Requirements
-
+Before any action:
 - dose known
 - duration known
+- patient state known
+- co-medications known
+
+Continuation requires:
 - monitoring present
-- intervention possible
+- access uninterrupted
+- intervention available
+- withdrawal risk bounded
 
-If not:
-→ DO NOT CONTINUE
-
-## Final Condition
-
-If you cannot monitor and respond:
+If these cannot be established:
 → STOP
+→ stabilize
+→ escalate

@@ -1,24 +1,16 @@
 # Recoverability-Constrained Pharmacological Systems
 
-## Definition
+No medication may be initiated, continued, modified, substituted, or discontinued unless
+recoverability can be established in time under real conditions.
 
-No medication may be used unless recoverability can be established in time under real conditions.
+All medications are treated as interval-bound physiological modifiers.
 
-## System Model
-
-All medications are interval-bound physiological modifiers.
-
-## Required Conditions
-
+Required conditions:
 - patient state known
-- effects understood
-- intervention possible
-- recovery achievable
+- drug effects interpretable
+- interactions bounded
+- intervention executable in time
+- recovery or stabilization achievable
 
 If not:
 → DO NOT CONTINUE
-
-## Final Condition
-
-If you cannot detect, act, and recover in time:
-→ execution does not occur

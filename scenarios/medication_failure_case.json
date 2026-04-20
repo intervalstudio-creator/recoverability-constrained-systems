@@ -1,0 +1,19 @@
+{
+  "title": "Real-World Medication Continuity Failure",
+  "summary": "Benzodiazepine continuation becomes non-admissible when monitoring, access continuity, and bounded withdrawal response are absent.",
+  "case_type": "medication_withdrawal",
+  "medication_class": "benzodiazepine",
+  "dose_known": true,
+  "duration_known": true,
+  "patient_state_known": false,
+  "co_medications_known": false,
+  "monitoring_present": false,
+  "access_continuity": false,
+  "intervention_available": true,
+  "withdrawal_risk_bounded": false,
+  "time_to_irreversibility_known": true,
+  "response_within_window": true,
+  "recovery_path_exists": false,
+  "expected_decision": "STOP",
+  "expected_action": "STABILIZE_ESCALATE_CONTAIN"
+}
