@@ -1,7 +1,0 @@
-{
-  "profile": "enterprise",
-  "safe_defaults": true,
-  "require_observability": true,
-  "require_authority_chain": true,
-  "degraded_mode_enabled": true
-}

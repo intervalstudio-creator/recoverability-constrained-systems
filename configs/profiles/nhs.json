@@ -1,8 +1,0 @@
-{
-  "profile": "nhs",
-  "healthcare_transport_mode": true,
-  "safe_defaults": true,
-  "degraded_mode_enabled": true,
-  "require_human_review_for_halt": false,
-  "case_pack": "healthcare_transport"
-}
