@@ -46,27 +46,21 @@ function loadCase(domain) {
     document.getElementById("recovery_path_verified").checked = false;
     document.getElementById("critical_unknowns_present").checked = true;
     document.getElementById("dependency_unavailable").checked = true;
-  }
-
-  else if (domain === "identity") {
+  } else if (domain === "identity") {
     document.getElementById("event_type").value = "identity_breach";
     document.getElementById("boundary_detectable").checked = true;
     document.getElementById("response_possible_in_time").checked = false;
     document.getElementById("recovery_path_verified").checked = false;
     document.getElementById("critical_unknowns_present").checked = true;
     document.getElementById("dependency_unavailable").checked = true;
-  }
-
-  else if (domain === "finance") {
+  } else if (domain === "finance") {
     document.getElementById("event_type").value = "wallet_lockout";
     document.getElementById("boundary_detectable").checked = true;
     document.getElementById("response_possible_in_time").checked = false;
     document.getElementById("recovery_path_verified").checked = false;
     document.getElementById("critical_unknowns_present").checked = true;
     document.getElementById("dependency_unavailable").checked = true;
-  }
-
-  else if (domain === "disaster") {
+  } else if (domain === "disaster") {
     document.getElementById("event_type").value = "tsunami_warning";
     document.getElementById("boundary_detectable").checked = true;
     document.getElementById("response_possible_in_time").checked = false;
@@ -82,7 +76,6 @@ function loadCase(domain) {
 function loadMedicationCase() {
   document.getElementById("domain").value = "pharmacology";
   document.getElementById("event_type").value = "medication_withdrawal";
-
   document.getElementById("boundary_detectable").checked = false;
   document.getElementById("response_possible_in_time").checked = true;
   document.getElementById("recovery_path_verified").checked = false;
@@ -96,7 +89,6 @@ function loadMedicationCase() {
 async function submitEvent() {
   const event = buildEvent();
 
-  // Medication handled by backend
   if (event.domain === "pharmacology") {
     const medicationInput = {
       case_type: "medication_withdrawal",
@@ -127,7 +119,6 @@ async function submitEvent() {
     return;
   }
 
-  // Default backend execution
   const result = await fetch(API + "/api/events", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
