@@ -9,26 +9,41 @@
   <div class="shell">
     <aside class="sidebar">
       <h1>Boundary</h1>
-      <p class="tag">Recoverability execution platform</p>
-      <button onclick="loadCase('healthcare')">Load NHS Case</button>
-      <button onclick="setMode('online')">Online Mode</button>
-      <button onclick="setMode('offline')">Offline Mode</button>
+      <p class="tag">Autonomous execution v3.2</p>
+      <button onclick="loadCase('healthcare')">Healthcare</button>
+      <button onclick="loadCase('identity')">Identity</button>
+      <button onclick="loadCase('finance')">Finance</button>
+      <button onclick="loadCase('disaster')">Disaster</button>
+      <button onclick="startAuto()">Start Auto</button>
+      <button onclick="stopAuto()">Stop Auto</button>
       <button onclick="refreshStatus()">Refresh Status</button>
+      <div class="auto-box">
+        <h3>Automatic Execution</h3>
+        <label>Interval
+          <select id="autoInterval">
+            <option value="2">2s</option>
+            <option value="5" selected>5s</option>
+            <option value="10">10s</option>
+          </select>
+        </label>
+        <div id="autoState">Auto: unknown</div>
+      </div>
     </aside>
     <main class="main">
       <section class="panel">
-        <h2>Case Input</h2>
+        <h2>Event Input</h2>
         <label>Domain <input id="domain" value="healthcare"></label>
+        <label>Event Type <input id="event_type" value="transport_failure"></label>
         <label>Boundary detectable <input id="boundary_detectable" type="checkbox" checked></label>
         <label>Response possible in time <input id="response_possible_in_time" type="checkbox"></label>
         <label>Recovery path verified <input id="recovery_path_verified" type="checkbox"></label>
         <label>Critical unknowns present <input id="critical_unknowns_present" type="checkbox" checked></label>
         <label>Dependency unavailable <input id="dependency_unavailable" type="checkbox" checked></label>
-        <button class="primary" onclick="runCycle()">Run Cycle</button>
+        <button class="primary" onclick="submitEvent()">Submit Event</button>
       </section>
       <section class="panel">
-        <h2>Decision</h2>
-        <pre id="decision">No decision yet.</pre>
+        <h2>Execution Result</h2>
+        <pre id="decision">No execution yet.</pre>
       </section>
       <section class="panel">
         <h2>Runtime / Observability</h2>

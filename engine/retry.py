@@ -1,8 +1,7 @@
 import time
-from typing import Callable, Any
 from engine.config import get_int, get_float
 
-def with_retry(fn: Callable[[], Any], retriable_exceptions=(Exception,)):
+def with_retry(fn, retriable_exceptions=(Exception,)):
     max_retries = get_int("BOUNDARY_MAX_RETRIES", 3)
     backoff = get_float("BOUNDARY_RETRY_BACKOFF_SECONDS", 1.5)
     last_error = None

@@ -1,13 +1,8 @@
-import json
-from pathlib import Path
-
-AUTHORITY_PATH = Path("configs/authority/default_chain.json")
-
-def get_authority_chain():
-    return json.loads(AUTHORITY_PATH.read_text(encoding="utf-8"))["chain"]
-
 def route_authority(decision: str):
-    chain = get_authority_chain()
     if decision == "CONTINUE":
         return []
-    return chain
+    return [
+        {"level": 1, "role": "operator", "deadline_seconds": 60},
+        {"level": 2, "role": "supervisor", "deadline_seconds": 180},
+        {"level": 3, "role": "external_authority", "deadline_seconds": 600}
+    ]
