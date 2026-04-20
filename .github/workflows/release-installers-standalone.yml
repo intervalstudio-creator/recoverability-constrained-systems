@@ -1,0 +1,81 @@
+name: Release Installers Standalone
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build backend (Windows)
+        if: runner.os == 'Windows'
+        run: build_backend\build_backend_windows.bat
+
+      - name: Stage backend (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist-backend\win | Out-Null
+          Copy-Item -Recurse dist\boundary-backend dist-backend\win\boundary-backend
+
+      - name: Build backend (macOS)
+        if: runner.os == 'macOS'
+        run: bash build_backend/build_backend_unix.sh
+
+      - name: Stage backend (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p dist-backend/mac
+          cp -R dist/boundary-backend dist-backend/mac/boundary-backend
+
+      - name: Install Electron dependencies
+        working-directory: desktop/electron
+        run: npm install
+
+      - name: Build Windows installer
+        if: runner.os == 'Windows'
+        working-directory: desktop/electron
+        run: npm run build-win
+
+      - name: Build macOS disk image
+        if: runner.os == 'macOS'
+        working-directory: desktop/electron
+        run: npm run build-mac
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boundary-standalone-${{ runner.os }}
+          path: desktop/electron/dist/**
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true
