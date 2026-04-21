@@ -1,0 +1,74 @@
+[
+  {
+    "id": "benzo-crisis-001",
+    "domain": "pharmacological",
+    "label": "Benzodiazepine supply failure — GP unreachable, no taper plan",
+    "state": {
+      "supply_days_remaining": 0,
+      "prescriber_reachable": false,
+      "abrupt_stop_risk": true,
+      "dispensing_accessible": false,
+      "taper_required": true,
+      "taper_plan_exists": false,
+      "interaction_flag": false,
+      "human_authority_reachable": false,
+      "time_remaining_seconds": 14400,
+      "fallback_path_available": false,
+      "override_active": false
+    },
+    "expected_state": "NON-EXECUTABLE",
+    "notes": "Classic benzo continuity failure. No supply, no prescriber, abrupt stop risk, no taper plan, human authority unreachable."
+  },
+  {
+    "id": "oxygen-crisis-001",
+    "domain": "healthcare",
+    "label": "Oxygen-dependent patient — supply interrupted, no caregiver",
+    "state": {
+      "oxygen_dependent": true,
+      "oxygen_interrupted": true,
+      "caregiver_available": false,
+      "transport_available": false,
+      "critical_appointment_missed": false,
+      "human_authority_reachable": false,
+      "time_remaining_seconds": 1800,
+      "fallback_path_available": false
+    },
+    "expected_state": "NON-EXECUTABLE",
+    "notes": "Life-critical scenario. 30 minutes remaining. Escalation required immediately."
+  },
+  {
+    "id": "bank-lockout-001",
+    "domain": "finance",
+    "label": "Bank account frozen — essential payments blocked, income interrupted",
+    "state": {
+      "bank_locked": true,
+      "essential_payment_blocked": true,
+      "income_interrupted": true,
+      "single_provider_risk": true,
+      "human_authority_reachable": true,
+      "time_remaining_seconds": 86400,
+      "fallback_path_available": false
+    },
+    "expected_state": "NON-ADMISSIBLE",
+    "notes": "Bank lockout with no fallback. Human reachable but no admissible path."
+  },
+  {
+    "id": "stable-patient-001",
+    "domain": "pharmacological",
+    "label": "Stable patient — 2-week supply, prescriber available",
+    "state": {
+      "supply_days_remaining": 14,
+      "prescriber_reachable": true,
+      "abrupt_stop_risk": false,
+      "dispensing_accessible": true,
+      "taper_required": false,
+      "interaction_flag": false,
+      "human_authority_reachable": true,
+      "time_remaining_seconds": 1209600,
+      "fallback_path_available": true,
+      "override_active": false
+    },
+    "expected_state": "CONTINUE",
+    "notes": "All conditions met. Continuation admissible."
+  }
+]
