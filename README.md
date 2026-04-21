@@ -1,11 +1,16 @@
-# Boundary Platform v4.1
+# Boundary Platform v4.1 — Recoverability-Constrained Execution System
 
-**Recoverability-Constrained Execution Platform**
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19674392.svg)](https://doi.org/10.5281/zenodo.19674392)
 
-Boundary detects when continuation becomes non-recoverable in time under real conditions — and requires visibility and escalation when it does.
+DOI: https://doi.org/10.5281/zenodo.19674392
 
-It implements a universal execution constraint across human, institutional, computational, artificial intelligence, robotic, and hybrid systems.
+Boundary evaluates recoverability and produces admissibility states.  
+It does not make or enforce clinical, legal, financial, or operational decisions.  
+All outputs require action by a responsible human authority.
 
+Boundary identifies when continuation becomes non-recoverable in time under real conditions and requires visibility and escalation.
+
+It operationalizes a universal execution constraint across human, institutional, computational, artificial intelligence, robotic, and hybrid systems.
 ---
 
 ## Core Principle
