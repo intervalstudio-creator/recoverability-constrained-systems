@@ -1,0 +1,718 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RECOVS - Recoverability Check</title>
+  <meta
+    name="description"
+    content="Recoverability evaluation and formal record generation for healthcare, medication, finance, housing, identity, and emergency access failures."
+  />
+  <meta name="theme-color" content="#101316" />
+  <meta property="og:title" content="RECOVS - Recoverability Check" />
+  <meta
+    property="og:description"
+    content="Evaluate whether recoverability still exists under real conditions and generate a formal record."
+  />
+  <meta property="og:type" content="website" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="brand-block">
+        <div class="logo" aria-label="RECOVS">
+          <div class="logo-hex" aria-hidden="true"></div>
+          <span>RECOVS</span>
+        </div>
+        <div class="header-note">
+          Recoverability check
+          <br />
+          No login required
+          <br />
+          <span id="countryFlag" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <div class="header-side">
+        <a class="header-link-btn" href="institutional/">🏛️ Institutions</a>
+        <button class="nav-tab header-about-btn" type="button" role="tab" aria-selected="false" aria-controls="tab-about" data-tab="about">ℹ️ About</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="section active" id="sec-home" aria-labelledby="heroTitle">
+      <div class="lang-bar" aria-label="Language options">
+        <button class="lang-btn active" type="button" aria-pressed="true">EN</button>
+        <button class="lang-btn" type="button" disabled aria-disabled="true">ES</button>
+        <button class="lang-btn" type="button" disabled aria-disabled="true">FR</button>
+        <button class="lang-btn" type="button" disabled aria-disabled="true">PT</button>
+        <button class="lang-btn" type="button" disabled aria-disabled="true">DE</button>
+        <button class="lang-btn" type="button" disabled aria-disabled="true">AR</button>
+      </div>
+
+      <div class="nav-tabs" role="tablist" aria-label="Site sections">
+        <button class="nav-tab active" type="button" role="tab" aria-selected="true" aria-controls="tab-check" data-tab="check">🔎 Check</button>
+        <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-record" data-tab="record">📝 Record</button>
+        <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-child" data-tab="child">🧒 Children</button>
+        <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-checkin" data-tab="checkin">⏰ Check-in</button>
+        <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-profile" data-tab="profile">👤 Profile + Lock Card</button>
+        <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-trusted" data-tab="trusted">🛟 Trusted</button>
+        <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-group" data-tab="group">👥 Group</button>
+      </div>
+
+      <div id="tab-check" role="tabpanel">
+        <div class="hero-grid">
+          <div>
+            <h1 class="hero-title" id="heroTitle">What is your <em>situation</em> right now?</h1>
+            <p class="hero-body">
+              RECOVS records incident events, timestamps them, evaluates whether the situation remains recoverable in time under real conditions, and generates a formal record for escalation or review with authorities or institutions.
+            </p>
+          </div>
+
+          <aside class="hero-panel" aria-label="How it works">
+            <div class="hero-panel-label">Three steps</div>
+            <ol class="hero-steps">
+              <li>Choose your current situation.</li>
+              <li>Write the details or information.</li>
+              <li>Review, export, or share the formal record.</li>
+            </ol>
+          </aside>
+        </div>
+
+        <div class="trust-strip" aria-label="Trust signals">
+          <span>timestamped records</span>
+          <span>formal outputs</span>
+          <span>usable offline</span>
+          <span>shareable with authorities</span>
+        </div>
+
+        <div class="country-box">
+          <label class="field-label" for="countrySelect">Where are you?</label>
+          <select id="countrySelect" class="field-input">
+            <option value="">Select your country...</option>
+            <option value="AR">Argentina</option>
+            <option value="AU">Australia</option>
+            <option value="BR">Brazil</option>
+            <option value="CA">Canada</option>
+            <option value="FR">France</option>
+            <option value="DE">Germany</option>
+            <option value="IE">Ireland</option>
+            <option value="IT">Italy</option>
+            <option value="MX">Mexico</option>
+            <option value="PT">Portugal</option>
+            <option value="ES">Spain</option>
+            <option value="GB">United Kingdom</option>
+            <option value="US">United States</option>
+            <option value="DEFAULT">Other / International</option>
+          </select>
+        </div>
+
+        <div class="section-head">
+          <p class="field-label choose-label">Choose your situation</p>
+        </div>
+        <div class="sit-grid" id="sitGrid" aria-live="polite"></div>
+
+        <div class="notice-banner page-bottom-note">
+          <strong>Important:</strong> This tool records and evaluates recoverability conditions only. It does not replace emergency, legal, clinical, or financial authorities.
+        </div>
+      </div>
+
+      <div id="tab-record" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">Direct formal record</div>
+        <h2 class="subpage-title">Record what is happening now</h2>
+        <p class="hero-body small">
+          Create a timestamped contemporaneous record for interrupted health care, incidents, blocked medication, housing failure, identity exclusion, accidents, or other urgent situations.
+        </p>
+
+        <div class="tool-card" style="margin-bottom:20px;">
+          <div class="hero-panel-label">Choose record type</div>
+          <div class="nav-tabs" role="tablist" aria-label="Record type">
+            <button class="nav-tab active record-mode-tab" type="button" data-record-mode="self">📝 This is for myself</button>
+            <button class="nav-tab record-mode-tab" type="button" data-record-mode="behalf">🤝 On behalf of someone else</button>
+            <button class="nav-tab record-mode-tab" type="button" data-record-mode="witness">👁️ I am a witness</button>
+          </div>
+        </div>
+
+        <div id="recordMode-self" class="record-mode-panel">
+          <div class="form-stack">
+            <div class="form-group">
+              <label class="field-label" for="fr-reporter">Your name or initials</label>
+              <input class="field-input" id="fr-reporter" placeholder="e.g. N.S. or Noelia S." autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="fr-role">Your role</label>
+              <input class="field-input" id="fr-role" placeholder="Patient, carer, worker, witness..." />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="fr-institution">Institution or service involved</label>
+              <input class="field-input" id="fr-institution" placeholder="Hospital, bank, housing office, insurer..." />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="fr-what">What happened?</label>
+              <textarea class="field-input" id="fr-what" rows="5" placeholder="Describe what occurred in plain words..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="fr-subject">Who is affected?</label>
+              <input class="field-input" id="fr-subject" placeholder="Name, initials, or description" />
+            </div>
+            <button class="check-btn" id="generateRecordBtn" type="button">Generate formal record</button>
+          </div>
+
+          <div id="recordValidation" class="inline-feedback hidden" aria-live="polite"></div>
+          <div id="recordPreview" class="hidden"></div>
+        </div>
+
+        <div id="recordMode-behalf" class="record-mode-panel hidden"></div>
+
+        <div id="recordMode-witness" class="record-mode-panel hidden"></div>
+      </div>
+
+      <div id="tab-behalf" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">On Behalf Of Someone</div>
+        <h2 class="subpage-title">Create a record for someone who cannot speak for themselves</h2>
+        <p class="hero-body small">
+          Record what you observed, the risk they face, and what help is or is not available right now.
+        </p>
+
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="field-label" for="beh-reporter">Your name and role</label>
+            <input class="field-input" id="beh-reporter" placeholder="Carer, worker, witness..." />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-subject">Person being helped</label>
+            <input class="field-input" id="beh-subject" placeholder="Name or description" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-location">Location</label>
+            <input class="field-input" id="beh-location" placeholder="Where did you find them?" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-state">Observed state</label>
+            <textarea class="field-input" id="beh-state" rows="4" placeholder="Describe what you observed..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-risk">Immediate risk</label>
+            <textarea class="field-input" id="beh-risk" rows="3" placeholder="What risk do they face right now?"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-recovery">Recovery path</label>
+            <select class="field-input" id="beh-recovery">
+              <option value="">Select...</option>
+              <option value="yes">Recovery path visible</option>
+              <option value="partial">Partial recovery path only</option>
+              <option value="no">No recovery path visible</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-medical">Known medical information</label>
+            <input class="field-input" id="beh-medical" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-action">Action taken so far</label>
+            <textarea class="field-input" id="beh-action" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="beh-present">Who else is present?</label>
+            <input class="field-input" id="beh-present" />
+          </div>
+          <button class="check-btn" id="generateBehalfBtn" type="button">Generate on-behalf record</button>
+        </div>
+        <div id="behalfPreview" class="hidden"></div>
+      </div>
+
+      <div id="tab-child" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">For Children</div>
+        <h2 class="subpage-title">Quick help and report</h2>
+        <p class="hero-body small">
+          A simple screen for children to decide if they need help now and to make a report a grown-up can read.
+        </p>
+
+        <div class="child-flow">
+          <div class="child-step" id="childStep1">
+            <div class="child-emoji" aria-hidden="true">✋</div>
+            <h3 class="child-title">Do you need help right now?</h3>
+            <div class="child-actions">
+              <button class="child-btn child-btn-yes" type="button" id="childQ1Yes">Yes, I need help</button>
+              <button class="child-btn child-btn-no" type="button" id="childQ1No">I am okay</button>
+            </div>
+          </div>
+
+          <div class="child-step hidden" id="childStep2">
+            <div class="child-emoji" aria-hidden="true">🏠</div>
+            <h3 class="child-title">Are you in a safe place?</h3>
+            <div class="child-actions">
+              <button class="child-btn child-btn-yes" type="button" id="childQ2Yes">Yes, I am safe</button>
+              <button class="child-btn child-btn-no" type="button" id="childQ2No">No, I am not safe</button>
+            </div>
+          </div>
+
+          <div class="child-step hidden" id="childStep3">
+            <div class="child-emoji" aria-hidden="true">🧑‍🤝‍🧑</div>
+            <h3 class="child-title">Is there a grown-up nearby who can help?</h3>
+            <div class="child-actions">
+              <button class="child-btn child-btn-yes" type="button" id="childQ3Yes">Yes</button>
+              <button class="child-btn child-btn-no" type="button" id="childQ3No">No</button>
+            </div>
+          </div>
+
+          <div class="child-result hidden" id="childResult"></div>
+        </div>
+
+        <div class="tool-card child-report-card">
+          <div class="hero-panel-label">Child report</div>
+          <p class="hero-body small">
+            Fill this in if you want to tell a grown-up, teacher, helper, or authority what happened.
+          </p>
+
+          <div class="form-stack">
+            <div class="form-group">
+              <label class="field-label" for="child-name">Your name or nickname</label>
+              <input class="field-input" id="child-name" placeholder="You can use a nickname" />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="child-age">Your age</label>
+              <input class="field-input" id="child-age" inputmode="numeric" placeholder="Age" />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="child-where">Where are you?</label>
+              <input class="field-input" id="child-where" placeholder="Home, school, street, hospital..." />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="child-with">Who is with you?</label>
+              <input class="field-input" id="child-with" placeholder="Alone, friend, parent, teacher..." />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="child-what">What happened?</label>
+              <textarea class="field-input" id="child-what" rows="4" placeholder="Write what happened in simple words..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="child-help-now">Do you need help now?</label>
+              <select class="field-input" id="child-help-now">
+                <option value="">Select...</option>
+                <option value="yes">Yes</option>
+                <option value="not_sure">Not sure</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <button class="check-btn" id="generateChildReportBtn" type="button">Generate child report</button>
+          </div>
+        </div>
+
+        <div id="childReportPreview" class="hidden"></div>
+      </div>
+
+      <div id="tab-witness" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">Witness Record</div>
+        <h2 class="subpage-title">Create a contemporaneous witness statement</h2>
+        <p class="hero-body small">
+          Capture what you saw while it is fresh, with a timestamped record you can export or share.
+        </p>
+
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="field-label" for="wit-name">Your name</label>
+            <input class="field-input" id="wit-name" placeholder="Or Anonymous" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-contact">Contact details</label>
+            <input class="field-input" id="wit-contact" placeholder="Optional" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-when">When did this occur?</label>
+            <input class="field-input" id="wit-when" type="datetime-local" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-where">Where did this occur?</label>
+            <input class="field-input" id="wit-where" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-persons">Persons involved</label>
+            <input class="field-input" id="wit-persons" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-what">What did you witness?</label>
+            <textarea class="field-input" id="wit-what" rows="5"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-context">Additional context</label>
+            <textarea class="field-input" id="wit-context" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="wit-followup">Available for follow-up?</label>
+            <select class="field-input" id="wit-followup">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <button class="check-btn" id="generateWitnessBtn" type="button">Generate witness record</button>
+        </div>
+        <div id="witnessPreview" class="hidden"></div>
+      </div>
+
+      <div id="tab-checkin" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">Check-in</div>
+        <h2 class="subpage-title">Set a local check-in reminder</h2>
+        <p class="hero-body small">
+          Keep a device-local check-in window and a ready-made alert card for your trusted contact if you miss it.
+        </p>
+
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="field-label" for="ci-name">Your name</label>
+            <input class="field-input" id="ci-name" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="ci-ec-name">Emergency contact name</label>
+            <input class="field-input" id="ci-ec-name" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="ci-ec-contact">Emergency contact phone or email</label>
+            <input class="field-input" id="ci-ec-contact" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="ci-message">Message if you miss a check-in</label>
+            <textarea class="field-input" id="ci-message" rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="ci-interval">Check-in interval</label>
+            <select class="field-input" id="ci-interval">
+              <option value="21600">Every 6 hours</option>
+              <option value="43200" selected>Every 12 hours</option>
+              <option value="86400">Every 24 hours</option>
+              <option value="172800">Every 2 days</option>
+            </select>
+          </div>
+          <button class="check-btn" id="startCheckinBtn" type="button">Start check-in</button>
+          <div id="checkinStatus" class="status-text"></div>
+        </div>
+
+        <div class="tool-card" style="margin-top:20px;">
+          <div class="result-meta-label">Active check-in</div>
+          <div id="checkinActive"></div>
+        </div>
+      </div>
+
+      <div id="tab-profile" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">Profile</div>
+        <h2 class="subpage-title">Your saved profile and lock card</h2>
+        <p class="hero-body small">
+          Stored only in this browser. It helps prefill forms, the lock card, and emergency contact flows.
+        </p>
+
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="field-label" for="prof-name">Your name</label>
+            <input class="field-input" id="prof-name" autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-dob">Date of birth</label>
+            <input class="field-input" id="prof-dob" type="date" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-blood">Blood type</label>
+            <select class="field-input" id="prof-blood">
+              <option value="">Unknown</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-meds">Critical medications</label>
+            <textarea class="field-input" id="prof-meds" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-allergies">Allergies</label>
+            <input class="field-input" id="prof-allergies" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-ec1">Emergency contact 1</label>
+            <input class="field-input" id="prof-ec1" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-ec2">Emergency contact 2</label>
+            <input class="field-input" id="prof-ec2" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="prof-role">Your role</label>
+            <input class="field-input" id="prof-role" placeholder="Patient, carer, worker, witness..." />
+          </div>
+          <div class="action-row">
+            <button class="check-btn" id="saveProfileBtn" type="button">Save profile</button>
+            <button class="again-btn" id="clearProfileBtn" type="button">Clear profile</button>
+          </div>
+          <div class="status-text" id="profileStatus" aria-live="polite"></div>
+        </div>
+
+        <div class="tool-card" style="margin-top:20px;">
+          <div class="result-meta-label">Recent evaluations</div>
+          <div id="profileHistory"></div>
+        </div>
+
+        <div class="tool-card" style="margin-top:20px;">
+          <div class="result-meta-label">Lock card</div>
+          <p class="hero-body small">
+            Fill in your essential details, preview the card, and export it for your phone lock screen so first responders or helpers can read it immediately.
+          </p>
+
+          <div class="two-col-grid">
+            <div class="form-stack">
+              <div class="form-group">
+                <label class="field-label" for="ls-name">Your name</label>
+                <input class="field-input" id="ls-name" autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-dob">Date of birth</label>
+                <input class="field-input" id="ls-dob" type="date" />
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-blood">Blood type</label>
+                <select class="field-input" id="ls-blood">
+                  <option value="">Unknown</option>
+                  <option>A+</option>
+                  <option>A-</option>
+                  <option>B+</option>
+                  <option>B-</option>
+                  <option>AB+</option>
+                  <option>AB-</option>
+                  <option>O+</option>
+                  <option>O-</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-meds">Critical medications</label>
+                <input class="field-input" id="ls-meds" />
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-allergies">Allergies</label>
+                <input class="field-input" id="ls-allergies" />
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-ec1">Emergency contact 1</label>
+                <input class="field-input" id="ls-ec1" />
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-ec2">Emergency contact 2</label>
+                <input class="field-input" id="ls-ec2" />
+              </div>
+              <div class="form-group">
+                <label class="field-label" for="ls-note">Additional note</label>
+                <input class="field-input" id="ls-note" />
+              </div>
+              <button class="pdf-btn" id="downloadLockCardBtn" type="button">Download lock card</button>
+            </div>
+
+            <div>
+              <div class="field-label">Preview</div>
+              <div class="lock-preview" id="lockCardPreview">
+                <div class="lock-label">Emergency Medical Information</div>
+                <div class="lock-name" id="lc-name">Your name</div>
+                <div class="lock-sub" id="lc-dob"></div>
+                <div class="lock-grid">
+                  <div>
+                    <div class="lock-mini-label">Blood type</div>
+                    <div class="lock-mini-value" id="lc-blood">-</div>
+                  </div>
+                  <div>
+                    <div class="lock-mini-label">Allergies</div>
+                    <div class="lock-mini-value small" id="lc-allergies">-</div>
+                  </div>
+                </div>
+                <div class="lock-block">
+                  <div class="lock-mini-label">Critical medications</div>
+                  <div class="lock-mini-value small" id="lc-meds">-</div>
+                </div>
+                <div class="lock-block">
+                  <div class="lock-mini-label">Emergency contacts</div>
+                  <div class="lock-mini-value small" id="lc-ec1">-</div>
+                  <div class="lock-mini-value small" id="lc-ec2"></div>
+                </div>
+                <div class="lock-note" id="lc-note"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-trusted" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">Trusted Contact</div>
+        <h2 class="subpage-title">Prepare a trusted alert contact</h2>
+        <p class="hero-body small">
+          Save one person you can alert quickly by email or SMS using prewritten messages generated on your device.
+        </p>
+
+        <div class="form-stack">
+          <div class="form-group">
+            <label class="field-label" for="tc-name">Trusted contact name</label>
+            <input class="field-input" id="tc-name" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="tc-email">Email</label>
+            <input class="field-input" id="tc-email" type="email" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="tc-phone">Phone</label>
+            <input class="field-input" id="tc-phone" />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="tc-message">Alert message</label>
+            <textarea class="field-input" id="tc-message" rows="4"></textarea>
+          </div>
+          <button class="check-btn" id="saveTrustedBtn" type="button">Save trusted contact</button>
+          <div class="tool-row">
+            <button class="share-btn" id="sendEmailAlertBtn" type="button">Send email alert</button>
+            <button class="share-btn" id="sendSmsAlertBtn" type="button">Send SMS alert</button>
+          </div>
+          <div class="status-text" id="trustedStatus" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <div id="tab-group" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">Group Mode</div>
+        <h2 class="subpage-title">Track a group at a glance</h2>
+        <p class="hero-body small">
+          Useful for care teams, social workers, or anyone monitoring multiple cases. Add people and assign their current state manually.
+        </p>
+
+        <div class="tool-card">
+          <div class="two-col-grid">
+            <div class="form-group">
+              <label class="field-label" for="grp-name">Person name or ID</label>
+              <input class="field-input" id="grp-name" />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="grp-domain">Domain</label>
+              <select class="field-input" id="grp-domain">
+                <option value="">Select...</option>
+                <option value="pharmacological">Medication</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="finance">Finance</option>
+                <option value="housing">Housing</option>
+                <option value="identity">Identity</option>
+                <option value="disaster">Emergency</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="grp-state">State</label>
+              <select class="field-input" id="grp-state">
+                <option value="">Select...</option>
+                <option value="CONTINUE">Admissible</option>
+                <option value="DEGRADED">Degraded</option>
+                <option value="NON-ADMISSIBLE">Non-admissible</option>
+                <option value="NON-EXECUTABLE">Non-executable</option>
+              </select>
+            </div>
+            <div class="form-group action-end">
+              <button class="check-btn" id="addGroupMemberBtn" type="button">Add to group</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-card" style="margin-top:20px;">
+          <div class="result-meta-label">Group summary</div>
+          <div id="groupSummary"></div>
+        </div>
+        <div class="tool-card" style="margin-top:20px;">
+          <div class="result-meta-label">Group list</div>
+          <div id="groupList"></div>
+        </div>
+        <button class="pdf-btn" id="downloadGroupReportBtn" type="button" style="margin-top:20px;">Download group report</button>
+      </div>
+
+      <div id="tab-about" class="hidden" role="tabpanel">
+        <div class="hero-eyebrow">About</div>
+        <h2 class="subpage-title">What this tool does</h2>
+        <p class="hero-body small">
+          RECOVS evaluates whether recoverability can still be established in time under real conditions. If it cannot, continuation is non-admissible and requires restriction, escalation, containment, or halt.
+        </p>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <div class="hero-panel-label">What RECOVS is for</div>
+            <p>Short-form triage of recoverability conditions across medication, healthcare, finance, housing, identity, and emergency disruption.</p>
+          </div>
+          <div class="about-card">
+            <div class="hero-panel-label">What RECOVS is not</div>
+            <p>It does not replace emergency services, clinicians, lawyers, caseworkers, or operational authorities.</p>
+          </div>
+        </div>
+
+        <div class="hero-note">
+          Framework reference:
+          <a href="https://doi.org/10.5281/zenodo.19583410" target="_blank" rel="noopener">doi.org/10.5281/zenodo.19583410</a>
+          <br />
+        </div>
+
+        <div class="tool-card outreach-card">
+          <div class="hero-panel-label">Institution Deployment</div>
+          <p class="hero-body small">
+            Share the public link, a one-line description, and an example PDF. This is intended for hospitals, housing and benefits services, NGOs, patient rights advocates, and other institutions that need a formal recoverability record.
+          </p>
+          <div class="tool-row">
+            <button class="share-btn" id="copyInstitutionLineBtn" type="button">Copy institution line</button>
+            <button class="pdf-btn" id="downloadExamplePdfBtn" type="button">Download example PDF</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-questions" aria-labelledby="questionSectionTitle">
+      <div class="q-header">
+        <button class="q-back" id="backHomeBtn" type="button">Back</button>
+        <div>
+          <div class="hero-eyebrow" id="questionSectionTitle">Recoverability check</div>
+          <span class="q-domain-label" id="qDomainLabel"></span>
+        </div>
+      </div>
+
+      <div class="progress-meta">
+        <span id="progressText">0% complete</span>
+        <span id="progressCount">0 / 0 answered</span>
+      </div>
+      <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+      <div id="questionsContainer"></div>
+      <div id="questionHint" class="section-caption">Answer every question to continue.</div>
+      <button class="check-btn" id="checkBtn" type="button" style="display:none;">Check my situation</button>
+    </section>
+
+    <section class="section" id="sec-result" aria-labelledby="resultTitle">
+      <div id="statusLive" class="sr-only" aria-live="polite"></div>
+      <div id="resultContent"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="https://recovs.org/institutions">Institutions</a>
+      <a href="https://recovs.org/framework">Framework</a>
+      <a href="https://recovs.org/cases">Cases</a>
+      <a href="https://intervalstudio.org" target="_blank" rel="noopener">Interval Studio</a>
+    </div>
+    <div class="footer-note-text">
+      RECOVS Platform v1.3 · Recoverability-Constrained Systems
+    </div>
+  </footer>
+
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+

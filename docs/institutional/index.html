@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RECOVS Institutional Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --paper:#f4efe7;
+      --panel:rgba(255,253,249,.9);
+      --ink:#101316;
+      --muted:#635b52;
+      --line:rgba(155,138,120,.28);
+      --shadow:0 18px 42px rgba(16,19,22,.08);
+      --mono:"DM Mono", monospace;
+      --serif:"Fraunces", Georgia, serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      background:linear-gradient(180deg,#f7f3ec 0%,var(--paper) 100%);
+      color:var(--ink);
+      font-family:var(--serif);
+      line-height:1.6;
+      padding:28px 16px 48px;
+    }
+    main{width:min(1080px,100%);margin:0 auto}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      margin-bottom:28px;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-family:var(--mono);
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .logo-hex{
+      width:24px;
+      height:24px;
+      background:linear-gradient(135deg,var(--ink),#36404a);
+      clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    }
+    .back-link,.eyebrow,.mini-label{
+      font-family:var(--mono);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      text-decoration:none;
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);
+      gap:18px;
+      margin-bottom:20px;
+    }
+    .stack{
+      display:grid;
+      gap:18px;
+    }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+    h1{font-size:clamp(2.2rem,6vw,4.2rem);line-height:1;margin:12px 0 16px;font-weight:400}
+    h2{font-size:1.6rem;line-height:1.1;margin-bottom:14px;font-weight:400}
+    p{font-size:1rem;color:var(--muted)}
+    .lines{display:grid;gap:8px;margin-top:10px}
+    .cap-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+    .cap-item{
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.62);
+    }
+    .login{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:18px;
+    }
+    input{
+      width:100%;
+      padding:14px 15px;
+      border:1.5px solid rgba(155,138,120,.42);
+      border-radius:16px;
+      background:rgba(255,255,255,.88);
+      color:var(--ink);
+      font:inherit;
+      outline:none;
+    }
+    button{
+      width:100%;
+      padding:15px 16px;
+      border:none;
+      border-radius:18px;
+      background:#101316;
+      color:#fff;
+      font:inherit;
+      cursor:pointer;
+    }
+    .note{font-size:13px}
+    ul{padding-left:18px}
+    li+li{margin-top:6px}
+    @media (max-width:860px){
+      .hero,.cap-grid{grid-template-columns:1fr}
+      .topbar{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topbar">
+      <div class="logo"><div class="logo-hex" aria-hidden="true"></div><span>RECOVS</span></div>
+      <a class="back-link" href="../">Back to public RECOVS</a>
+    </div>
+
+    <div class="hero">
+      <section class="panel">
+        <div class="eyebrow">Institutional</div>
+        <h1>Institution Access</h1>
+        <p>This system evaluates real-world continuity. It detects when continuation is unsafe, produces formal records, and exposes system-level failure.</p>
+
+        <div class="cap-grid">
+          <div class="cap-item">Real-time evaluation</div>
+          <div class="cap-item">System failure detection</div>
+          <div class="cap-item">Institutional accountability</div>
+          <div class="cap-item">Audit logging and formal reporting</div>
+        </div>
+      </section>
+
+      <div class="stack">
+        <section class="panel">
+          <div class="mini-label">Restricted access</div>
+          <h2>Login</h2>
+          <p>Use institutional credentials to open the monitoring dashboard.</p>
+
+          <div class="login">
+            <input id="username" placeholder="Username" autocomplete="username" />
+            <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+            <button onclick="go()">Enter dashboard</button>
+            <p class="note">Public RECOVS has no access to system-wide data. Institutional access opens full visibility.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="mini-label">Regulatory overview</div>
+          <div class="lines">
+            <div>No system may continue if recoverability cannot be established in time.</div>
+            <div>Use cases include healthcare, finance, infrastructure, and public systems.</div>
+            <div>Outputs are designed for monitoring, audit, and institutional review.</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API = "http://127.0.0.1:8000";
+
+    function go(){
+      localStorage.setItem("recovs-dashboard-user", document.getElementById("username").value);
+      localStorage.setItem("recovs-dashboard-pass", document.getElementById("password").value);
+      window.location = "../dashboard/";
+    }
+  </script>
+</body>
+</html>
