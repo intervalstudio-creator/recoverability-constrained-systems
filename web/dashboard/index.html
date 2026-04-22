@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RECOVS Institution Dashboard</title>
+  <style>
+    :root{
+      --navy:#0f2d52;
+      --navy-2:#133867;
+      --blue:#3266d0;
+      --page:#f4f7fb;
+      --card:#ffffff;
+      --line:#d7dfeb;
+      --ink:#17304d;
+      --muted:#61758e;
+      --green:#2fb66d;
+      --red:#ef4444;
+      --orange:#f97316;
+      --amber:#fbbf24;
+      --purple:#8b5cf6;
+      --shadow:0 8px 24px rgba(15,45,82,.08);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:var(--page);
+      color:var(--ink);
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    .app-shell{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:254px minmax(0,1fr);
+    }
+
+    .sidebar{
+      background:linear-gradient(180deg,var(--navy) 0%, #102947 100%);
+      color:#fff;
+      padding:22px 14px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:4px 10px 8px;
+    }
+
+    .brand-mark{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.08);
+      display:grid;
+      place-items:center;
+      font-size:20px;
+    }
+
+    .brand-title{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+
+    .brand-sub{
+      margin-top:6px;
+      color:rgba(255,255,255,.84);
+      font-size:12px;
+      line-height:1.55;
+      max-width:140px;
+    }
+
+    .nav-list{
+      display:grid;
+      gap:8px;
+      margin-top:2px;
+    }
+
+    .nav-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:12px;
+      color:#fff;
+      text-decoration:none;
+      background:transparent;
+      border:1px solid transparent;
+      font-size:15px;
+    }
+
+    .nav-item.active{
+      background:#3466cf;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .nav-item.muted{
+      color:rgba(255,255,255,.92);
+    }
+
+    .nav-icon{
+      width:28px;
+      text-align:center;
+      opacity:.95;
+    }
+
+    .nav-badge{
+      margin-left:auto;
+      min-width:28px;
+      height:28px;
+      padding:0 8px;
+      border-radius:999px;
+      background:#3466cf;
+      display:grid;
+      place-items:center;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .sidebar-card{
+      margin-top:auto;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:14px;
+      padding:14px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .sidebar-card .tiny{
+      color:rgba(255,255,255,.72);
+      font-size:12px;
+    }
+
+    .sidebar-card .name{
+      margin-top:6px;
+      font-size:17px;
+      font-weight:700;
+    }
+
+    .sidebar-card .role{
+      margin-top:8px;
+      color:rgba(255,255,255,.8);
+      font-size:13px;
+    }
+
+    .logout{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+      padding:12px 14px;
+      color:#fff;
+      text-decoration:none;
+      border-radius:12px;
+    }
+
+    .main{
+      padding:20px 22px 28px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:24px;
+      margin-bottom:22px;
+    }
+
+    .page-title{
+      font-size:28px;
+      line-height:1.1;
+      font-weight:800;
+      margin:0 0 8px;
+    }
+
+    .welcome{
+      color:var(--ink);
+      font-size:14px;
+    }
+
+    .topbar-right{
+      display:grid;
+      gap:14px;
+      justify-items:end;
+    }
+
+    .top-row{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      color:var(--ink);
+    }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding-left:12px;
+      border-left:1px solid #e2e8f0;
+      min-height:24px;
+    }
+
+    .status-row{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      color:#42556e;
+      font-size:14px;
+    }
+
+    .status-row span{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:12px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat-card{
+      padding:26px 24px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      gap:12px;
+    }
+
+    .stat-label{
+      color:#1f2f47;
+      font-size:16px;
+      margin-bottom:8px;
+    }
+
+    .stat-value{
+      font-size:18px;
+      color:var(--muted);
+    }
+
+    .stat-value strong{
+      display:block;
+      font-size:16px;
+      margin-bottom:4px;
+    }
+
+    .stat-number{
+      font-size:19px;
+      font-weight:800;
+      margin-bottom:2px;
+    }
+
+    .stat-number.blue{color:var(--blue)}
+    .stat-number.red{color:var(--red)}
+    .stat-number.green{color:var(--green)}
+    .stat-number.orange{color:var(--orange)}
+
+    .stat-note{
+      color:#4f647d;
+      font-size:14px;
+    }
+
+    .stat-icon{
+      width:66px;
+      height:66px;
+      border-radius:20px;
+      display:grid;
+      place-items:center;
+      font-size:31px;
+    }
+
+    .stat-icon.blue{background:#e8f0ff;color:var(--blue)}
+    .stat-icon.red{background:#fdeceb;color:var(--red)}
+    .stat-icon.green{background:#e7f7ec;color:var(--green)}
+    .stat-icon.orange{background:#fff1e6;color:var(--orange)}
+
+    .content-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(360px,.85fr);
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding:16px 18px 0;
+    }
+
+    .card-title{
+      font-size:17px;
+      font-weight:700;
+      color:#1d2d45;
+    }
+
+    .select{
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:#fff;
+      color:#334155;
+      font:inherit;
+    }
+
+    .chart-wrap{
+      padding:10px 16px 16px;
+    }
+
+    .chart-legend{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      padding:8px 0 4px 56px;
+      font-size:13px;
+      color:#334155;
+    }
+
+    .chart-legend span{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .line-key{
+      width:20px;
+      height:4px;
+      border-radius:999px;
+      display:inline-block;
+    }
+
+    .line-key.green{background:var(--green)}
+    .line-key.red{background:var(--red)}
+
+    .chart-svg{
+      width:100%;
+      height:200px;
+      display:block;
+    }
+
+    .donut-wrap{
+      padding:8px 20px 18px;
+      display:grid;
+      grid-template-columns:210px minmax(0,1fr);
+      align-items:center;
+      gap:12px;
+    }
+
+    .donut-svg{
+      width:180px;
+      height:180px;
+      margin:0 auto;
+      display:block;
+    }
+
+    .domain-list{
+      display:grid;
+      gap:14px;
+    }
+
+    .domain-item{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      align-items:center;
+      gap:10px;
+      color:#24364f;
+      font-size:14px;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    .bottom-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(360px,.85fr);
+      gap:16px;
+    }
+
+    .table-card,
+    .alerts-card{
+      padding-bottom:10px;
+    }
+
+    .card-actions{
+      display:flex;
+      justify-content:flex-end;
+      padding:0 18px 12px;
+    }
+
+    .ghost-btn,
+    .soft-btn{
+      border:1px solid #dbe5f0;
+      background:#f8fbff;
+      color:#2b5fcf;
+      padding:8px 14px;
+      border-radius:8px;
+      font:inherit;
+      cursor:pointer;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+
+    th,td{
+      text-align:left;
+      padding:14px 18px;
+      border-top:1px solid #edf2f7;
+      vertical-align:middle;
+    }
+
+    th{
+      color:#5b6f87;
+      font-size:13px;
+      font-weight:500;
+    }
+
+    td{
+      color:#22344d;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 8px;
+      border-radius:8px;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.02em;
+    }
+
+    .status-pill.continue{background:#e8f7ee;color:var(--green)}
+    .status-pill.degraded{background:#fff3dd;color:#c27a08}
+    .status-pill.non-admissible{background:#ffefef;color:var(--red)}
+    .status-pill.non-executable{background:#f8ecff;color:#9c3ef2}
+
+    .action-btn{
+      width:42px;
+      height:32px;
+      border-radius:9px;
+      border:1px solid #d5e1ef;
+      background:#fff;
+      color:#2b5fcf;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    .view-all-wrap{
+      padding:8px 18px 14px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .alerts-list{
+      padding:6px 18px 8px;
+      display:grid;
+      gap:8px;
+    }
+
+    .alert-row{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      gap:12px;
+      align-items:start;
+      padding:10px 0;
+      border-top:1px solid #edf2f7;
+    }
+
+    .alert-icon{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-size:20px;
+    }
+
+    .alert-icon.red{background:#ffeded;color:var(--red)}
+    .alert-icon.orange{background:#fff1e6;color:var(--orange)}
+
+    .alert-title{
+      font-weight:600;
+      margin-bottom:3px;
+    }
+
+    .alert-meta{
+      color:#4d627c;
+      font-size:14px;
+    }
+
+    .alert-time{
+      color:var(--red);
+      font-size:14px;
+      white-space:nowrap;
+    }
+
+    .login-bar{
+      margin-bottom:16px;
+      padding:12px 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .login-bar input{
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      min-width:170px;
+      font:inherit;
+    }
+
+    .login-bar button{
+      padding:10px 14px;
+      border:none;
+      border-radius:8px;
+      background:#1f3f74;
+      color:#fff;
+      font:inherit;
+      cursor:pointer;
+    }
+
+    .mode-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid #d8e1ef;
+      background:#f7f9fc;
+      color:#37506b;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .mode-pill.live{
+      background:#edf9f1;
+      color:#1b7a46;
+      border-color:#c7ead4;
+    }
+
+    .mode-pill.demo{
+      background:#f2f5f9;
+      color:#5b6f87;
+      border-color:#dbe5f0;
+    }
+
+    .mode-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:currentColor;
+      opacity:.9;
+    }
+
+    .footer{
+      text-align:center;
+      color:#7b8ba0;
+      font-size:13px;
+      padding:18px 0 6px;
+    }
+
+    @media (max-width:1220px){
+      .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .content-grid,.bottom-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width:980px){
+      .app-shell{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .main{padding:16px}
+      .topbar{flex-direction:column}
+      .topbar-right{justify-items:start}
+    }
+
+    @media (max-width:640px){
+      .stats-grid{grid-template-columns:1fr}
+      .donut-wrap{grid-template-columns:1fr}
+      .chart-legend{padding-left:0;flex-wrap:wrap}
+      th:nth-child(4),td:nth-child(4),
+      th:nth-child(5),td:nth-child(5){display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">🛡️</div>
+        <div>
+          <div class="brand-title">BOUNDARY</div>
+          <div class="brand-sub">Recoverability-Constrained Continuity System</div>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <a class="nav-item active" href="#"><span class="nav-icon">🏛️</span>Dashboard</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">📋</span>Evaluations</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">📑</span>Records</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">🔔</span>Alerts</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">🧾</span>Reports</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">⬇️</span>Export Data</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">🕘</span>Audit Log</a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">👥</span>Users <span class="nav-badge" id="userBadge">0</span></a>
+        <a class="nav-item muted" href="#"><span class="nav-icon">⚙️</span>Settings</a>
+      </nav>
+
+      <div class="sidebar-card">
+        <div class="tiny">Institution</div>
+        <div class="name" id="sidebarInstitution">St. Mary Hospital</div>
+        <div class="role">Role: <span id="sidebarRole">Institution Admin</span></div>
+      </div>
+
+      <a class="logout" href="#" onclick="logout(); return false;"><span class="nav-icon">↪️</span>Logout</a>
+    </aside>
+
+    <main class="main">
+      <div class="login-bar card">
+        <input id="u" placeholder="user" autocomplete="username" />
+        <input id="p" type="password" placeholder="password" autocomplete="current-password" />
+        <button onclick="login()">Login</button>
+        <div class="mode-pill demo" id="modePill"><span class="mode-dot"></span><span id="modeLabel">Demo mode</span></div>
+        <div class="meta" id="loginStatus">Log in to load institutional records.</div>
+      </div>
+
+      <div class="topbar">
+        <div>
+          <h1 class="page-title">Institution Dashboard</h1>
+          <div class="welcome">Welcome, <span id="welcomeInstitution">St. Mary Hospital</span></div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="top-row">
+            <div>🏥 <span id="topInstitution">St. Mary Hospital</span></div>
+            <div class="pill">👤 <span id="topUser">Admin</span></div>
+          </div>
+          <div class="status-row">
+            <span>📅 <span id="topDate">May 26, 2025</span></span>
+            <span>🕒 <span id="topClock">14:30:22</span></span>
+          </div>
+        </div>
+      </div>
+
+      <section class="stats-grid">
+        <div class="card stat-card">
+          <div>
+            <div class="stat-label">Total Evaluations</div>
+            <div class="stat-value">
+              <div class="stat-number blue" id="totalEvaluations">0</div>
+              <div class="stat-note">All time</div>
+            </div>
+          </div>
+          <div class="stat-icon blue">📋</div>
+        </div>
+
+        <div class="card stat-card">
+          <div>
+            <div class="stat-label">Non-Admissible</div>
+            <div class="stat-value">
+              <div class="stat-number red" id="nonAdmissibleCount">0</div>
+              <div class="stat-note">This month</div>
+            </div>
+          </div>
+          <div class="stat-icon red">🛑</div>
+        </div>
+
+        <div class="card stat-card">
+          <div>
+            <div class="stat-label">Admissible</div>
+            <div class="stat-value">
+              <div class="stat-number green" id="admissibleCount">0</div>
+              <div class="stat-note">This month</div>
+            </div>
+          </div>
+          <div class="stat-icon green">✅</div>
+        </div>
+
+        <div class="card stat-card">
+          <div>
+            <div class="stat-label">Critical Alerts</div>
+            <div class="stat-value">
+              <div class="stat-number orange" id="criticalAlertsCount">0</div>
+              <div class="stat-note">Requiring attention</div>
+            </div>
+          </div>
+          <div class="stat-icon orange">🔔</div>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Evaluations Over Time</div>
+            <select class="select" id="timeFilter">
+              <option>This Month</option>
+            </select>
+          </div>
+          <div class="chart-legend">
+            <span><i class="line-key green"></i> Admissible</span>
+            <span><i class="line-key red"></i> Non-Admissible</span>
+          </div>
+          <div class="chart-wrap">
+            <svg class="chart-svg" id="lineChart" viewBox="0 0 700 220" preserveAspectRatio="none"></svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Evaluations by Domain</div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" id="donutChart" viewBox="0 0 220 220"></svg>
+            <div class="domain-list" id="domainList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bottom-grid">
+        <div class="card table-card">
+          <div class="card-header">
+            <div class="card-title">Latest Evaluations</div>
+            <button class="ghost-btn">View All</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Domain</th>
+                <th>State</th>
+                <th>Institution</th>
+                <th>Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="latestEvaluationsBody"></tbody>
+          </table>
+          <div class="view-all-wrap">
+            <button class="soft-btn">View All Evaluations</button>
+          </div>
+        </div>
+
+        <div class="card alerts-card">
+          <div class="card-header">
+            <div class="card-title">Recent Alerts</div>
+            <button class="ghost-btn">View All</button>
+          </div>
+          <div class="alerts-list" id="recentAlerts"></div>
+        </div>
+      </section>
+
+      <div class="footer">BOUNDARY Recoverability-Constrained Continuity System © 2025</div>
+    </main>
+  </div>
+
+  <audio id="beep" preload="auto">
+    <source src="data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YTAAAAAAAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
+  </audio>
+
+  <script>
+    const API = "http://127.0.0.1:8000";
+    const DOMAIN_COLORS = ["#3466d0", "#2fb66d", "#fbbf24", "#8b5cf6", "#94a3b8", "#ef4444"];
+    let lastCritical = 0;
+    let dashboardMode = "demo";
+    let recordsCache = [];
+    let currentUser = localStorage.getItem("recovs-dashboard-user") || "Admin";
+    let currentInstitution = localStorage.getItem("recovs-dashboard-institution") || "St. Mary Hospital";
+    let currentRole = localStorage.getItem("recovs-dashboard-role") || "Institution Admin";
+
+    document.getElementById("u").value = localStorage.getItem("recovs-dashboard-user") || "";
+    document.getElementById("p").value = localStorage.getItem("recovs-dashboard-pass") || "";
+
+    function updateClock(){
+      const now = new Date();
+      document.getElementById("topDate").textContent = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+      document.getElementById("topClock").textContent = now.toLocaleTimeString("en-US", { hour12: false });
+    }
+
+    function setIdentity(){
+      document.getElementById("welcomeInstitution").textContent = currentInstitution;
+      document.getElementById("topInstitution").textContent = currentInstitution;
+      document.getElementById("topUser").textContent = currentUser || "Admin";
+      document.getElementById("sidebarInstitution").textContent = currentInstitution;
+      document.getElementById("sidebarRole").textContent = currentRole;
+      document.getElementById("u").value = currentUser || "";
+    }
+
+    function setMode(mode, label){
+      dashboardMode = mode;
+      const pill = document.getElementById("modePill");
+      const labelEl = document.getElementById("modeLabel");
+      if(!pill || !labelEl) return;
+      pill.className = `mode-pill ${mode}`;
+      labelEl.textContent = label;
+    }
+
+    function buildDemoRecords(){
+      const now = Date.now();
+      const domains = ["Medication Continuity", "Medical Access", "Living Conditions", "Support Network", "Identity Access", "Other"];
+      const states = ["CONTINUE", "CONTINUE", "CONTINUE", "DEGRADED", "NON-ADMISSIBLE", "CONTINUE", "DEGRADED", "NON-EXECUTABLE"];
+
+      return Array.from({ length: 28 }, (_, index) => ({
+        evaluation_id: `EV-2026-0422-${String(index + 101).padStart(3, "0")}`,
+        timestamp: new Date(now - ((27 - index) * 6 * 60 * 60 * 1000)).toISOString(),
+        domain: domains[index % domains.length],
+        state: states[index % states.length],
+        institution: currentInstitution,
+        summary: "Institutional continuity evaluation recorded for dashboard preview.",
+        reason_codes: states[index % states.length] === "CONTINUE" ? [] : ["GI-001"]
+      }));
+    }
+
+    function useDemoMode(reason){
+      recordsCache = buildDemoRecords();
+      setMode("demo", "Demo mode");
+      document.getElementById("loginStatus").textContent = reason;
+      renderStats();
+      renderLineChart();
+      renderDonutChart();
+      renderLatestEvaluations();
+      renderAlerts();
+      lastCritical = recordsCache.filter((item) => ["NON-ADMISSIBLE", "NON-EXECUTABLE"].includes(item.state)).length;
+    }
+
+    async function login(){
+      const username = document.getElementById("u").value;
+      const password = document.getElementById("p").value;
+      const status = document.getElementById("loginStatus");
+
+      localStorage.setItem("recovs-dashboard-user", username);
+      localStorage.setItem("recovs-dashboard-pass", password);
+
+      try {
+        const r = await fetch(API + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        if(r.status !== 200){
+          status.textContent = "Unauthorized";
+          return;
+        }
+
+        const d = await r.json();
+        localStorage.setItem("recovs-token", d.access_token);
+        currentUser = username || "Admin";
+        currentRole = username === "admin" || username === "regulator" ? "Regulator" : "Institution Admin";
+        localStorage.setItem("recovs-dashboard-role", currentRole);
+        if(d.institution){
+          currentInstitution = d.institution;
+          localStorage.setItem("recovs-dashboard-institution", currentInstitution);
+        }
+        setIdentity();
+        setMode("live", "Live backend");
+        status.textContent = "Authenticated. Loading records...";
+        load();
+      } catch (error) {
+        status.textContent = "Could not reach backend login.";
+      }
+    }
+
+    function logout(){
+      localStorage.removeItem("recovs-token");
+      setMode("demo", "Demo mode");
+      useDemoMode("Logged out. Showing demo data.");
+    }
+
+    function stateClass(state){
+      if(state === "CONTINUE") return "continue";
+      if(state === "DEGRADED") return "degraded";
+      if(state === "NON-ADMISSIBLE") return "non-admissible";
+      return "non-executable";
+    }
+
+    function formatTime(value){
+      if(!value) return "";
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return value;
+      return date.toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      });
+    }
+
+    function relativeTime(value){
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return "recent";
+      const diffMinutes = Math.max(1, Math.round((Date.now() - date.getTime()) / 60000));
+      if(diffMinutes < 60) return `${diffMinutes} min ago`;
+      const hours = Math.round(diffMinutes / 60);
+      if(hours < 24) return `${hours} hr ago`;
+      const days = Math.round(hours / 24);
+      return `${days} day ago`;
+    }
+
+    function renderStats(){
+      const total = recordsCache.length;
+      const admissible = recordsCache.filter((item) => item.state === "CONTINUE").length;
+      const nonAdmissible = recordsCache.filter((item) => item.state === "NON-ADMISSIBLE").length;
+      const critical = recordsCache.filter((item) => ["NON-ADMISSIBLE", "NON-EXECUTABLE"].includes(item.state)).length;
+
+      document.getElementById("totalEvaluations").textContent = total;
+      document.getElementById("admissibleCount").textContent = admissible;
+      document.getElementById("nonAdmissibleCount").textContent = nonAdmissible;
+      document.getElementById("criticalAlertsCount").textContent = critical;
+
+      document.getElementById("userBadge").textContent = String(Math.max(1, currentRole === "Regulator" ? 3 : 1));
+
+      if(recordsCache.length){
+        currentInstitution = recordsCache[0].institution || currentInstitution;
+        setIdentity();
+      }
+    }
+
+    function renderLatestEvaluations(){
+      const body = document.getElementById("latestEvaluationsBody");
+      body.innerHTML = "";
+
+      recordsCache.slice().reverse().slice(0, 5).forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.evaluation_id || "EV-" + Math.random().toString(36).slice(2, 10).toUpperCase()}</td>
+          <td>${item.domain || "Unknown"}</td>
+          <td><span class="status-pill ${stateClass(item.state)}">${item.state}</span></td>
+          <td>${item.institution || currentInstitution}</td>
+          <td>${formatTime(item.timestamp)}</td>
+          <td><button class="action-btn" onclick="report('${item.evaluation_id}')">👁️</button></td>
+        `;
+        body.appendChild(row);
+      });
+    }
+
+    function renderAlerts(){
+      const wrap = document.getElementById("recentAlerts");
+      wrap.innerHTML = "";
+      const alertItems = recordsCache
+        .filter((item) => ["NON-ADMISSIBLE", "NON-EXECUTABLE"].includes(item.state))
+        .slice()
+        .reverse()
+        .slice(0, 5);
+
+      alertItems.forEach((item) => {
+        const isCritical = item.state === "NON-EXECUTABLE";
+        const row = document.createElement("div");
+        row.className = "alert-row";
+        row.innerHTML = `
+          <div class="alert-icon ${isCritical ? "orange" : "red"}">${isCritical ? "🔔" : "🛑"}</div>
+          <div>
+            <div class="alert-title">${isCritical ? "Critical Alert" : "Non-Admissible Evaluation"}</div>
+            <div class="alert-meta">${item.domain || "Unknown"} · ${item.evaluation_id || ""}</div>
+          </div>
+          <div class="alert-time">${relativeTime(item.timestamp)}</div>
+        `;
+        wrap.appendChild(row);
+      });
+    }
+
+    function renderLineChart(){
+      const svg = document.getElementById("lineChart");
+      const width = 700;
+      const height = 220;
+      const left = 44;
+      const top = 18;
+      const chartWidth = 620;
+      const chartHeight = 150;
+      const points = 12;
+
+      const grouped = Array.from({ length: points }, () => ({ green: 0, red: 0 }));
+      recordsCache.forEach((item, index) => {
+        const bucket = grouped[index % points];
+        if(item.state === "CONTINUE") bucket.green += 1;
+        if(item.state === "NON-ADMISSIBLE" || item.state === "NON-EXECUTABLE") bucket.red += 1;
+      });
+
+      const maxValue = Math.max(10, ...grouped.flatMap((item) => [item.green, item.red]));
+      const yFor = (value) => top + chartHeight - (value / maxValue) * chartHeight;
+      const xFor = (index) => left + (index * (chartWidth / (points - 1)));
+
+      const greenPath = grouped.map((item, index) => `${index === 0 ? "M" : "L"} ${xFor(index)} ${yFor(item.green)}`).join(" ");
+      const redPath = grouped.map((item, index) => `${index === 0 ? "M" : "L"} ${xFor(index)} ${yFor(item.red)}`).join(" ");
+
+      const gridLines = [0, .25, .5, .75, 1].map((ratio, idx) => {
+        const y = top + chartHeight * ratio;
+        const label = Math.round(maxValue * (1 - ratio));
+        return `
+          <line x1="${left}" y1="${y}" x2="${left + chartWidth}" y2="${y}" stroke="#dbe5f0" stroke-width="1" />
+          <text x="${left - 10}" y="${y + 4}" text-anchor="end" fill="#5b6f87" font-size="12">${label}</text>
+        `;
+      }).join("");
+
+      const monthLabels = ["May 1","May 3","May 5","May 8","May 11","May 14","May 16","May 19","May 21","May 23","May 25","May 26"];
+      const xLabels = monthLabels.map((label, index) => `
+        <text x="${xFor(index)}" y="${top + chartHeight + 24}" text-anchor="middle" fill="#5b6f87" font-size="12">${label}</text>
+      `).join("");
+
+      const greenDots = grouped.map((item, index) => `<circle cx="${xFor(index)}" cy="${yFor(item.green)}" r="3.5" fill="#2fb66d" />`).join("");
+      const redDots = grouped.map((item, index) => `<circle cx="${xFor(index)}" cy="${yFor(item.red)}" r="3.5" fill="#ef4444" />`).join("");
+
+      svg.innerHTML = `
+        ${gridLines}
+        <path d="${greenPath}" fill="none" stroke="#2fb66d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="${redPath}" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+        ${greenDots}
+        ${redDots}
+        ${xLabels}
+      `;
+    }
+
+    function polarToCartesian(cx, cy, radius, angle){
+      const radians = (angle - 90) * Math.PI / 180.0;
+      return {
+        x: cx + (radius * Math.cos(radians)),
+        y: cy + (radius * Math.sin(radians))
+      };
+    }
+
+    function describeArc(cx, cy, radius, startAngle, endAngle){
+      const start = polarToCartesian(cx, cy, radius, endAngle);
+      const end = polarToCartesian(cx, cy, radius, startAngle);
+      const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+      return ["M", start.x, start.y, "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(" ");
+    }
+
+    function renderDonutChart(){
+      const domainMap = new Map();
+      recordsCache.forEach((item) => {
+        const key = item.domain || "Other";
+        domainMap.set(key, (domainMap.get(key) || 0) + 1);
+      });
+
+      const entries = Array.from(domainMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const total = entries.reduce((sum, [, value]) => sum + value, 0);
+      const svg = document.getElementById("donutChart");
+      const list = document.getElementById("domainList");
+
+      if(total === 0){
+        svg.innerHTML = `<circle cx="110" cy="110" r="70" fill="none" stroke="#dbe5f0" stroke-width="34"></circle>
+          <text x="110" y="108" text-anchor="middle" font-size="18" font-weight="700" fill="#1d2d45">0</text>
+          <text x="110" y="132" text-anchor="middle" font-size="12" fill="#5b6f87">Total</text>`;
+        list.innerHTML = "";
+        return;
+      }
+
+      let startAngle = 0;
+      const arcs = entries.map(([label, value], index) => {
+        const angle = (value / total) * 360;
+        const arc = describeArc(110, 110, 70, startAngle, startAngle + angle);
+        const piece = `<path d="${arc}" fill="none" stroke="${DOMAIN_COLORS[index]}" stroke-width="38" stroke-linecap="butt"></path>`;
+        startAngle += angle;
+        return piece;
+      }).join("");
+
+      svg.innerHTML = `
+        <circle cx="110" cy="110" r="70" fill="none" stroke="#edf2f7" stroke-width="38"></circle>
+        ${arcs}
+        <circle cx="110" cy="110" r="40" fill="#fff"></circle>
+        <text x="110" y="108" text-anchor="middle" font-size="22" font-weight="800" fill="#1d2d45">${recordsCache.length}</text>
+        <text x="110" y="132" text-anchor="middle" font-size="13" fill="#5b6f87">Total</text>
+      `;
+
+      list.innerHTML = entries.map(([label, value], index) => {
+        const pct = ((value / total) * 100).toFixed(1);
+        return `
+          <div class="domain-item">
+            <span class="dot" style="background:${DOMAIN_COLORS[index]}"></span>
+            <span>${label}</span>
+            <strong>${value} (${pct}%)</strong>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function load(){
+      const token = localStorage.getItem("recovs-token");
+      if(!token){
+        useDemoMode("Log in to replace demo data with live institutional records.");
+        return;
+      }
+
+      try {
+        const r = await fetch(API + "/records", {
+          headers: { Authorization: "Bearer " + token }
+        });
+
+        if(r.status !== 200){
+          useDemoMode("Backend unavailable or session rejected. Showing demo data.");
+          return;
+        }
+
+        const data = await r.json();
+        recordsCache = Array.isArray(data) ? data : [];
+
+        if(!recordsCache.length){
+          recordsCache = buildDemoRecords();
+          setMode("live", "Live backend");
+          document.getElementById("loginStatus").textContent = "Authenticated. No stored evaluations yet, so sample dashboard data is shown.";
+        } else {
+          setMode("live", "Live backend");
+          document.getElementById("loginStatus").textContent = "Institutional records loaded successfully.";
+        }
+
+        if(recordsCache.length && recordsCache[0].institution){
+          currentInstitution = recordsCache[0].institution;
+          setIdentity();
+        }
+
+        renderStats();
+        renderLineChart();
+        renderDonutChart();
+        renderLatestEvaluations();
+        renderAlerts();
+
+        const critical = recordsCache.filter((item) => ["NON-ADMISSIBLE", "NON-EXECUTABLE"].includes(item.state)).length;
+        if(critical > lastCritical){
+          document.getElementById("alert").style.display = "block";
+          document.getElementById("beep").play().catch(() => {});
+          setTimeout(() => document.getElementById("alert").style.display = "none", 3000);
+        }
+        lastCritical = critical;
+      } catch (error) {
+        useDemoMode("Could not reach the backend. Showing demo data instead.");
+      }
+    }
+
+    function report(id){
+      window.open(API + "/report/" + id, "_blank");
+    }
+
+    updateClock();
+    setIdentity();
+    setInterval(updateClock, 1000);
+    setInterval(load, 5000);
+    load();
+  </script>
+</body>
+</html>

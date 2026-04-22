@@ -13,6 +13,18 @@ Boundary identifies when continuation becomes non-recoverable in time under real
 It operationalizes a universal execution constraint across human, institutional, computational, artificial intelligence, robotic, and hybrid systems.
 ---
 
+## Project guidance
+
+For current repository direction and preserved project references, read:
+
+- [docs/RECOVS_REFERENCE_PACK.md](C:\Users\usuario\Documents\Codex\recoverability-constrained-systems\docs\RECOVS_REFERENCE_PACK.md)
+- [docs/WEBSITE_DIRECTION_GAP_ANALYSIS.md](C:\Users\usuario\Documents\Codex\recoverability-constrained-systems\docs\WEBSITE_DIRECTION_GAP_ANALYSIS.md)
+- [docs/IMPLEMENTATION_ROADMAP.md](C:\Users\usuario\Documents\Codex\recoverability-constrained-systems\docs\IMPLEMENTATION_ROADMAP.md)
+
+These documents capture the reviewed RECOVS reference zip, the intended website direction, and the recommended next implementation phases.
+
+---
+
 ## Core Principle
 
 A system may evaluate, simulate, or recommend without restriction.

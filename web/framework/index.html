@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RECOVS - Framework</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f6f0e7;
+      --surface: rgba(255, 255, 255, 0.82);
+      --ink: #101010;
+      --muted: #5f574d;
+      --line: rgba(16, 16, 16, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.7;
+    }
+
+    main {
+      width: min(760px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    .eyebrow,
+    .back-link {
+      display: inline-block;
+      font-family: "DM Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .back-link {
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: clamp(2.4rem, 8vw, 4.2rem);
+      line-height: 0.98;
+      font-weight: 400;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.32rem;
+      font-weight: 400;
+    }
+
+    p {
+      margin: 0 0 18px;
+      font-size: 1.02rem;
+    }
+
+    section {
+      margin-top: 36px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+    }
+
+    .lines div {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back-link" href="https://recovs.org/">Back to RECOVS</a>
+    <div class="eyebrow">Framework</div>
+    <h1>Framework</h1>
+    <p>RECOVS is a unified system that defines when any action is allowed to occur.</p>
+
+    <section>
+      <h2>Core definition</h2>
+      <p>A system may act only while recoverability can be established in time under real conditions as sufficient to prevent irreversible transition.</p>
+      <p>If this condition fails:</p>
+      <div class="lines">
+        <div>→ execution does not occur</div>
+      </div>
+      <p>No further condition applies.</p>
+    </section>
+
+    <section>
+      <h2>System structure</h2>
+      <p>The framework operates as a single, non-fragmentable system:</p>
+      <div class="lines">
+        <div>Invariant Layer</div>
+        <div>Defines the admissibility condition</div>
+        <div>Structural Layer</div>
+        <div>Master Index and formal definition</div>
+        <div>Execution Layer</div>
+        <div>Runtime systems enforcing decisions</div>
+        <div>Interface Layer</div>
+        <div>Tools and evaluation surfaces</div>
+        <div>Domain Layer</div>
+        <div>Applications across real-world systems</div>
+        <div>Preservation Layer</div>
+        <div>Ensures continuity and non-loss</div>
+      </div>
+      <p>No layer may override the invariant.</p>
+    </section>
+
+    <section>
+      <h2>Core principle</h2>
+      <p>No distinction is permitted between representation and execution.</p>
+      <p>If a system cannot act in time under real conditions:</p>
+      <div class="lines">
+        <div>→ it is treated as incapable</div>
+        <div>→ continuation is non-admissible</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Decision logic</h2>
+      <p>Every evaluation produces one of three outcomes:</p>
+      <div class="lines">
+        <div>CONTINUE</div>
+        <div>STOP</div>
+        <div>NON-EXECUTABLE</div>
+      </div>
+      <p>These outputs are not advisory. They are enforcement conditions.</p>
+    </section>
+
+    <section>
+      <h2>Continuity condition</h2>
+      <p>If any required path, dependency, or recovery mechanism cannot be established in time:</p>
+      <div class="lines">
+        <div>→ admissibility cannot be established</div>
+        <div>→ execution does not occur</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Scope</h2>
+      <p>The framework applies to:</p>
+      <div class="lines">
+        <div>humans</div>
+        <div>institutions</div>
+        <div>machines</div>
+        <div>infrastructures</div>
+        <div>autonomous systems</div>
+      </div>
+      <p>Across:</p>
+      <div class="lines">
+        <div>healthcare</div>
+        <div>transport</div>
+        <div>energy</div>
+        <div>finance</div>
+        <div>communication</div>
+        <div>governance</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

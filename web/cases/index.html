@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RECOVS - Real Cases</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f6f0e7;
+      --surface: rgba(255, 255, 255, 0.82);
+      --ink: #101010;
+      --muted: #5f574d;
+      --line: rgba(16, 16, 16, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Fraunces", Georgia, serif;
+      line-height: 1.7;
+    }
+
+    main {
+      width: min(760px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 48px 0 72px;
+    }
+
+    .eyebrow,
+    .back-link {
+      display: inline-block;
+      font-family: "DM Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .back-link {
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: clamp(2.4rem, 8vw, 4.2rem);
+      line-height: 0.98;
+      font-weight: 400;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.32rem;
+      font-weight: 400;
+    }
+
+    p {
+      margin: 0 0 18px;
+      font-size: 1.02rem;
+    }
+
+    section {
+      margin-top: 36px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+    }
+
+    .lines div {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back-link" href="https://recovs.org/">Back to RECOVS</a>
+    <div class="eyebrow">Real Cases</div>
+    <h1>Real Cases</h1>
+    <p>RECOVS is validated through real-world failures and interventions where recoverability was either lost or restored.</p>
+
+    <section>
+      <h2>Case 1 - Healthcare (intervention)</h2>
+      <p>A bedbound patient received no follow-up for years after diagnosis.</p>
+      <p>A caregiver applied the recoverability condition:</p>
+      <div class="lines">
+        <div>detected uncertainty</div>
+        <div>identified absence of records</div>
+        <div>triggered escalation</div>
+      </div>
+      <p>The system corrected:</p>
+      <div class="lines">
+        <div>→ patient referred for reassessment</div>
+      </div>
+      <p>Result: Non-admissible continuation detected and stopped.</p>
+    </section>
+
+    <section>
+      <h2>Case 2 - Healthcare (failure)</h2>
+      <p>No escalation despite patient deterioration.</p>
+      <p>System conditions:</p>
+      <div class="lines">
+        <div>no detection</div>
+        <div>no response</div>
+        <div>no recovery</div>
+      </div>
+      <p>Result:</p>
+      <div class="lines">
+        <div>→ continuation occurred under non-admissible conditions</div>
+        <div>→ irreversible risk increased</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Case 3 - Institutional failure</h2>
+      <p>A system was present but no action occurred.</p>
+      <div class="lines">
+        <div>signals existed</div>
+        <div>response did not occur</div>
+        <div>enforcement failed</div>
+      </div>
+      <p>Result:</p>
+      <div class="lines">
+        <div>→ non-admissible continuation</div>
+        <div>→ system failure despite visibility</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Case 4 - NHS transport failure</h2>
+      <p>A documented continuity failure where delay prevented recovery.</p>
+      <div class="lines">
+        <div>time constraint exceeded</div>
+        <div>coordination failed</div>
+        <div>recovery path collapsed</div>
+      </div>
+      <p>Result:</p>
+      <div class="lines">
+        <div>→ continuation should not have occurred</div>
+        <div>→ system crossed irreversible boundary</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What all cases show</h2>
+      <p>Failure does not come from lack of information.</p>
+      <p>Failure comes from:</p>
+      <div class="lines">
+        <div>inability to act in time</div>
+        <div>absence of enforcement</div>
+        <div>loss of recoverability</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>System rule</h2>
+      <p>If a system cannot:</p>
+      <div class="lines">
+        <div>detect</div>
+        <div>respond</div>
+        <div>and recover in time</div>
+      </div>
+      <div class="lines">
+        <div>→ it is already unsafe</div>
+        <div>→ continuation must not occur</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
