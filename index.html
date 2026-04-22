@@ -2,60 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="refresh" content="0; url=./web/index.html"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Boundary v4.1</title>
-<style>
-:root {
-  --bg:#07162f;
-  --panel:#0f2345;
-  --line:#27446e;
-  --text:#f4f7fb;
-  --muted:#b8c7dc;
-  --accent:#5fb3ff;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#07162f 0%,#0b1d3c 100%);color:var(--text);min-height:100vh}
-.wrap{max-width:980px;margin:0 auto;padding:56px 24px 40px}
-.kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
-h1{font-size:clamp(40px,7vw,72px);line-height:1.02;margin-bottom:18px}
-.lead{max-width:760px;font-size:20px;line-height:1.6;color:var(--muted);margin-bottom:34px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:24px 0 40px}
-.card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px}
-.card h2{font-size:16px;margin-bottom:8px}
-.card p{font-size:14px;line-height:1.6;color:var(--muted)}
-.actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:999px;border:1px solid var(--line);color:var(--text);text-decoration:none;font-weight:600;background:rgba(255,255,255,.03)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#081423}
-.note{padding-top:22px;border-top:1px solid var(--line);font-size:13px;line-height:1.7;color:var(--muted)}
-code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#d8ebff}
-</style>
+<title>RECOVS Redirect</title>
+<script>
+window.location.replace('./web/index.html');
+</script>
 </head>
 <body>
-  <main class="wrap">
-    <div class="kicker">Boundary Platform</div>
-    <h1>Boundary v4.1</h1>
-    <p class="lead">Recoverability-Constrained Execution System. This repository is the main Boundary platform and engine surface, separate from the public RECOVS tool.</p>
-    <div class="actions">
-      <a class="btn primary" href="./README.md">Open project overview</a>
-      <a class="btn" href="./docs/PLATFORM_RECORD.md">Platform record</a>
-      <a class="btn" href="./docs/DEPLOYMENT.md">Deployment notes</a>
-      <a class="btn" href="https://github.com/intervalstudio-creator/recoverability-constrained-systems">GitHub repository</a>
-    </div>
-    <section class="grid">
-      <article class="card">
-        <h2>Engine</h2>
-        <p>Core evaluation logic, admissibility reasoning, audit paths, and execution constraints for Boundary v4.1.</p>
-      </article>
-      <article class="card">
-        <h2>API</h2>
-        <p>Backend and institutional interfaces for storage, detection, records, reporting, and monitoring.</p>
-      </article>
-      <article class="card">
-        <h2>Docs</h2>
-        <p>Framework notes, platform record, deployment instructions, and implementation material remain in <code>docs/</code>.</p>
-      </article>
-    </section>
-    <p class="note">RECOVS should now be published from its own repository and custom domain, independent from this Boundary platform repository.</p>
-  </main>
+<p>Redirecting to <a href="./web/index.html">RECOVS</a>...</p>
 </body>
 </html>
