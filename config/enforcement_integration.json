@@ -1,0 +1,13 @@
+{
+  "enabled": false,
+  "forward_states": [
+    "DEGRADED",
+    "NON-ADMISSIBLE",
+    "NON-EXECUTABLE"
+  ],
+  "enforcement_endpoint": "http://127.0.0.1:8010/evaluate",
+  "timeout_seconds": 3,
+  "include_reason_codes": true,
+  "include_rule_trace": true,
+  "fail_open": true
+}
