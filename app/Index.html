@@ -1,0 +1,2518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Boundary Platform v4.0 — Enforcement Connected</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #0a0c0f;
+  --surface:  #111418;
+  --surface2: #181c22;
+  --border:   #1e2530;
+  --border2:  #252d3a;
+  --text:     #c8d4e0;
+  --text2:    #7a8fa8;
+  --text3:    #3d5068;
+  --cont:     #00e676;
+  --cont-bg:  #00251a;
+  --deg:      #ffb300;
+  --deg-bg:   #1f1600;
+  --non:      #ff3d00;
+  --non-bg:   #1f0800;
+  --esc:      #d500f9;
+  --esc-bg:   #1a0022;
+  --accent:   #00b4d8;
+  --mono:     'IBM Plex Mono', monospace;
+  --sans:     'IBM Plex Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-mark {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+.logo-text { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: 0.08em; color: var(--text); }
+.logo-ver { font-size: 10px; color: var(--text3); font-family: var(--mono); margin-left: 6px; }
+
+.header-right { display: flex; align-items: center; gap: 16px; }
+.mode-toggle {
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.mode-btn {
+  padding: 5px 14px;
+  font-size: 11px;
+  font-family: var(--mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  background: none;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mode-btn.active { background: var(--accent); color: #000; }
+
+.conn-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text3); }
+.conn-dot.online { background: var(--cont); box-shadow: 0 0 6px var(--cont); }
+.conn-label { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr 320px;
+  height: calc(100vh - 56px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 20px 0;
+}
+.sidebar-section { margin-bottom: 8px; }
+.sidebar-label {
+  padding: 4px 20px 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  font-size: 13px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--surface2); color: var(--accent); border-left-color: var(--accent); }
+.nav-icon { width: 14px; text-align: center; font-size: 12px; }
+
+/* ── MAIN ── */
+.main { overflow-y: auto; background: var(--bg); }
+.panel { display: none; padding: 28px; }
+.panel.active { display: block; }
+
+/* ── PANEL HEADER ── */
+.panel-head { margin-bottom: 24px; }
+.panel-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.panel-sub { font-size: 12px; color: var(--text2); }
+
+/* ── STATUS DISPLAY ── */
+.status-display {
+  border-radius: 6px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+.status-display.CONTINUE     { background: var(--cont-bg); border-color: var(--cont); }
+.status-display.DEGRADED { background: var(--deg-bg);  border-color: var(--deg); }
+.status-display.NON-ADMISSIBLE { background: var(--non-bg); border-color: var(--non); }
+.status-display.NON-EXECUTABLE { background: var(--esc-bg); border-color: var(--esc); animation: pulse-border 1.2s ease-in-out infinite; }
+
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(213,0,249,0); }
+  50% { box-shadow: 0 0 0 4px rgba(213,0,249,0.15); }
+}
+
+.status-icon { font-size: 36px; line-height: 1; }
+.status-info { flex: 1; }
+.status-label {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.status-label.CONTINUE     { color: var(--cont); }
+.status-label.DEGRADED { color: var(--deg); }
+.status-label.NON-ADMISSIBLE { color: var(--non); }
+.status-label.NON-EXECUTABLE { color: var(--esc); }
+.status-meta { font-size: 11px; color: var(--text2); margin-top: 4px; font-family: var(--mono); }
+
+.status-tti { text-align: right; }
+.tti-label { font-size: 10px; color: var(--text3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; }
+.tti-value { font-family: var(--mono); font-size: 20px; font-weight: 600; margin-top: 2px; }
+
+/* ── FORM ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 11px; color: var(--text2); font-family: var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+input, select, textarea {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+select option { background: var(--surface); }
+textarea { min-height: 100px; resize: vertical; }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+}
+.btn-primary { background: var(--accent); color: #000; }
+.btn-primary:hover { background: #00c8f5; }
+.btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: transparent; border: 1px solid var(--non); color: var(--non); }
+.btn-danger:hover { background: var(--non-bg); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ── FIELDS BUILDER ── */
+.fields-area { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 16px; }
+.fields-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr 24px; gap: 8px; align-items: center; margin-bottom: 8px; }
+.field-row input, .field-row select { padding: 6px 10px; font-size: 12px; }
+.remove-field { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; line-height: 1; transition: color 0.12s; }
+.remove-field:hover { color: var(--non); }
+
+/* ── TRACE TABLE ── */
+.trace-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; margin-top: 16px; }
+.trace-table th { text-align: left; padding: 8px 12px; background: var(--surface); color: var(--text3); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+.trace-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+.trace-table tr:last-child td { border-bottom: none; }
+.trace-table tr.fail td { background: rgba(255,61,0,0.04); }
+.trace-table tr.unknown td { background: rgba(255,179,0,0.04); }
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.pill-pass    { background: rgba(0,230,118,0.12); color: var(--cont); }
+.pill-fail    { background: rgba(255,61,0,0.12);  color: var(--non); }
+.pill-skip    { background: rgba(122,143,168,0.1); color: var(--text3); }
+.pill-unknown { background: rgba(255,179,0,0.12); color: var(--deg); }
+.pill-crit { background: rgba(255,61,0,0.1); color: var(--non); }
+.pill-major { background: rgba(255,179,0,0.1); color: var(--deg); }
+.pill-minor { background: rgba(0,180,216,0.1); color: var(--accent); }
+
+/* ── CARDS ── */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.card:hover { border-color: var(--accent); }
+.card-title { font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.card-domain { font-family: var(--mono); font-size: 10px; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+.card-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+/* ── LOG LIST ── */
+.log-list { display: flex; flex-direction: column; gap: 8px; }
+.log-entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.log-state-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.log-state-dot.CONTINUE     { background: var(--cont); }
+.log-state-dot.DEGRADED { background: var(--deg); }
+.log-state-dot.NON-ADMISSIBLE { background: var(--non); }
+.log-state-dot.NON-EXECUTABLE { background: var(--esc); }
+.log-domain { color: var(--accent); min-width: 80px; }
+.log-label  { color: var(--text); flex: 1; }
+.log-state  { font-weight: 600; min-width: 100px; }
+.log-time   { color: var(--text3); min-width: 100px; text-align: right; }
+
+/* ── DASHBOARD ── */
+.dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.dash-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px; }
+.dash-num { font-family: var(--mono); font-size: 28px; font-weight: 600; }
+.dash-num.safe { color: var(--cont); }
+.dash-num.deg  { color: var(--deg); }
+.dash-num.non  { color: var(--non); }
+.dash-num.esc  { color: var(--esc); }
+.dash-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--mono); margin-top: 4px; }
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 20px;
+}
+.rp-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+.rp-section { margin-bottom: 20px; }
+
+.explanation-block { background: var(--surface2); border-radius: 4px; padding: 12px 14px; margin-bottom: 10px; border-left: 3px solid var(--border2); }
+.explanation-block.fail { border-left-color: var(--non); }
+.explanation-block.warn { border-left-color: var(--deg); }
+.exp-rule { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 4px; letter-spacing: 0.06em; }
+.exp-reason { font-size: 12px; color: var(--text); line-height: 1.5; }
+
+/* ── SIMPLE MODE ── */
+.simple-mode { display: none; }
+body.simple .simple-mode { display: block; }
+body.simple .expert-mode { display: none; }
+
+.simple-card {
+  max-width: 600px;
+  margin: 40px auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 32px;
+}
+.simple-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+.simple-sub { color: var(--text2); font-size: 13px; margin-bottom: 28px; line-height: 1.6; }
+.simple-steps { counter-reset: step; list-style: none; }
+.simple-steps li {
+  counter-increment: step;
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+.simple-steps li::before {
+  content: counter(step);
+  background: var(--accent);
+  color: #000;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.simple-steps li > div { flex: 1; }
+.simple-step-label { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.simple-step-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ── OFFLINE BANNER ── */
+.offline-banner {
+  display: none;
+  background: var(--deg-bg);
+  border-bottom: 1px solid var(--deg);
+  padding: 8px 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--deg);
+}
+.offline-banner.show { display: block; }
+
+/* ── MISC ── */
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+.empty-state { text-align: center; padding: 48px 24px; color: var(--text3); font-size: 13px; }
+.loading { color: var(--text3); font-family: var(--mono); font-size: 12px; padding: 12px 0; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ── SIMPLE VIEW RESULT ── */
+.big-status {
+  border-radius: 8px;
+  padding: 28px;
+  text-align: center;
+  margin: 24px 0;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+.big-status.CONTINUE     { background: var(--cont-bg); border-color: var(--cont); }
+.big-status.DEGRADED { background: var(--deg-bg);  border-color: var(--deg); }
+.big-status.NON-ADMISSIBLE { background: var(--non-bg); border-color: var(--non); }
+.big-status.NON-EXECUTABLE { background: var(--esc-bg); border-color: var(--esc); }
+.big-status-label { font-size: 28px; font-weight: 700; font-family: var(--mono); letter-spacing: 0.04em; }
+.big-status-label.CONTINUE     { color: var(--cont); }
+.big-status-label.DEGRADED { color: var(--deg); }
+.big-status-label.NON-ADMISSIBLE { color: var(--non); }
+.big-status-label.NON-EXECUTABLE { color: var(--esc); }
+.big-status-explain { margin-top: 10px; font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* ── ENFORCEMENT UI UPGRADE ── */
+.boundary-enforcement-panel{
+  margin-top:16px;
+  padding:16px;
+  border:1px solid #1e2530;
+  border-radius:14px;
+  background:#111418;
+}
+.boundary-enforcement-title{
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+.boundary-enforcement-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.boundary-enforcement-box{
+  padding:12px;
+  border:1px solid #252d3a;
+  border-radius:12px;
+  background:#181c22;
+}
+.boundary-enforcement-label{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  opacity:.7;
+  margin-bottom:6px;
+  color: var(--text2);
+  font-family: var(--mono);
+}
+.boundary-enforcement-value{
+  font-size:14px;
+  font-weight:600;
+  word-break:break-word;
+}
+.boundary-pill{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid #252d3a;
+  background:#181c22;
+}
+.boundary-pill.ok{background:#00251a;border-color:#00e676;color:#00e676}
+.boundary-pill.warn{background:#1f1600;border-color:#ffb300;color:#ffb300}
+.boundary-pill.err{background:#1f0800;border-color:#ff3d00;color:#ff3d00}
+.boundary-controls-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.boundary-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:220px;
+}
+.boundary-field input{
+  padding:10px 12px;
+  border:1px solid #252d3a;
+  border-radius:10px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--mono);
+}
+.boundary-btn{
+  padding:10px 14px;
+  border:1px solid #252d3a;
+  background:#181c22;
+  color: var(--text);
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  font-family: var(--mono);
+}
+.boundary-btn:hover{border-color:#00b4d8;color:#00b4d8}
+.boundary-pre{
+  margin-top:12px;
+  padding:12px;
+  border-radius:10px;
+  background:#0a0c0f;
+  color:#f3f3f3;
+  overflow:auto;
+  font-size:12px;
+  max-height:240px;
+  border:1px solid #252d3a;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Offline banner -->
+<div class="offline-banner" id="offlineBanner">
+  ⚠ OFFLINE MODE — Engine running locally. No backend connection. All evaluations performed in-browser.
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <span class="logo-text">BOUNDARY<span class="logo-ver">v4.0+E</span></span>
+  </div>
+  <div class="header-right">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btnExpert" onclick="setMode('expert')">EXPERT</button>
+      <button class="mode-btn" id="btnSimple" onclick="setMode('simple')">SIMPLE</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div class="conn-dot" id="connDot"></div>
+      <span class="conn-label" id="connLabel">CHECKING</span>
+    </div>
+  </div>
+</header>
+
+<!-- SIMPLE MODE -->
+<div class="simple-mode">
+  <div class="simple-card">
+    <div class="simple-title">Boundary — Recoverability Check</div>
+    <div class="simple-sub">
+      This tool evaluates whether a situation can still be recovered from.
+      It does not make decisions. It shows you the current state and tells you when to escalate.
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label>Select a situation type</label>
+      <select id="simpleTemplate" onchange="loadSimpleTemplate()" style="margin-top:6px;width:100%;">
+        <option value="">— Choose a situation —</option>
+      </select>
+    </div>
+
+    <div id="simpleResult" style="display:none;">
+      <div class="big-status" id="bigStatus">
+        <div class="big-status-label" id="bigStatusLabel"></div>
+        <div class="big-status-explain" id="bigStatusExplain"></div>
+      </div>
+      <div id="simpleFailList"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="runSimpleCheck()">CHECK NOW</button>
+      <button class="btn btn-ghost" onclick="clearSimple()">CLEAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERT MODE -->
+<div class="expert-mode">
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Evaluate</div>
+      <div class="nav-item active" onclick="showPanel('evaluate')">
+        <span class="nav-icon">◈</span> New Evaluation
+      </div>
+      <div class="nav-item" onclick="showPanel('templates')">
+        <span class="nav-icon">▤</span> Templates
+      </div>
+      <div class="nav-item" onclick="showPanel('batch')">
+        <span class="nav-icon">⊞</span> Batch Evaluate
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Monitor</div>
+      <div class="nav-item" onclick="showPanel('dashboard')">
+        <span class="nav-icon">⊡</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPanel('decisions')">
+        <span class="nav-icon">≡</span> Decision Log
+      </div>
+      <div class="nav-item" onclick="showPanel('residue')">
+        <span class="nav-icon">◌</span> Residue Log
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+      <div class="nav-item" onclick="showPanel('auto')">
+        <span class="nav-icon">⟳</span> Auto Re-gate
+      </div>
+      <div class="nav-item" onclick="showPanel('incidents')">
+        <span class="nav-icon">⊘</span> Incident Library
+      </div>
+      <div class="nav-item" onclick="showPanel('audit')">
+        <span class="nav-icon">⊛</span> Audit Export
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">New in v4.1</div>
+      <div class="nav-item" onclick="showPanel('monitor')">
+        <span class="nav-icon">◉</span> Person Monitor
+      </div>
+      <div class="nav-item" onclick="showPanel('population')">
+        <span class="nav-icon">⊞</span> Population View
+      </div>
+      <div class="nav-item" onclick="showPanel('clock')">
+        <span class="nav-icon">◷</span> PNR Clocks
+      </div>
+      <div class="nav-item" onclick="showPanel('accountability')">
+        <span class="nav-icon">⊟</span> Accountability
+      </div>
+      <div class="nav-item" onclick="showPanel('plain')">
+        <span class="nav-icon">◎</span> Plain Language
+      </div>
+      <div class="nav-item" onclick="showPanel('corpus')">
+        <span class="nav-icon">⊕</span> Research Corpus
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main panels -->
+  <main class="main">
+
+    <!-- EVALUATE -->
+    <div class="panel active" id="panel-evaluate">
+      <div class="panel-head">
+        <div class="panel-title">New Evaluation</div>
+        <div class="panel-sub">Evaluate recoverability state for a domain case</div>
+      </div>
+
+      <div id="evalResult"></div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Domain</label>
+          <select id="evalDomain" onchange="loadDomainFields()">
+            <option value="">Select domain…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Case Label</label>
+          <input type="text" id="evalLabel" placeholder="Describe the situation…"/>
+        </div>
+        <div class="form-group">
+          <label>Operator ID</label>
+          <input type="text" id="evalOperator" placeholder="operator@system" value="operator"/>
+        </div>
+        <div class="form-group">
+          <label>Time Remaining (seconds)</label>
+          <input type="number" id="evalTime" placeholder="e.g. 7200" min="0"/>
+        </div>
+      </div>
+
+      <div class="fields-area">
+        <div class="fields-title">Domain State Fields</div>
+        <div id="domainFields"></div>
+        <button class="btn btn-ghost" style="margin-top:8px;" onclick="addCustomField()">+ ADD FIELD</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="runEvaluation()">EVALUATE</button>
+        <button class="btn btn-ghost" onclick="clearEval()">CLEAR</button>
+        <button class="btn btn-ghost" onclick="showPanel('templates')">LOAD TEMPLATE</button>
+      </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <div class="panel" id="panel-templates">
+      <div class="panel-head">
+        <div class="panel-title">Case Templates</div>
+        <div class="panel-sub">Pre-set cases for common recoverability scenarios</div>
+      </div>
+      <div class="cards-grid" id="templateCards"></div>
+    </div>
+
+    <!-- BATCH -->
+    <div class="panel" id="panel-batch">
+      <div class="panel-head">
+        <div class="panel-title">Batch Evaluation</div>
+        <div class="panel-sub">Paste a JSON array of cases to evaluate simultaneously</div>
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>Cases JSON Array</label>
+        <textarea id="batchJson" placeholder='[{"domain":"pharmacological","label":"Case 1","state":{...}},...]'></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="runBatch()">RUN BATCH</button>
+      </div>
+      <div id="batchResult" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="panel" id="panel-dashboard">
+      <div class="panel-head">
+        <div class="panel-title">Dashboard</div>
+        <div class="panel-sub">Cross-domain visibility — live state overview</div>
+      </div>
+      <div class="dash-grid" id="dashCards">
+        <div class="dash-card"><div class="dash-num safe" id="d-safe">—</div><div class="dash-lbl">CONTINUE</div></div>
+        <div class="dash-card"><div class="dash-num deg" id="d-deg">—</div><div class="dash-lbl">DEGRADED</div></div>
+        <div class="dash-card"><div class="dash-num non" id="d-non">—</div><div class="dash-lbl">NON-ADMISSIBLE</div></div>
+        <div class="dash-card"><div class="dash-num esc" id="d-esc">—</div><div class="dash-lbl">ESCALATION</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="rp-title">Recent Decisions</div>
+      <div id="dashDecisions"><div class="empty-state">No decisions recorded yet. Run an evaluation to begin.</div></div>
+    </div>
+
+    <!-- DECISIONS -->
+    <div class="panel" id="panel-decisions">
+      <div class="panel-head">
+        <div class="panel-title">Decision Log</div>
+        <div class="panel-sub">Full audit trail of all evaluations</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+        <select id="filterDomain" style="flex:1;min-width:140px;"><option value="">All domains</option></select>
+        <select id="filterState" style="flex:1;min-width:140px;">
+          <option value="">All states</option>
+          <option>CONTINUE</option><option>DEGRADED</option><option>NON-ADMISSIBLE</option><option>NON-EXECUTABLE</option>
+        </select>
+        <button class="btn btn-ghost" onclick="loadDecisions()">FILTER</button>
+      </div>
+      <div id="decisionsList"><div class="empty-state">No decisions yet.</div></div>
+    </div>
+
+    <!-- RESIDUE -->
+    <div class="panel" id="panel-residue">
+      <div class="panel-head">
+        <div class="panel-title">Residue Log</div>
+        <div class="panel-sub">Unresolved structural residue — prior failures, overrides, deferred corrections</div>
+      </div>
+      <div id="residueList"><div class="empty-state">No unresolved residue.</div></div>
+    </div>
+
+    <!-- AUTO -->
+    <div class="panel" id="panel-auto">
+      <div class="panel-head">
+        <div class="panel-title">Auto Re-gating</div>
+        <div class="panel-sub">Continuously re-evaluate a case at a set interval</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Domain</label>
+          <select id="autoDomain"></select>
+        </div>
+        <div class="form-group">
+          <label>Interval (seconds)</label>
+          <input type="number" id="autoInterval" value="30" min="5"/>
+        </div>
+        <div class="form-group full">
+          <label>Case Label</label>
+          <input type="text" id="autoLabel" placeholder="Continuous case label…"/>
+        </div>
+        <div class="form-group full">
+          <label>State JSON</label>
+          <textarea id="autoState" placeholder='{"supply_days_remaining": 2, "prescriber_reachable": true, ...}'></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="startAuto()">START</button>
+        <button class="btn btn-danger" onclick="stopAuto()">STOP ALL</button>
+      </div>
+      <div id="autoStatus" style="margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text3);">No active gates.</div>
+    </div>
+
+    <!-- INCIDENTS -->
+    <div class="panel" id="panel-incidents">
+      <div class="panel-head">
+        <div class="panel-title">Incident Library</div>
+        <div class="panel-sub">Searchable library of saved real cases</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <input type="text" id="incidentSearch" placeholder="Search incidents…" style="flex:1;"/>
+        <button class="btn btn-ghost" onclick="searchIncidents()">SEARCH</button>
+      </div>
+      <div id="incidentList"><div class="empty-state">No incidents saved yet. Run an evaluation and save it to the incident library.</div></div>
+    </div>
+
+    <!-- AUDIT -->
+    <div class="panel" id="panel-audit">
+      <div class="panel-head">
+        <div class="panel-title">Audit Export</div>
+        <div class="panel-sub">Full audit-grade export of all decisions, residue, and overrides</div>
+      </div>
+      <p style="color:var(--text2);font-size:13px;margin-bottom:16px;line-height:1.6;">
+        Export everything: all decisions, unresolved residue, overrides, and summary — as a JSON file suitable for regulatory review, institutional reporting, or archival.
+      </p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="exportAudit()">EXPORT AUDIT JSON</button>
+        <button class="btn btn-ghost" onclick="refreshAll()">REFRESH ALL DATA</button>
+      </div>
+      <div id="auditPreview" style="margin-top:20px;"></div>
+    </div>
+
+
+    <!-- PERSON MONITOR -->
+    <div class="panel" id="panel-monitor">
+      <div class="panel-head">
+        <div class="panel-title">Person Monitor</div>
+        <div class="panel-sub">Evaluate a person as a continuity object across all active domains simultaneously — the visibility gap</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Subject ID</label>
+          <input type="text" id="monSubjectId" placeholder="patient-001 / person-id…"/>
+        </div>
+        <div class="form-group">
+          <label>Subject Label</label>
+          <input type="text" id="monLabel" placeholder="Name or description…"/>
+        </div>
+        <div class="form-group full">
+          <label>Active Domains + State (JSON)</label>
+          <textarea id="monDomains" style="min-height:160px;" placeholder='{"pharmacological":{"supply_days_remaining":0,"prescriber_reachable":false,...},"finance":{"bank_locked":true,...}}'></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="runPersonMonitor()">EVALUATE ALL DOMAINS</button>
+      </div>
+      <div id="monitorResult" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- POPULATION VIEW -->
+    <div class="panel" id="panel-population">
+      <div class="panel-head">
+        <div class="panel-title">Population View</div>
+        <div class="panel-sub">Evaluate a cohort simultaneously — a ward, care home, settlement, or any group. Detect clustering and cascades.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Cohort Label</label>
+          <input type="text" id="popLabel" placeholder="Ward 7B / Settlement Alpha…"/>
+        </div>
+        <div class="form-group">
+          <label>Context</label>
+          <input type="text" id="popContext" placeholder="NHS / NGO / Emergency…"/>
+        </div>
+        <div class="form-group full">
+          <label>Subjects JSON Array</label>
+          <textarea id="popSubjects" style="min-height:180px;" placeholder='[{"subject_id":"P001","label":"Patient 1","domains":{"pharmacological":{...},"healthcare":{...}}},...]'></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="runPopulationView()">EVALUATE COHORT</button>
+      </div>
+      <div id="populationResult" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- PNR CLOCKS -->
+    <div class="panel" id="panel-clock">
+      <div class="panel-head">
+        <div class="panel-title">Point-of-No-Return Clocks</div>
+        <div class="panel-sub">Live countdown per case before irreversible transition. The timing gap made visible.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Case ID</label>
+          <input type="text" id="clockCaseId" placeholder="case-id…"/>
+        </div>
+        <div class="form-group">
+          <label>Domain</label>
+          <select id="clockDomain"></select>
+        </div>
+        <div class="form-group">
+          <label>Label</label>
+          <input type="text" id="clockLabel" placeholder="Clock label…"/>
+        </div>
+        <div class="form-group">
+          <label>Seconds to Irreversibility</label>
+          <input type="number" id="clockSeconds" placeholder="e.g. 7200"/>
+        </div>
+        <div class="form-group">
+          <label>Detection Window (sec)</label>
+          <input type="number" id="clockDetect" placeholder="e.g. 900"/>
+        </div>
+        <div class="form-group">
+          <label>Response Window (sec)</label>
+          <input type="number" id="clockResponse" placeholder="e.g. 1800"/>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="registerClock()">REGISTER CLOCK</button>
+        <button class="btn btn-ghost" onclick="loadClocks()">REFRESH ALL CLOCKS</button>
+      </div>
+      <div id="clockList" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- ACCOUNTABILITY -->
+    <div class="panel" id="panel-accountability">
+      <div class="panel-head">
+        <div class="panel-title">Override Accountability Record</div>
+        <div class="panel-sub">Formal, tamper-evident record of every override. Usable in regulatory review, legal proceedings, institutional learning.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Case ID</label>
+          <input type="text" id="accCaseId" placeholder="case-id…"/>
+        </div>
+        <div class="form-group">
+          <label>Domain</label>
+          <select id="accDomain"></select>
+        </div>
+        <div class="form-group">
+          <label>Operator ID</label>
+          <input type="text" id="accOperatorId" placeholder="operator@institution"/>
+        </div>
+        <div class="form-group">
+          <label>Operator Role</label>
+          <input type="text" id="accRole" placeholder="Clinician / Manager / Officer…"/>
+        </div>
+        <div class="form-group">
+          <label>Authorising Authority</label>
+          <input type="text" id="accAuthority" placeholder="Name + role of authorising person"/>
+        </div>
+        <div class="form-group">
+          <label>Boundary State at Override</label>
+          <select id="accState">
+            <option value="NON-ADMISSIBLE">NON-ADMISSIBLE</option>
+            <option value="NON-EXECUTABLE">NON-EXECUTABLE</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Reason for Continuation</label>
+          <textarea id="accReason" placeholder="State the reason for continuing despite non-admissible conditions…"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Acknowledged Risk</label>
+          <textarea id="accRisk" placeholder="State the risk being accepted and any mitigations in place…"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-danger" onclick="createAccountabilityRecord()">CREATE FORMAL RECORD</button>
+        <button class="btn btn-ghost" onclick="loadAccountabilityReport()">VIEW REPORT</button>
+      </div>
+      <div id="accountabilityResult" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- PLAIN LANGUAGE -->
+    <div class="panel" id="panel-plain">
+      <div class="panel-head">
+        <div class="panel-title">Plain Language Evaluator</div>
+        <div class="panel-sub">Describe your situation in ordinary words. Boundary translates it into a formal recoverability evaluation.</div>
+      </div>
+      <div id="plainStep1">
+        <div style="font-size:14px;color:var(--text2);margin-bottom:16px;">What kind of situation are you in?</div>
+        <div class="cards-grid" id="plainDomainCards"></div>
+      </div>
+      <div id="plainStep2" style="display:none;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <button class="btn btn-ghost" onclick="plainBack()" style="padding:6px 12px;">← Back</button>
+          <div style="font-size:14px;color:var(--text2);" id="plainDomainLabel"></div>
+        </div>
+        <div id="plainQuestions"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="runPlainEval()">CHECK MY SITUATION</button>
+        </div>
+      </div>
+      <div id="plainStep3" style="display:none;margin-top:20px;">
+        <button class="btn btn-ghost" style="margin-bottom:20px;" onclick="plainReset()">← Start again</button>
+        <div id="plainResult"></div>
+      </div>
+    </div>
+
+    <!-- RESEARCH CORPUS -->
+    <div class="panel" id="panel-corpus">
+      <div class="panel-head">
+        <div class="panel-title">Research Corpus</div>
+        <div class="panel-sub">The incident library as a structured dataset — pattern detection, statistical analysis, regulatory export packs.</div>
+      </div>
+      <div class="dash-grid" id="corpusStats" style="margin-bottom:20px;"></div>
+      <div class="btn-row" style="margin-bottom:20px;">
+        <button class="btn btn-primary" onclick="loadCorpusPatterns()">DETECT PATTERNS</button>
+        <button class="btn btn-ghost" onclick="exportCorpusJSON()">EXPORT JSON (ANONYMISED)</button>
+        <button class="btn btn-ghost" onclick="generateRegulatoryPack()">REGULATORY PACK</button>
+      </div>
+      <div id="corpusPatterns"></div>
+    </div>
+
+  </main>
+
+  <!-- Right panel — Explanation + Actions -->
+  <aside class="right-panel">
+    <div class="rp-section">
+      <div class="rp-title">Last Result</div>
+      <div id="rpLastState" style="font-family:var(--mono);font-size:12px;color:var(--text3);">No evaluation run yet.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="rp-section">
+      <div class="rp-title">Why this result</div>
+      <div id="rpExplanation"><div style="font-size:12px;color:var(--text3);">Run an evaluation to see the explanation.</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="rp-section">
+      <div class="rp-title">Recommended Actions</div>
+      <div id="rpActions"><div style="font-size:12px;color:var(--text3);">No actions yet.</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="rp-section">
+      <div class="rp-title">Save / Escalate</div>
+      <div class="btn-row" style="flex-direction:column;gap:8px;">
+        <button class="btn btn-ghost" style="width:100%;" onclick="saveLastIncident()">SAVE TO INCIDENT LIBRARY</button>
+        <button class="btn btn-danger" style="width:100%;" onclick="triggerEscalation()">TRIGGER ESCALATION</button>
+      </div>
+    </div>
+  </aside>
+
+</div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+const API_BASE = "http://127.0.0.1:8787";
+let isOnline = false;
+let lastResult = null;
+let activeGates = [];
+let templates = [];
+
+const STATE_ICONS = {
+  CONTINUE: "✓", DEGRADED: "⚠", NON-ADMISSIBLE: "✕", NON-EXECUTABLE: "⚡"
+};
+const STATE_EXPLAIN = {
+  SAFE: "All recoverability conditions are met. Continuation is admissible.",
+  DEGRADED: "One or more conditions are weakened. Margin is reduced. Monitor closely.",
+  NON-ADMISSIBLE: "Continuation is not admissible under current conditions. Do not proceed.",
+  NON-EXECUTABLE: "Non-admissible and time-critical. A responsible human authority must be reached immediately.",
+};
+const STATE_ACTIONS = {
+  CONTINUE: ["Continue with monitoring", "Schedule next re-evaluation"],
+  DEGRADED: ["Increase monitoring frequency", "Identify and address weakened conditions", "Prepare fallback path"],
+  NON-ADMISSIBLE: ["STOP continuation", "Activate fallback path", "Escalate to responsible authority", "Log residue"],
+  NON-EXECUTABLE: ["HALT IMMEDIATELY", "Contact human authority NOW", "Log override if overriding", "Document all actions with attribution"],
+};
+
+// Domain-specific field templates
+const DOMAIN_FIELDS = {
+  pharmacological: [
+    {key:"supply_days_remaining", label:"Supply Days Remaining", type:"number"},
+    {key:"prescriber_reachable", label:"Prescriber Reachable", type:"bool"},
+    {key:"abrupt_stop_risk", label:"Abrupt Stop Risk", type:"bool"},
+    {key:"dispensing_accessible", label:"Dispensing Accessible", type:"bool"},
+    {key:"taper_required", label:"Taper Required", type:"bool"},
+    {key:"taper_plan_exists", label:"Taper Plan Exists", type:"bool"},
+    {key:"interaction_flag", label:"Interaction Flag", type:"bool"},
+  ],
+  healthcare: [
+    {key:"critical_appointment_missed", label:"Critical Appointment Missed", type:"bool"},
+    {key:"diagnostic_delay_days", label:"Diagnostic Delay (days)", type:"number"},
+    {key:"transport_available", label:"Transport Available", type:"bool"},
+    {key:"caregiver_available", label:"Caregiver Available", type:"bool"},
+    {key:"oxygen_dependent", label:"Oxygen Dependent", type:"bool"},
+    {key:"oxygen_interrupted", label:"Oxygen Interrupted", type:"bool"},
+    {key:"pending_discharge", label:"Pending Discharge", type:"bool"},
+    {key:"discharge_safe", label:"Discharge Safe", type:"bool"},
+  ],
+  identity: [
+    {key:"id_document_available", label:"ID Document Available", type:"bool"},
+    {key:"access_recovery_available", label:"Access Recovery Available", type:"bool"},
+    {key:"payroll_identity_intact", label:"Payroll Identity Intact", type:"bool"},
+    {key:"institution_portability_gap", label:"Institution Portability Gap", type:"bool"},
+  ],
+  finance: [
+    {key:"bank_locked", label:"Bank Account Locked", type:"bool"},
+    {key:"essential_payment_blocked", label:"Essential Payment Blocked", type:"bool"},
+    {key:"income_interrupted", label:"Income Interrupted", type:"bool"},
+    {key:"single_provider_risk", label:"Single Provider Risk", type:"bool"},
+  ],
+  housing: [
+    {key:"eviction_imminent", label:"Eviction Imminent", type:"bool"},
+    {key:"utilities_disconnected", label:"Utilities Disconnected", type:"bool"},
+    {key:"habitability_failure", label:"Habitability Failure", type:"bool"},
+    {key:"re_entry_blocked", label:"Re-entry Blocked", type:"bool"},
+  ],
+  legal: [
+    {key:"remedy_unreachable", label:"Remedy Unreachable", type:"bool"},
+    {key:"court_deadline_missed", label:"Court Deadline Missed", type:"bool"},
+    {key:"enforcement_gap", label:"Enforcement Gap", type:"bool"},
+  ],
+  labour: [
+    {key:"wage_interrupted", label:"Wage Interrupted", type:"bool"},
+    {key:"rest_violation", label:"Rest Interval Violated", type:"bool"},
+    {key:"unsafe_shift", label:"Unsafe Shift Scheduled", type:"bool"},
+  ],
+  infrastructure: [
+    {key:"power_failure", label:"Power Failure", type:"bool"},
+    {key:"network_failure", label:"Network Failure", type:"bool"},
+    {key:"control_loss", label:"Control Loss", type:"bool"},
+    {key:"degraded_mode_available", label:"Degraded Mode Available", type:"bool"},
+  ],
+  disaster: [
+    {key:"evacuation_window_closed", label:"Evacuation Window Closed", type:"bool"},
+    {key:"shelter_assigned", label:"Shelter Assigned", type:"bool"},
+    {key:"comms_collapsed", label:"Communications Collapsed", type:"bool"},
+  ],
+  transport: [
+    {key:"route_blocked", label:"Route Blocked", type:"bool"},
+    {key:"timing_missed", label:"Timing Missed", type:"bool"},
+  ],
+  education: [
+    {key:"learning_excluded", label:"Learning Excluded", type:"bool"},
+    {key:"progression_interrupted", label:"Progression Interrupted", type:"bool"},
+  ],
+  energy: [
+    {key:"energy_interrupted", label:"Energy Interrupted", type:"bool"},
+    {key:"backup_energy_available", label:"Backup Energy Available", type:"bool"},
+  ],
+  communications: [
+    {key:"primary_comms_down", label:"Primary Comms Down", type:"bool"},
+    {key:"fallback_comms_available", label:"Fallback Comms Available", type:"bool"},
+  ],
+  food_water: [
+    {key:"food_interrupted", label:"Food Interrupted", type:"bool"},
+    {key:"water_interrupted", label:"Water Interrupted", type:"bool"},
+  ],
+  supply_chain: [
+    {key:"critical_supply_gap", label:"Critical Supply Gap", type:"bool"},
+    {key:"alternate_supplier_exists", label:"Alternate Supplier Exists", type:"bool"},
+  ],
+};
+
+const GLOBAL_FIELDS = [
+  {key:"human_authority_reachable", label:"Human Authority Reachable", type:"bool", value: true},
+  {key:"fallback_path_available", label:"Fallback Path Available", type:"bool", value: true},
+  {key:"override_active", label:"Override Active", type:"bool", value: false},
+  {key:"override_attributed", label:"Override Attributed", type:"bool", value: true},
+];
+
+
+// ─────────────────────────────────────────────
+// ENFORCEMENT CONNECTOR
+// ─────────────────────────────────────────────
+window.BoundaryEnforcement = (() => {
+  const config = {
+    enabled: false,
+    endpoint: "http://127.0.0.1:8010/evaluate",
+    forwardStates: ["DEGRADED", "NON-ADMISSIBLE", "NON-EXECUTABLE"],
+    failOpen: true
+  };
+
+  function normalizeState(state) {
+    if (!state) return "UNKNOWN";
+    const s = String(state).trim().toUpperCase();
+    if (s === "STOP") return "NON-ADMISSIBLE";
+    if (s === "HALT") return "NON-EXECUTABLE";
+    if (s === "SAFE") return "CONTINUE";
+    return s;
+  }
+
+  function buildPayload(result, context = {}) {
+    const state = normalizeState(result.state || result.boundary_state || result.admissibility_state || result.decision);
+    return {
+      evaluation_id: context.evaluation_id || result.evaluation_id || result.eval_id || `BND-${Date.now()}`,
+      timestamp: context.timestamp || result.timestamp || new Date().toISOString(),
+      domain: context.domain || result.domain || "unknown",
+      state,
+      reason_codes: result.reason_codes || (result.failed_conditions || []).map(x => x.rule_id).filter(Boolean) || [],
+      summary: result.summary || result.explanation || result.plain_language || "Boundary evaluation result forwarded to enforcement layer.",
+      source: "boundary-v4.0-ui",
+      raw_result: result
+    };
+  }
+
+  async function send(result, context = {}) {
+    const payload = buildPayload(result, context);
+    if (!config.enabled) {
+      return { ok: true, skipped: true, reason: "enforcement_disabled", payload };
+    }
+    if (!config.forwardStates.includes(payload.state)) {
+      return { ok: true, skipped: true, reason: "state_not_forwarded", payload };
+    }
+    try {
+      const res = await fetch(config.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      return { ok: true, forwarded: true, payload, response: data };
+    } catch (err) {
+      if (config.failOpen) {
+        return { ok: true, forwarded: false, fail_open: true, error: String(err), payload };
+      }
+      return { ok: false, forwarded: false, error: String(err), payload };
+    }
+  }
+
+  function setEnabled(v) { config.enabled = !!v; syncEnforcementPanelFromConfig(); }
+  function setEndpoint(v) { config.endpoint = String(v); syncEnforcementPanelFromConfig(); }
+  function setForwardStates(v) { config.forwardStates = Array.isArray(v) ? v : config.forwardStates; }
+
+  return { config, normalizeState, buildPayload, send, setEnabled, setEndpoint, setForwardStates };
+})();
+
+
+// ─────────────────────────────────────────────
+// ENFORCEMENT UI PANEL
+// ─────────────────────────────────────────────
+function ensureEnforcementPanel(){
+  if (document.getElementById("boundary-enforcement-panel")) return;
+
+  const panel = document.createElement("section");
+  panel.id = "boundary-enforcement-panel";
+  panel.className = "boundary-enforcement-panel";
+  panel.innerHTML = `
+    <div class="boundary-enforcement-title">Enforcement forwarding</div>
+
+    <div class="boundary-enforcement-grid">
+      <div class="boundary-enforcement-box">
+        <div class="boundary-enforcement-label">Mode</div>
+        <div class="boundary-enforcement-value" id="be-mode">Disabled</div>
+      </div>
+      <div class="boundary-enforcement-box">
+        <div class="boundary-enforcement-label">Last state forwarded</div>
+        <div class="boundary-enforcement-value" id="be-last-state">—</div>
+      </div>
+      <div class="boundary-enforcement-box">
+        <div class="boundary-enforcement-label">Forwarding status</div>
+        <div class="boundary-enforcement-value" id="be-last-status"><span class="boundary-pill warn">Not sent</span></div>
+      </div>
+      <div class="boundary-enforcement-box">
+        <div class="boundary-enforcement-label">Endpoint</div>
+        <div class="boundary-enforcement-value" id="be-endpoint-label">http://127.0.0.1:8010/evaluate</div>
+      </div>
+    </div>
+
+    <div class="boundary-controls-row">
+      <button class="boundary-btn" id="be-enable-btn" type="button">Enable forwarding</button>
+      <button class="boundary-btn" id="be-disable-btn" type="button">Disable forwarding</button>
+      <button class="boundary-btn" id="be-test-btn" type="button">Send test payload</button>
+    </div>
+
+    <div class="boundary-controls-row">
+      <label class="boundary-field">
+        <span style="color:var(--text2);font-family:var(--mono);font-size:11px;">Endpoint</span>
+        <input id="be-endpoint-input" type="text" value="http://127.0.0.1:8010/evaluate" />
+      </label>
+    </div>
+
+    <pre class="boundary-pre" id="be-response-box">No forwarding response yet.</pre>
+  `;
+
+  const anchor = document.getElementById("evalResult") || document.querySelector("main") || document.body;
+  anchor.insertAdjacentElement("afterend", panel);
+
+  bindEnforcementPanelEvents();
+  syncEnforcementPanelFromConfig();
+}
+
+function setEnforcementHtml(id, html){
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+function setEnforcementText(id, text){
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+function syncEnforcementPanelFromConfig(){
+  if (!window.BoundaryEnforcement) return;
+  const cfg = window.BoundaryEnforcement.config;
+  setEnforcementText("be-mode", cfg.enabled ? "Enabled" : "Disabled");
+  setEnforcementText("be-endpoint-label", cfg.endpoint || "—");
+  const input = document.getElementById("be-endpoint-input");
+  if (input) input.value = cfg.endpoint || "";
+}
+function bindEnforcementPanelEvents(){
+  const enableBtn = document.getElementById("be-enable-btn");
+  const disableBtn = document.getElementById("be-disable-btn");
+  const testBtn = document.getElementById("be-test-btn");
+  const endpointInput = document.getElementById("be-endpoint-input");
+
+  if (enableBtn) enableBtn.onclick = function(){
+    if (endpointInput && endpointInput.value) {
+      window.BoundaryEnforcement.setEndpoint(endpointInput.value);
+    }
+    window.BoundaryEnforcement.setEnabled(true);
+    setEnforcementHtml("be-last-status", '<span class="boundary-pill ok">Enabled</span>');
+  };
+
+  if (disableBtn) disableBtn.onclick = function(){
+    window.BoundaryEnforcement.setEnabled(false);
+    setEnforcementHtml("be-last-status", '<span class="boundary-pill warn">Disabled</span>');
+  };
+
+  if (testBtn) testBtn.onclick = async function(){
+    if (endpointInput && endpointInput.value) {
+      window.BoundaryEnforcement.setEndpoint(endpointInput.value);
+    }
+    const fake = {
+      evaluation_id: `BND-TEST-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      domain: "test",
+      state: "NON-ADMISSIBLE",
+      reason_codes: ["TEST"],
+      summary: "UI forwarding test."
+    };
+    const response = await window.BoundaryEnforcement.send(fake, { domain: "test" });
+    renderEnforcementForwardResult(response, fake.state);
+  };
+}
+
+function renderEnforcementForwardResult(response, state){
+  setEnforcementText("be-last-state", state || response?.payload?.state || "—");
+
+  if (response?.forwarded) {
+    setEnforcementHtml("be-last-status", '<span class="boundary-pill ok">Forwarded</span>');
+  } else if (response?.skipped) {
+    setEnforcementHtml("be-last-status", '<span class="boundary-pill warn">Skipped</span>');
+  } else if (response?.fail_open || response?.ok) {
+    setEnforcementHtml("be-last-status", '<span class="boundary-pill warn">Fail-open / not forwarded</span>');
+  } else {
+    setEnforcementHtml("be-last-status", '<span class="boundary-pill err">Error</span>');
+  }
+
+  const box = document.getElementById("be-response-box");
+  if (box) box.textContent = JSON.stringify(response, null, 2);
+}
+
+async function forwardBoundaryResultWithUI(result, domain){
+  if (!window.BoundaryEnforcement) return null;
+  const response = await window.BoundaryEnforcement.send(result, {
+    domain: domain || result.domain || "unknown",
+    evaluation_id: result.evaluation_id || result.eval_id || `BND-${Date.now()}`,
+    timestamp: result.timestamp || new Date().toISOString()
+  });
+  renderEnforcementForwardResult(
+    response,
+    result.state || result.boundary_state || result.admissibility_state || result.decision
+  );
+  return response;
+}
+
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+async function init() {
+  populateDomainSelects();
+  await checkConnection();
+  await loadTemplates();
+  setInterval(checkConnection, 10000);
+}
+
+async function checkConnection() {
+  try {
+    const res = await fetch(`${API_BASE}/api/health`, {signal: AbortSignal.timeout(2000)});
+    if (res.ok) {
+      isOnline = true;
+      document.getElementById("connDot").className = "conn-dot online";
+      document.getElementById("connLabel").textContent = "ONLINE";
+      document.getElementById("offlineBanner").classList.remove("show");
+      return;
+    }
+  } catch {}
+  isOnline = false;
+  document.getElementById("connDot").className = "conn-dot";
+  document.getElementById("connLabel").textContent = "OFFLINE";
+  document.getElementById("offlineBanner").classList.add("show");
+}
+
+function populateDomainSelects() {
+  const domains = Object.keys(DOMAIN_FIELDS);
+  ["evalDomain","autoDomain","filterDomain"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    domains.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d; opt.textContent = d.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+      el.appendChild(opt);
+    });
+  });
+}
+
+// ─────────────────────────────────────────────
+// OFFLINE ENGINE (mirrors Python engine in JS)
+// ─────────────────────────────────────────────
+const GLOBAL_RULES = [
+  {id:"GI-001",field:"human_authority_reachable",required_value:true,weight:"critical",description:"A responsible human authority must be reachable."},
+  {id:"GI-002",field:"time_remaining_seconds",required_min:0,weight:"critical",description:"Time remaining before irreversibility must be positive."},
+  {id:"GI-004",field:"fallback_path_available",required_value:true,weight:"major",description:"At least one fallback path must be identified."},
+];
+
+const DOMAIN_RULES_JS = {
+  pharmacological:[
+    {id:"PH-001",field:"supply_days_remaining",required_min:1,weight:"critical",description:"Medication supply must be available."},
+    {id:"PH-002",field:"prescriber_reachable",required_value:true,weight:"critical",description:"Prescribing authority must be reachable."},
+    {id:"PH-003",field:"abrupt_stop_risk",required_value:false,weight:"critical",description:"Abrupt discontinuation must not pose irreversible risk."},
+    {id:"PH-004",field:"dispensing_accessible",required_value:true,weight:"major",description:"Dispensing point must be accessible."},
+    {id:"PH-005",field:"taper_plan_exists",required_value:true,conditional_on:"taper_required",weight:"critical",description:"If tapering required, a plan must exist."},
+    {id:"PH-006",field:"interaction_flag",required_value:false,weight:"major",description:"No unresolved dangerous interactions."},
+  ],
+  healthcare:[
+    {id:"HC-001",field:"critical_appointment_missed",required_value:false,weight:"critical",description:"Critical appointment must not be missed."},
+    {id:"HC-002",field:"diagnostic_delay_days",required_max:7,weight:"major",description:"Diagnostic delay must not exceed 7 days."},
+    {id:"HC-003",field:"transport_available",required_value:true,weight:"major",description:"Transport to care must be available."},
+    {id:"HC-004",field:"caregiver_available",required_value:true,weight:"critical",description:"Caregiver must not be collapsed."},
+    {id:"HC-005",field:"oxygen_interrupted",required_value:false,conditional_on:"oxygen_dependent",weight:"critical",description:"Oxygen supply must not be interrupted."},
+    {id:"HC-006",field:"discharge_safe",required_value:true,conditional_on:"pending_discharge",weight:"critical",description:"Discharge must be safe."},
+  ],
+  identity:[
+    {id:"ID-001",field:"id_document_available",required_value:true,weight:"major"},
+    {id:"ID-002",field:"access_recovery_available",required_value:true,weight:"major"},
+    {id:"ID-003",field:"payroll_identity_intact",required_value:true,weight:"major"},
+  ],
+  finance:[
+    {id:"FI-001",field:"bank_locked",required_value:false,weight:"critical"},
+    {id:"FI-002",field:"essential_payment_blocked",required_value:false,weight:"critical"},
+    {id:"FI-003",field:"income_interrupted",required_value:false,weight:"major"},
+  ],
+  housing:[
+    {id:"HO-001",field:"eviction_imminent",required_value:false,weight:"critical"},
+    {id:"HO-002",field:"utilities_disconnected",required_value:false,weight:"major"},
+    {id:"HO-003",field:"habitability_failure",required_value:false,weight:"critical"},
+  ],
+  legal:[
+    {id:"LE-001",field:"remedy_unreachable",required_value:false,weight:"critical"},
+    {id:"LE-002",field:"court_deadline_missed",required_value:false,weight:"critical"},
+  ],
+  labour:[
+    {id:"LA-001",field:"wage_interrupted",required_value:false,weight:"major"},
+    {id:"LA-002",field:"rest_violation",required_value:false,weight:"major"},
+  ],
+  infrastructure:[
+    {id:"IN-001",field:"power_failure",required_value:false,weight:"critical"},
+    {id:"IN-003",field:"control_loss",required_value:false,weight:"critical"},
+  ],
+  disaster:[
+    {id:"DI-001",field:"evacuation_window_closed",required_value:false,weight:"critical"},
+    {id:"DI-002",field:"shelter_assigned",required_value:true,weight:"critical"},
+    {id:"DI-003",field:"comms_collapsed",required_value:false,weight:"major"},
+  ],
+  transport:[
+    {id:"TR-001",field:"route_blocked",required_value:false,weight:"major"},
+    {id:"TR-002",field:"timing_missed",required_value:false,weight:"major"},
+  ],
+  education:[{id:"ED-001",field:"learning_excluded",required_value:false,weight:"major"}],
+  energy:[{id:"EN-001",field:"energy_interrupted",required_value:false,weight:"critical"},{id:"EN-002",field:"backup_energy_available",required_value:true,weight:"major"}],
+  communications:[{id:"CO-001",field:"primary_comms_down",required_value:false,weight:"major"},{id:"CO-002",field:"fallback_comms_available",required_value:true,weight:"major"}],
+  food_water:[{id:"FW-001",field:"food_interrupted",required_value:false,weight:"critical"},{id:"FW-002",field:"water_interrupted",required_value:false,weight:"critical"}],
+  supply_chain:[{id:"SC-001",field:"critical_supply_gap",required_value:false,weight:"major"}],
+};
+
+function evalRule(rule, state) {
+  const val = state[rule.field];
+  if (rule.conditional_on && !state[rule.conditional_on]) return {rule_id:rule.id,passed:true,skipped:true,reason:`Condition '${rule.conditional_on}' not active`,weight:rule.weight,description:rule.description||""};
+  if (val === undefined || val === null || val === "") return {rule_id:rule.id,passed:null,unknown:true,reason:`Field '${rule.field}' not provided`,weight:rule.weight,description:rule.description||""};
+  let passed = true, reason = "OK";
+  if ("required_value" in rule && val !== rule.required_value) { passed=false; reason=`'${rule.field}' is ${val}, expected ${rule.required_value}`; }
+  if ("required_min" in rule && (isNaN(val) || Number(val) < rule.required_min)) { passed=false; reason=`'${rule.field}' is ${val}, minimum ${rule.required_min}`; }
+  if ("required_max" in rule && (isNaN(val) || Number(val) > rule.required_max)) { passed=false; reason=`'${rule.field}' is ${val}, maximum ${rule.required_max}`; }
+  return {rule_id:rule.id,passed,reason,weight:rule.weight,description:rule.description||""};
+}
+
+function offlineEvaluate(caseObj) {
+  const state = caseObj.state || {};
+  const domain = caseObj.domain || "";
+  const results = [];
+  for (const rule of GLOBAL_RULES) results.push({...evalRule(rule,state),layer:"global_invariant"});
+  for (const rule of (DOMAIN_RULES_JS[domain]||[])) results.push({...evalRule(rule,state),layer:"domain"});
+
+  const critical = results.filter(r=>!r.passed&&r.weight==="critical"&&!r.skipped);
+  const major    = results.filter(r=>!r.passed&&r.weight==="major"&&!r.skipped);
+  const unknown  = results.filter(r=>r.unknown);
+  const timeLeft = Number(state.time_remaining_seconds);
+
+  let boundary_state;
+  if (critical.length) {
+    const humanFail = results.find(r=>r.rule_id==="GI-001"&&!r.passed);
+    const timeFail  = results.find(r=>r.rule_id==="GI-002"&&!r.passed);
+    boundary_state = (humanFail||timeFail||(timeLeft>0&&timeLeft<3600)) ? "NON-EXECUTABLE" : "NON-ADMISSIBLE";
+  } else if (major.length||unknown.length) {
+    boundary_state = "DEGRADED";
+  } else {
+    boundary_state = "CONTINUE";
+  }
+
+  const tti = !isNaN(timeLeft) && state.time_remaining_seconds !== undefined ? {
+    seconds_remaining: timeLeft,
+    hours_remaining: (timeLeft/3600).toFixed(2),
+    point_of_no_return_crossed: timeLeft <= 0,
+    margin_warning: timeLeft < 7200,
+  } : null;
+
+  return {
+    eval_id: crypto.randomUUID(),
+    case_id: caseObj.case_id || crypto.randomUUID(),
+    label: caseObj.label || "Unlabelled",
+    domain,
+    timestamp: new Date().toISOString(),
+    boundary_state,
+    failed_conditions: results.filter(r=>!r.passed&&!r.skipped&&!r.unknown),
+    unknown_fields: unknown,
+    time_to_irreversibility: tti,
+    rule_trace: results,
+    offline: true,
+  };
+}
+
+// ─────────────────────────────────────────────
+// EVALUATE
+// ─────────────────────────────────────────────
+function loadDomainFields() {
+  const domain = document.getElementById("evalDomain").value;
+  const container = document.getElementById("domainFields");
+  container.innerHTML = "";
+  if (!domain) return;
+
+  const allFields = [...GLOBAL_FIELDS, ...(DOMAIN_FIELDS[domain]||[])];
+  for (const f of allFields) {
+    const row = document.createElement("div");
+    row.className = "field-row";
+    row.innerHTML = `<input type="text" value="${f.key}" readonly style="color:var(--text3);"/>`
+      + (f.type==="bool"
+        ? `<select data-key="${f.key}"><option value="">—</option><option value="true" ${f.value===true?"selected":""}>true</option><option value="false" ${f.value===false?"selected":""}>false</option></select>`
+        : `<input type="number" data-key="${f.key}" placeholder="value" value="${f.value??''}"/>`)
+      + `<button class="remove-field" onclick="this.parentElement.remove()">×</button>`;
+    container.appendChild(row);
+  }
+}
+
+function addCustomField() {
+  const container = document.getElementById("domainFields");
+  const row = document.createElement("div");
+  row.className = "field-row";
+  row.innerHTML = `<input type="text" data-key-input placeholder="field_name"/><input type="text" placeholder="value"/><button class="remove-field" onclick="this.parentElement.remove()">×</button>`;
+  container.appendChild(row);
+}
+
+function collectState() {
+  const state = {};
+  document.querySelectorAll("#domainFields .field-row").forEach(row => {
+    const keyIn = row.querySelector("[data-key]") || row.querySelector("[data-key-input]");
+    const valIn = row.querySelector("select[data-key]") || row.querySelector("input[type=number][data-key]") || row.querySelector("input:not([readonly]):not([data-key-input])");
+    if (!keyIn || !valIn) return;
+    const key = keyIn.dataset.key || keyIn.value;
+    let val = valIn.value;
+    if (val === "true") val = true;
+    else if (val === "false") val = false;
+    else if (!isNaN(val) && val !== "") val = Number(val);
+    if (key && val !== "") state[key] = val;
+  });
+  const t = document.getElementById("evalTime").value;
+  if (t) state.time_remaining_seconds = Number(t);
+  return state;
+}
+
+async function runEvaluation() {
+  const domain   = document.getElementById("evalDomain").value;
+  const label    = document.getElementById("evalLabel").value || "Unlabelled";
+  const operator = document.getElementById("evalOperator").value || "anonymous";
+
+  if (!domain) { alert("Please select a domain."); return; }
+
+  const caseObj = { domain, label, operator_id: operator, state: collectState() };
+
+  let result;
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/evaluate`, {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(caseObj)
+      });
+      result = await res.json();
+    } catch { result = offlineEvaluate(caseObj); }
+  } else {
+    result = offlineEvaluate(caseObj);
+  }
+
+  lastResult = result;
+  storeLocal(result);
+  renderResult(result);
+  updateRightPanel(result);
+  await forwardBoundaryResultWithUI(result, domain);
+}
+
+function renderResult(r) {
+  const el = document.getElementById("evalResult");
+  const s = r.boundary_state;
+  const tti = r.time_to_irreversibility;
+
+  let traceRows = r.rule_trace.map(rt => {
+    const cls = rt.passed===false&&!rt.skipped?"fail":rt.unknown?"unknown":"";
+    const pill = rt.skipped ? `<span class="pill pill-skip">SKIP</span>`
+               : rt.unknown ? `<span class="pill pill-unknown">UNKNOWN</span>`
+               : rt.passed  ? `<span class="pill pill-pass">PASS</span>`
+                             : `<span class="pill pill-fail">FAIL</span>`;
+    const w = rt.weight==="critical"?`<span class="pill pill-crit">CRIT</span>`
+            : rt.weight==="major"   ?`<span class="pill pill-major">MAJ</span>`
+            :                        `<span class="pill pill-minor">MIN</span>`;
+    return `<tr class="${cls}"><td>${rt.rule_id||""}</td><td>${rt.description||rt.name||""}</td><td>${w}</td><td>${pill}</td><td style="color:var(--text3)">${rt.reason||""}</td></tr>`;
+  }).join("");
+
+  el.innerHTML = `
+    <div class="status-display ${s}">
+      <div class="status-icon">${STATE_ICONS[s]||"?"}</div>
+      <div class="status-info">
+        <div class="status-label ${s}">${s.replace(/_/g," ")}</div>
+        <div class="status-meta">${r.domain} · ${r.label} · ${new Date(r.timestamp).toLocaleTimeString()}${r.offline?" · OFFLINE ENGINE":""}</div>
+      </div>
+      ${tti ? `<div class="status-tti"><div class="tti-label">Time Remaining</div><div class="tti-value" style="color:${tti.margin_warning?'var(--non)':'var(--text)'}">${tti.hours_remaining}h</div></div>` : ""}
+    </div>
+    <table class="trace-table">
+      <thead><tr><th>Rule</th><th>Description</th><th>Weight</th><th>Result</th><th>Reason</th></tr></thead>
+      <tbody>${traceRows}</tbody>
+    </table>`;
+}
+
+function updateRightPanel(r) {
+  const s = r.boundary_state;
+  document.getElementById("rpLastState").innerHTML =
+    `<div class="status-label ${s}" style="font-size:16px;margin-bottom:6px;">${s.replace(/_/g," ")}</div>`
+    + `<div style="color:var(--text3);font-size:11px;">${r.domain} · ${new Date(r.timestamp).toLocaleTimeString()}</div>`;
+
+  const failed = r.failed_conditions || [];
+  const unknown = r.unknown_fields || [];
+  let expHtml = failed.map(f =>
+    `<div class="explanation-block fail"><div class="exp-rule">${f.rule_id} — ${f.weight?.toUpperCase()}</div><div class="exp-reason">${f.reason}</div></div>`
+  ).join("");
+  expHtml += unknown.map(f =>
+    `<div class="explanation-block warn"><div class="exp-rule">${f.rule_id} — UNKNOWN</div><div class="exp-reason">${f.reason}</div></div>`
+  ).join("");
+  if (!expHtml) expHtml = `<div style="font-size:12px;color:var(--cont);">All evaluated conditions passed.</div>`;
+  document.getElementById("rpExplanation").innerHTML = expHtml;
+
+  const actions = STATE_ACTIONS[s] || [];
+  document.getElementById("rpActions").innerHTML = actions.map(a =>
+    `<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+      <span style="color:var(--accent);font-size:12px;margin-top:1px;">→</span>
+      <span style="font-size:12px;">${a}</span>
+    </div>`
+  ).join("");
+}
+
+// ─────────────────────────────────────────────
+// LOCAL STORAGE (offline persistence)
+// ─────────────────────────────────────────────
+function storeLocal(result) {
+  try {
+    const existing = JSON.parse(sessionStorage.getItem("boundary_decisions")||"[]");
+    existing.unshift(result);
+    sessionStorage.setItem("boundary_decisions", JSON.stringify(existing.slice(0,200)));
+  } catch {}
+}
+
+function getLocalDecisions() {
+  try { return JSON.parse(sessionStorage.getItem("boundary_decisions")||"[]"); } catch { return []; }
+}
+
+// ─────────────────────────────────────────────
+// TEMPLATES
+// ─────────────────────────────────────────────
+async function loadTemplates() {
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/templates`);
+      const data = await res.json();
+      templates = data.templates;
+    } catch { templates = getOfflineTemplates(); }
+  } else {
+    templates = getOfflineTemplates();
+  }
+  renderTemplateCards();
+  populateSimpleTemplates();
+}
+
+function getOfflineTemplates() {
+  return [
+    {id:"benzo-withdrawal",label:"Benzodiazepine withdrawal continuity",domain:"pharmacological",state:{supply_days_remaining:0,prescriber_reachable:false,abrupt_stop_risk:true,dispensing_accessible:false,taper_required:true,taper_plan_exists:false,interaction_flag:false,human_authority_reachable:false,time_remaining_seconds:14400,fallback_path_available:false}},
+    {id:"hospital-transport",label:"Missed hospital transport — critical appointment",domain:"healthcare",state:{critical_appointment_missed:true,transport_available:false,caregiver_available:false,human_authority_reachable:true,time_remaining_seconds:7200,fallback_path_available:false}},
+    {id:"bank-lockout",label:"Bank account locked — essential payment blocked",domain:"finance",state:{bank_locked:true,essential_payment_blocked:true,income_interrupted:true,human_authority_reachable:true,time_remaining_seconds:86400,fallback_path_available:false}},
+    {id:"identity-loss",label:"Identity documents lost",domain:"identity",state:{id_document_available:false,access_recovery_available:false,payroll_identity_intact:false,human_authority_reachable:true,time_remaining_seconds:172800,fallback_path_available:true}},
+    {id:"oxygen-interruption",label:"Oxygen-dependent patient — supply interrupted",domain:"healthcare",state:{oxygen_dependent:true,oxygen_interrupted:true,caregiver_available:false,transport_available:false,human_authority_reachable:false,time_remaining_seconds:1800,fallback_path_available:false}},
+    {id:"eviction-imminent",label:"Imminent eviction — shelter at risk",domain:"housing",state:{eviction_imminent:true,utilities_disconnected:true,habitability_failure:false,human_authority_reachable:true,time_remaining_seconds:43200,fallback_path_available:false}},
+    {id:"disaster-evacuation",label:"Disaster — evacuation window closing",domain:"disaster",state:{evacuation_window_closed:false,shelter_assigned:false,comms_collapsed:true,human_authority_reachable:true,time_remaining_seconds:3600,fallback_path_available:true}},
+  ];
+}
+
+function renderTemplateCards() {
+  const container = document.getElementById("templateCards");
+  if (!container) return;
+  container.innerHTML = templates.map(t => `
+    <div class="card" onclick="loadTemplate('${t.id}')">
+      <div class="card-domain">${t.domain}</div>
+      <div class="card-title">${t.label}</div>
+      <div class="card-desc">Click to load into evaluator</div>
+    </div>
+  `).join("");
+}
+
+function populateSimpleTemplates() {
+  const sel = document.getElementById("simpleTemplate");
+  if (!sel) return;
+  templates.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t.id;
+    opt.textContent = t.label;
+    sel.appendChild(opt);
+  });
+}
+
+function loadTemplate(id) {
+  const t = templates.find(x=>x.id===id);
+  if (!t) return;
+  document.getElementById("evalDomain").value = t.domain;
+  document.getElementById("evalLabel").value = t.label;
+  loadDomainFields();
+  // Set values
+  setTimeout(() => {
+    for (const [k,v] of Object.entries(t.state)) {
+      if (k==="time_remaining_seconds") { document.getElementById("evalTime").value = v; continue; }
+      const el = document.querySelector(`[data-key="${k}"]`);
+      if (el) el.value = String(v);
+    }
+  }, 50);
+  showPanel("evaluate");
+}
+
+// ─────────────────────────────────────────────
+// SIMPLE MODE
+// ─────────────────────────────────────────────
+function loadSimpleTemplate() {
+  // Just highlight selection, run on button press
+}
+
+async function runSimpleCheck() {
+  const id = document.getElementById("simpleTemplate").value;
+  if (!id) { alert("Please select a situation type."); return; }
+  const t = templates.find(x=>x.id===id);
+  if (!t) return;
+  const result = isOnline
+    ? await fetch(`${API_BASE}/api/evaluate`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(t)}).then(r=>r.json()).catch(()=>offlineEvaluate(t))
+    : offlineEvaluate(t);
+  lastResult = result;
+  await forwardBoundaryResultWithUI(result, t.domain);
+  const s = result.boundary_state;
+  document.getElementById("bigStatus").className = `big-status ${s}`;
+  document.getElementById("bigStatusLabel").className = `big-status-label ${s}`;
+  document.getElementById("bigStatusLabel").textContent = s.replace(/_/g," ");
+  document.getElementById("bigStatusExplain").textContent = STATE_EXPLAIN[s];
+  const failed = result.failed_conditions||[];
+  document.getElementById("simpleFailList").innerHTML = failed.map(f=>
+    `<div style="background:var(--surface2);border-left:3px solid var(--non);padding:10px 14px;border-radius:4px;margin-bottom:8px;font-size:12px;color:var(--text2);">${f.reason}</div>`
+  ).join("");
+  document.getElementById("simpleResult").style.display = "block";
+}
+
+function clearSimple() {
+  document.getElementById("simpleTemplate").value = "";
+  document.getElementById("simpleResult").style.display = "none";
+}
+
+// ─────────────────────────────────────────────
+// BATCH
+// ─────────────────────────────────────────────
+async function runBatch() {
+  let cases;
+  try { cases = JSON.parse(document.getElementById("batchJson").value); } catch { alert("Invalid JSON."); return; }
+  const results = isOnline
+    ? await fetch(`${API_BASE}/api/evaluate/batch`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({cases})}).then(r=>r.json()).then(d=>d.results).catch(()=>cases.map(c=>offlineEvaluate(c)))
+    : cases.map(c=>offlineEvaluate(c));
+  const html = results.map(r=>`
+    <div class="log-entry">
+      <div class="log-state-dot ${r.boundary_state}"></div>
+      <div class="log-domain">${r.domain}</div>
+      <div class="log-label">${r.label}</div>
+      <div class="log-state" style="color:${r.boundary_state==='CONTINUE'?'var(--cont)':r.boundary_state==='DEGRADED'?'var(--deg)':r.boundary_state==='NON-ADMISSIBLE'?'var(--non)':'var(--esc)'}">${r.boundary_state}</div>
+    </div>`).join("");
+  document.getElementById("batchResult").innerHTML = html || `<div class="empty-state">No results.</div>`;
+}
+
+// ─────────────────────────────────────────────
+// DASHBOARD / DECISIONS
+// ─────────────────────────────────────────────
+async function loadDashboard() {
+  let decisions = [];
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/observability`);
+      const data = await res.json();
+      const by = data.recent_by_state||{};
+      document.getElementById("d-safe").textContent = by.SAFE||0;
+      document.getElementById("d-deg").textContent  = by.DEGRADED||0;
+      document.getElementById("d-non").textContent  = by.NON-ADMISSIBLE||0;
+      document.getElementById("d-esc").textContent  = by.NON-EXECUTABLE||0;
+      decisions = data.recent_decisions||[];
+    } catch { decisions = getLocalDecisions(); }
+  } else {
+    decisions = getLocalDecisions();
+    const by = {};
+    decisions.forEach(d=>{ by[d.boundary_state]=(by[d.boundary_state]||0)+1; });
+    document.getElementById("d-safe").textContent = by.SAFE||0;
+    document.getElementById("d-deg").textContent  = by.DEGRADED||0;
+    document.getElementById("d-non").textContent  = by.NON-ADMISSIBLE||0;
+    document.getElementById("d-esc").textContent  = by.NON-EXECUTABLE||0;
+  }
+  document.getElementById("dashDecisions").innerHTML = renderDecisionList(decisions);
+}
+
+async function loadDecisions() {
+  const domain = document.getElementById("filterDomain").value;
+  const state  = document.getElementById("filterState").value;
+  let decisions = [];
+  if (isOnline) {
+    try {
+      const params = new URLSearchParams();
+      if (domain) params.set("domain",domain);
+      if (state) params.set("state",state);
+      const res = await fetch(`${API_BASE}/api/decisions?${params}`);
+      const data = await res.json();
+      decisions = data.decisions||[];
+    } catch { decisions = getLocalDecisions(); }
+  } else {
+    decisions = getLocalDecisions();
+    if (domain) decisions = decisions.filter(d=>d.domain===domain);
+    if (state) decisions = decisions.filter(d=>d.boundary_state===state);
+  }
+  document.getElementById("decisionsList").innerHTML = renderDecisionList(decisions) || `<div class="empty-state">No decisions found.</div>`;
+}
+
+function renderDecisionList(decisions) {
+  if (!decisions.length) return "";
+  return `<div class="log-list">${decisions.map(r=>`
+    <div class="log-entry">
+      <div class="log-state-dot ${r.boundary_state}"></div>
+      <div class="log-domain">${r.domain}</div>
+      <div class="log-label">${r.label}</div>
+      <div class="log-state" style="color:${r.boundary_state==='CONTINUE'?'var(--cont)':r.boundary_state==='DEGRADED'?'var(--deg)':r.boundary_state==='NON-ADMISSIBLE'?'var(--non)':'var(--esc)'}">${r.boundary_state}</div>
+      <div class="log-time">${new Date(r.timestamp).toLocaleString()}</div>
+    </div>`).join("")}</div>`;
+}
+
+async function loadResidue() {
+  let residue = [];
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/residue`);
+      residue = (await res.json()).residue||[];
+    } catch {}
+  }
+  const el = document.getElementById("residueList");
+  if (!residue.length) { el.innerHTML = `<div class="empty-state">No unresolved residue.</div>`; return; }
+  el.innerHTML = `<div class="log-list">${residue.map(r=>`
+    <div class="log-entry">
+      <div class="log-state-dot NON-ADMISSIBLE"></div>
+      <div class="log-domain">${r.residue_type||""}</div>
+      <div class="log-label">${r.description}</div>
+      <div class="log-time">${new Date(r.logged_at).toLocaleString()}</div>
+    </div>`).join("")}</div>`;
+}
+
+// ─────────────────────────────────────────────
+// AUTO RE-GATE
+// ─────────────────────────────────────────────
+async function startAuto() {
+  const domain   = document.getElementById("autoDomain").value;
+  const interval = Number(document.getElementById("autoInterval").value)||30;
+  const label    = document.getElementById("autoLabel").value||"Auto case";
+  let state = {};
+  try { state = JSON.parse(document.getElementById("autoState").value||"{}"); } catch {}
+  if (!domain) { alert("Select a domain."); return; }
+
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/auto/start`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({case:{domain,label,state},interval_seconds:interval})});
+      const data = await res.json();
+      activeGates.push(data.gate_id);
+    } catch {}
+  } else {
+    activeGates.push(`offline-${Date.now()}`);
+  }
+  document.getElementById("autoStatus").textContent = `Active gates: ${activeGates.length} — IDs: ${activeGates.join(", ")}`;
+}
+
+async function stopAuto() {
+  if (isOnline) {
+    for (const id of activeGates) {
+      try { await fetch(`${API_BASE}/api/auto/stop?gate_id=${id}`,{method:"POST"}); } catch {}
+    }
+  }
+  activeGates = [];
+  document.getElementById("autoStatus").textContent = "All gates stopped.";
+}
+
+// ─────────────────────────────────────────────
+// INCIDENTS
+// ─────────────────────────────────────────────
+async function searchIncidents() {
+  const text = document.getElementById("incidentSearch").value;
+  let incidents = [];
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/incidents?text=${encodeURIComponent(text)}`);
+      incidents = (await res.json()).incidents||[];
+    } catch {}
+  }
+  const el = document.getElementById("incidentList");
+  if (!incidents.length) { el.innerHTML = `<div class="empty-state">No incidents found.</div>`; return; }
+  el.innerHTML = `<div class="log-list">${incidents.map(r=>`
+    <div class="log-entry">
+      <div class="log-state-dot ${r.boundary_state}"></div>
+      <div class="log-domain">${r.domain}</div>
+      <div class="log-label">${r.label}</div>
+      <div class="log-state" style="color:var(--text2);font-size:10px;">${r.notes||""}</div>
+      <div class="log-time">${new Date(r.saved_at||r.timestamp).toLocaleString()}</div>
+    </div>`).join("")}</div>`;
+}
+
+async function saveLastIncident() {
+  if (!lastResult) { alert("No evaluation to save."); return; }
+  const notes = prompt("Notes for this incident (optional):")||"";
+  if (isOnline) {
+    try {
+      await fetch(`${API_BASE}/api/incidents/save`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({evaluation_result:lastResult,notes})});
+      alert("Saved to incident library.");
+    } catch { alert("Saved locally (offline mode)."); }
+  } else {
+    alert("Saved locally (offline mode).");
+  }
+}
+
+async function triggerEscalation() {
+  if (!lastResult) { alert("No evaluation to escalate."); return; }
+  const reason = prompt("Reason for escalation:")||"Manual escalation";
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/escalation/trigger`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({case_id:lastResult.case_id,domain:lastResult.domain,reason,operator_id:"operator"})});
+      const data = await res.json();
+      alert(`Escalation logged.\nID: ${data.escalation_id}\n\nA responsible human authority must be reached.`);
+    } catch { alert("ESCALATION REQUIRED\n\nBackend unavailable. Log this escalation manually.\nCase: "+lastResult.label); }
+  } else {
+    alert("ESCALATION REQUIRED\n\nOffline mode. Log this escalation manually.\nCase: "+lastResult.label+"\nState: "+lastResult.boundary_state);
+  }
+}
+
+// ─────────────────────────────────────────────
+// AUDIT
+// ─────────────────────────────────────────────
+async function exportAudit() {
+  let data;
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/audit/export`);
+      data = await res.json();
+    } catch { data = {source:"offline",decisions:getLocalDecisions(),generated_at:new Date().toISOString()}; }
+  } else {
+    data = {source:"offline",decisions:getLocalDecisions(),generated_at:new Date().toISOString()};
+  }
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `boundary-audit-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function refreshAll() {
+  loadDashboard();
+  loadDecisions();
+  loadResidue();
+  searchIncidents();
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+  const panel = document.getElementById(`panel-${name}`);
+  if (panel) panel.classList.add("active");
+  const navItems = document.querySelectorAll(".nav-item");
+  navItems.forEach(n=>{ if(n.getAttribute("onclick")?.includes(`'${name}'`)) n.classList.add("active"); });
+
+  if (name==="dashboard") loadDashboard();
+  if (name==="decisions") loadDecisions();
+  if (name==="residue") loadResidue();
+  if (name==="incidents") searchIncidents();
+}
+
+function setMode(mode) {
+  if (mode==="simple") {
+    document.body.classList.add("simple");
+    document.getElementById("btnSimple").classList.add("active");
+    document.getElementById("btnExpert").classList.remove("active");
+  } else {
+    document.body.classList.remove("simple");
+    document.getElementById("btnExpert").classList.add("active");
+    document.getElementById("btnSimple").classList.remove("active");
+  }
+}
+
+function clearEval() {
+  document.getElementById("evalDomain").value="";
+  document.getElementById("evalLabel").value="";
+  document.getElementById("evalTime").value="";
+  document.getElementById("domainFields").innerHTML="";
+  document.getElementById("evalResult").innerHTML="";
+}
+
+// ─────────────────────────────────────────────
+// FEATURE 1: Person Monitor
+// ─────────────────────────────────────────────
+async function runPersonMonitor() {
+  const subjectId = document.getElementById("monSubjectId").value || crypto.randomUUID();
+  const label = document.getElementById("monLabel").value || subjectId;
+  let domains = {};
+  try { domains = JSON.parse(document.getElementById("monDomains").value || "{}"); }
+  catch { alert("Invalid JSON in domains field."); return; }
+
+  const req = { subject_id: subjectId, label, domains };
+  let result;
+  if (isOnline) {
+    try {
+      result = await fetch(`${API_BASE}/api/monitor/subject`, {
+        method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(req)
+      }).then(r=>r.json());
+    } catch { result = offlineMultiDomain(req); }
+  } else {
+    result = offlineMultiDomain(req);
+  }
+
+  const el = document.getElementById("monitorResult");
+  const s = result.combined_state;
+  const stateColor = s==="CONTINUE"?"var(--cont)":s==="DEGRADED"?"var(--deg)":s==="NON-ADMISSIBLE"?"var(--non)":"var(--esc)";
+
+  let domainRows = Object.entries(result.domain_states||{}).map(([d,ds])=>{
+    const col = ds==="CONTINUE"?"var(--cont)":ds==="DEGRADED"?"var(--deg)":ds==="NON-ADMISSIBLE"?"var(--non)":"var(--esc)";
+    return `<div class="log-entry"><div class="log-state-dot ${ds}"></div><div class="log-domain">${d}</div><div style="flex:1;"></div><div style="font-family:var(--mono);font-size:11px;color:${col};font-weight:600;">${ds}</div></div>`;
+  }).join("");
+
+  const cascade = result.cascading_risk||[];
+  const cascadeHtml = cascade.length ? `<div style="margin-top:12px;padding:12px;background:var(--non-bg);border:1px solid var(--non);border-radius:4px;font-size:12px;">
+    <div style="color:var(--non);font-family:var(--mono);font-size:10px;margin-bottom:8px;">CASCADING RISK DETECTED</div>
+    ${cascade.map(c=>`<div style="color:var(--text2);margin-bottom:4px;">${c.failing_domain} → ${c.at_risk_domains.join(", ")}</div>`).join("")}
+  </div>` : "";
+
+  const compoundHtml = result.compound_non_admissible ? `<div style="margin-top:12px;padding:12px;background:var(--esc-bg);border:1px solid var(--esc);border-radius:4px;font-size:12px;color:var(--esc);">
+    ⚡ COMPOUND NON-ADMISSIBLE: No single domain triggered an alert, but the combined picture across ${result.degraded_domains?.length} domains is non-admissible.
+  </div>` : "";
+
+  el.innerHTML = `
+    <div class="status-display ${s}">
+      <div class="status-icon">${STATE_ICONS[s]||"?"}</div>
+      <div class="status-info">
+        <div class="status-label ${s}">${s}</div>
+        <div class="status-meta">${label} · ${Object.keys(domains).length} domains evaluated · ${new Date().toLocaleTimeString()}</div>
+      </div>
+    </div>
+    ${compoundHtml}
+    ${cascadeHtml}
+    <div style="margin-top:16px;font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Domain breakdown</div>
+    <div class="log-list">${domainRows}</div>`;
+}
+
+function offlineMultiDomain(req) {
+  const results = {};
+  const states = {};
+  for (const [domain, state] of Object.entries(req.domains)) {
+    const r = offlineEvaluate({domain, label:`${req.label} — ${domain}`, state});
+    results[domain] = r;
+    states[domain] = r.boundary_state;
+  }
+  const rank = {"NON-EXECUTABLE":0,"NON-ADMISSIBLE":1,"DEGRADED":2,"CONTINUE":3};
+  const sorted = Object.entries(states).sort((a,b)=>rank[a[1]]-rank[b[1]]);
+  const combined_state = sorted[0]?.[1] || "CONTINUE";
+  const non_admissible_domains = Object.entries(states).filter(([,s])=>s==="NON-ADMISSIBLE"||s==="NON-EXECUTABLE").map(([d])=>d);
+  const degraded_domains = Object.entries(states).filter(([,s])=>s==="DEGRADED").map(([d])=>d);
+  return {
+    subject_id: req.subject_id, label: req.label, timestamp: new Date().toISOString(),
+    combined_state, domain_states: states, domain_results: results,
+    non_admissible_domains, degraded_domains,
+    compound_non_admissible: combined_state==="DEGRADED" && degraded_domains.length >= 3,
+    cascading_risk: [], alert: combined_state!=="CONTINUE", offline: true,
+  };
+}
+
+// ─────────────────────────────────────────────
+// FEATURE 2: Population View
+// ─────────────────────────────────────────────
+async function runPopulationView() {
+  const label = document.getElementById("popLabel").value || "Cohort";
+  const context = document.getElementById("popContext").value || "";
+  let subjects = [];
+  try { subjects = JSON.parse(document.getElementById("popSubjects").value || "[]"); }
+  catch { alert("Invalid JSON."); return; }
+
+  const req = { label, context, subjects };
+  let result;
+  if (isOnline) {
+    try {
+      result = await fetch(`${API_BASE}/api/cohort/evaluate`, {
+        method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(req)
+      }).then(r=>r.json());
+    } catch { result = offlinePopulation(req); }
+  } else {
+    result = offlinePopulation(req);
+  }
+
+  const el = document.getElementById("populationResult");
+  const s = result.population_state;
+  const counts = [
+    {label:"NON-EXECUTABLE", val:result.non_executable_count||0, color:"var(--esc)"},
+    {label:"NON-ADMISSIBLE", val:result.non_admissible_count||0, color:"var(--non)"},
+    {label:"DEGRADED", val:result.degraded_count||0, color:"var(--deg)"},
+    {label:"CONTINUE", val:result.continue_count||0, color:"var(--cont)"},
+  ];
+
+  const clustered = result.clustered_domains || {};
+  const clusterHtml = Object.keys(clustered).length ? `
+    <div style="margin-top:16px;padding:12px;background:var(--non-bg);border:1px solid var(--non);border-radius:4px;">
+      <div style="color:var(--non);font-family:var(--mono);font-size:10px;margin-bottom:8px;">SYSTEMIC DOMAIN FAILURE DETECTED</div>
+      ${Object.entries(clustered).map(([d,c])=>`<div style="font-size:12px;color:var(--text2);">${d}: ${c} subjects failing — possible systemic cause</div>`).join("")}
+    </div>` : "";
+
+  el.innerHTML = `
+    <div class="status-display ${s}">
+      <div class="status-icon">${STATE_ICONS[s]||"?"}</div>
+      <div class="status-info">
+        <div class="status-label ${s}">${s}</div>
+        <div class="status-meta">${result.total_subjects||0} subjects · ${label}${context?" · "+context:""}</div>
+      </div>
+    </div>
+    <div class="dash-grid" style="margin-top:16px;">
+      ${counts.map(c=>`<div class="dash-card"><div class="dash-num" style="color:${c.color}">${c.val}</div><div class="dash-lbl">${c.label}</div></div>`).join("")}
+    </div>
+    ${clusterHtml}
+    ${result.flagged_count>0 ? `<div style="margin-top:12px;font-size:12px;color:var(--text2);">${result.flagged_count} subject(s) flagged for immediate attention.</div>` : ""}`;
+}
+
+function offlinePopulation(req) {
+  const results = req.subjects.map(s => offlineMultiDomain({subject_id:s.subject_id,label:s.label,domains:s.domains}));
+  const rank = {"NON-EXECUTABLE":0,"NON-ADMISSIBLE":1,"DEGRADED":2,"CONTINUE":3};
+  const counts = {CONTINUE:0,DEGRADED:0,"NON-ADMISSIBLE":0,"NON-EXECUTABLE":0};
+  results.forEach(r=>{ counts[r.combined_state]=(counts[r.combined_state]||0)+1; });
+  const population_state = results.length ? results.reduce((best,r)=>rank[r.combined_state]<rank[best.combined_state]?r:best).combined_state : "CONTINUE";
+  return { population_state, total_subjects:results.length, ...counts, flagged_count:results.filter(r=>r.alert).length, clustered_domains:{}, offline:true };
+}
+
+// ─────────────────────────────────────────────
+// FEATURE 3: PNR Clocks
+// ─────────────────────────────────────────────
+async function registerClock() {
+  const req = {
+    case_id: document.getElementById("clockCaseId").value || crypto.randomUUID(),
+    label: document.getElementById("clockLabel").value || "Clock",
+    domain: document.getElementById("clockDomain").value,
+    seconds_to_irreversibility: Number(document.getElementById("clockSeconds").value)||null,
+    detection_window_seconds: Number(document.getElementById("clockDetect").value)||null,
+    response_window_seconds: Number(document.getElementById("clockResponse").value)||null,
+  };
+  if (isOnline) {
+    try {
+      await fetch(`${API_BASE}/api/clock/register`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)});
+    } catch {}
+  }
+  // Store locally too
+  const clocks = JSON.parse(sessionStorage.getItem("boundary_clocks")||"[]");
+  clocks.unshift({...req, registered_at: new Date().toISOString()});
+  sessionStorage.setItem("boundary_clocks", JSON.stringify(clocks.slice(0,50)));
+  loadClocks();
+}
+
+async function loadClocks() {
+  let clocks = [];
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/clock/all`);
+      const data = await res.json();
+      clocks = data.clocks || [];
+    } catch {}
+  }
+  if (!clocks.length) {
+    clocks = JSON.parse(sessionStorage.getItem("boundary_clocks")||"[]").map(c => {
+      const s = c.seconds_to_irreversibility;
+      const h = s ? (s/3600).toFixed(1) : null;
+      let threshold = s===null?"UNKNOWN":s<=0?"CROSSED":s<3600?"critical":s<14400?"warning":s<86400?"degraded":"safe";
+      return {...c, display: s ? `${h}h remaining` : "UNKNOWN", threshold, hours_remaining: h};
+    });
+  }
+  const el = document.getElementById("clockList");
+  if (!clocks.length) { el.innerHTML = `<div class="empty-state">No clocks registered.</div>`; return; }
+
+  const thresholdColor = {critical:"var(--non)",warning:"var(--deg)",degraded:"var(--deg)",safe:"var(--cont)",CROSSED:"var(--esc)",UNKNOWN:"var(--text3)"};
+  el.innerHTML = `<div class="log-list">${clocks.map(c=>`
+    <div class="log-entry">
+      <div class="log-domain">${c.domain||""}</div>
+      <div class="log-label">${c.label||c.case_id}</div>
+      <div style="font-family:var(--mono);font-size:12px;font-weight:600;color:${thresholdColor[c.threshold]||"var(--text)"};">${c.display||""}</div>
+      <div style="font-family:var(--mono);font-size:10px;color:${thresholdColor[c.threshold]||"var(--text3)"};">${(c.threshold||"").toUpperCase()}</div>
+    </div>`).join("")}</div>`;
+}
+
+// ─────────────────────────────────────────────
+// FEATURE 4: Accountability Records
+// ─────────────────────────────────────────────
+async function createAccountabilityRecord() {
+  const req = {
+    case_id: document.getElementById("accCaseId").value,
+    domain: document.getElementById("accDomain").value,
+    boundary_state: document.getElementById("accState").value,
+    operator_id: document.getElementById("accOperatorId").value,
+    operator_role: document.getElementById("accRole").value,
+    reason: document.getElementById("accReason").value,
+    acknowledged_risk: document.getElementById("accRisk").value,
+    authorising_authority: document.getElementById("accAuthority").value,
+    evaluation_result: lastResult || {},
+  };
+
+  const missing = [];
+  if (!req.case_id) missing.push("Case ID");
+  if (!req.operator_id) missing.push("Operator ID");
+  if (!req.operator_role) missing.push("Operator Role");
+  if (!req.reason) missing.push("Reason");
+  if (!req.acknowledged_risk) missing.push("Acknowledged Risk");
+  if (!req.authorising_authority) missing.push("Authorising Authority");
+  if (missing.length) { alert("Missing required fields: " + missing.join(", ")); return; }
+
+  const el = document.getElementById("accountabilityResult");
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/override/formal`, {
+        method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(req)
+      });
+      const data = await res.json();
+      el.innerHTML = `<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;font-family:var(--mono);font-size:11px;">
+        <div style="color:var(--cont);margin-bottom:8px;">✓ ACCOUNTABILITY RECORD CREATED</div>
+        <div style="color:var(--text2);">Record ID: ${data.record_id}</div>
+        <div style="color:var(--text2);">Integrity hash: ${data.integrity_hash?.slice(0,24)}…</div>
+        <div style="color:var(--text3);margin-top:8px;">This record is tamper-evident and permanently logged.</div>
+      </div>`;
+    } catch { el.innerHTML = `<div style="color:var(--text2);font-size:12px;">Offline — record logged locally only.</div>`; }
+  } else {
+    el.innerHTML = `<div style="color:var(--text2);font-size:12px;">Offline mode — record logged locally.</div>`;
+  }
+}
+
+async function loadAccountabilityReport() {
+  const el = document.getElementById("accountabilityResult");
+  if (!isOnline) { el.innerHTML = `<div style="color:var(--text3);font-size:12px;">Report requires backend connection.</div>`; return; }
+  try {
+    const res = await fetch(`${API_BASE}/api/override/report`, {method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
+    const data = await res.json();
+    el.innerHTML = `<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;font-family:var(--mono);font-size:11px;">
+      <div style="color:var(--text);margin-bottom:12px;font-size:13px;">ACCOUNTABILITY REPORT</div>
+      <div style="color:var(--text2);">Total overrides: ${data.total_overrides}</div>
+      <div style="color:${data.integrity_warning?"var(--non)":"var(--cont)"};">Tampered records: ${data.tampered_records}</div>
+      ${data.integrity_warning?'<div style="color:var(--non);margin-top:8px;">⚠ INTEGRITY WARNING: Some records may have been altered.</div>':""}
+    </div>`;
+  } catch { el.innerHTML = `<div style="color:var(--text3);font-size:12px;">Could not load report.</div>`; }
+}
+
+// ─────────────────────────────────────────────
+// FEATURE 5: Plain Language Evaluator
+// ─────────────────────────────────────────────
+let plainDomain = null;
+let plainAnswers = {};
+
+function initPlainLanguage() {
+  const container = document.getElementById("plainDomainCards");
+  if (!container) return;
+  const domains = [
+    {id:"pharmacological",label:"Medication / prescription problem"},
+    {id:"healthcare",label:"Healthcare / medical appointment"},
+    {id:"finance",label:"Bank / money / payment problem"},
+    {id:"housing",label:"Housing / accommodation problem"},
+    {id:"identity",label:"Identity / documents problem"},
+    {id:"disaster",label:"Emergency / disaster situation"},
+  ];
+  container.innerHTML = domains.map(d=>`
+    <div class="card" onclick="selectPlainDomain('${d.id}','${d.label}')">
+      <div class="card-title">${d.label}</div>
+      <div class="card-desc" style="margin-top:6px;">Tap to continue →</div>
+    </div>`).join("");
+}
+
+const PLAIN_QUESTIONS = {
+  pharmacological:[
+    {id:"q_supply",text:"Do you have enough medication to last the next few days?",yes_no:true,field:"supply_days_remaining",yes_val:7,no_val:0},
+    {id:"q_prescriber",text:"Can you reach your doctor or prescriber right now if needed?",yes_no:true,field:"prescriber_reachable",yes_val:true,no_val:false},
+    {id:"q_stop_risk",text:"Would stopping this medication suddenly be dangerous? (benzodiazepines, opioids, insulin, epilepsy meds, blood thinners)",yes_no:true,field:"abrupt_stop_risk",yes_val:true,no_val:false},
+    {id:"q_pharmacy",text:"Can you physically get to a pharmacy or have medication delivered?",yes_no:true,field:"dispensing_accessible",yes_val:true,no_val:false},
+    {id:"q_human",text:"Is there someone — a doctor, care coordinator, pharmacist, or emergency service — you could contact right now who could actually help?",yes_no:true,field:"human_authority_reachable",yes_val:true,no_val:false},
+    {id:"q_fallback",text:"Is there any alternative path — a different pharmacy, a walk-in clinic, an emergency prescription service?",yes_no:true,field:"fallback_path_available",yes_val:true,no_val:false},
+    {id:"q_time",text:"How many hours before this becomes an emergency if nothing changes?",numeric:true,field:"time_remaining_seconds",mult:3600},
+  ],
+  healthcare:[
+    {id:"q_appt",text:"Have you missed or are you about to miss a critical medical appointment?",yes_no:true,field:"critical_appointment_missed",yes_val:true,no_val:false},
+    {id:"q_transport",text:"Do you have a way to get to the hospital or clinic?",yes_no:true,field:"transport_available",yes_val:true,no_val:false},
+    {id:"q_carer",text:"Is your carer or support person available right now?",yes_no:true,field:"caregiver_available",yes_val:true,no_val:false},
+    {id:"q_human",text:"Can you reach a doctor, nurse, or emergency service right now?",yes_no:true,field:"human_authority_reachable",yes_val:true,no_val:false},
+    {id:"q_fallback",text:"Is there an alternative — a different hospital, a home visit, an emergency helpline?",yes_no:true,field:"fallback_path_available",yes_val:true,no_val:false},
+    {id:"q_time",text:"How many hours before this becomes a serious emergency?",numeric:true,field:"time_remaining_seconds",mult:3600},
+  ],
+  finance:[
+    {id:"q_bank",text:"Is your bank account locked or frozen?",yes_no:true,field:"bank_locked",yes_val:true,no_val:false},
+    {id:"q_payment",text:"Are you unable to pay for something essential — rent, food, utilities, medication?",yes_no:true,field:"essential_payment_blocked",yes_val:true,no_val:false},
+    {id:"q_income",text:"Has your income or benefit payment stopped or been delayed?",yes_no:true,field:"income_interrupted",yes_val:true,no_val:false},
+    {id:"q_human",text:"Can you reach your bank, a financial adviser, or a welfare support service right now?",yes_no:true,field:"human_authority_reachable",yes_val:true,no_val:false},
+    {id:"q_fallback",text:"Is there an alternative — a different account, family help, a crisis fund?",yes_no:true,field:"fallback_path_available",yes_val:true,no_val:false},
+    {id:"q_time",text:"How many hours before you face a serious consequence?",numeric:true,field:"time_remaining_seconds",mult:3600},
+  ],
+  housing:[
+    {id:"q_eviction",text:"Are you facing eviction or being forced to leave your home?",yes_no:true,field:"eviction_imminent",yes_val:true,no_val:false},
+    {id:"q_utilities",text:"Have your utilities (gas, electricity, water) been cut off?",yes_no:true,field:"utilities_disconnected",yes_val:true,no_val:false},
+    {id:"q_habitable",text:"Is your home currently unsafe or uninhabitable?",yes_no:true,field:"habitability_failure",yes_val:true,no_val:false},
+    {id:"q_human",text:"Can you reach a housing officer, council, or emergency housing service right now?",yes_no:true,field:"human_authority_reachable",yes_val:true,no_val:false},
+    {id:"q_fallback",text:"Is there anywhere else you could go — family, a shelter, emergency accommodation?",yes_no:true,field:"fallback_path_available",yes_val:true,no_val:false},
+    {id:"q_time",text:"How many hours before you have to leave or this becomes a crisis?",numeric:true,field:"time_remaining_seconds",mult:3600},
+  ],
+  identity:[
+    {id:"q_id",text:"Have you lost your identity documents (passport, driving licence, ID card)?",yes_no:true,field:"id_document_available",yes_val:false,no_val:true},
+    {id:"q_access",text:"Are you locked out of essential accounts or services because of missing ID?",yes_no:true,field:"access_recovery_available",yes_val:false,no_val:true},
+    {id:"q_payroll",text:"Is your ability to receive pay or benefits affected?",yes_no:true,field:"payroll_identity_intact",yes_val:false,no_val:true},
+    {id:"q_human",text:"Can you reach a government office, your employer, or an identity recovery service?",yes_no:true,field:"human_authority_reachable",yes_val:true,no_val:false},
+    {id:"q_fallback",text:"Is there any alternative way to prove your identity for now?",yes_no:true,field:"fallback_path_available",yes_val:true,no_val:false},
+    {id:"q_time",text:"How many hours before this causes a serious problem?",numeric:true,field:"time_remaining_seconds",mult:3600},
+  ],
+  disaster:[
+    {id:"q_window",text:"Is there still time to evacuate or reach safety?",yes_no:true,field:"evacuation_window_closed",yes_val:false,no_val:true},
+    {id:"q_shelter",text:"Have you been assigned to a shelter or safe location?",yes_no:true,field:"shelter_assigned",yes_val:true,no_val:false},
+    {id:"q_comms",text:"Have you lost the ability to communicate with emergency services or family?",yes_no:true,field:"comms_collapsed",yes_val:true,no_val:false},
+    {id:"q_human",text:"Can you reach emergency services or someone who can help right now?",yes_no:true,field:"human_authority_reachable",yes_val:true,no_val:false},
+    {id:"q_fallback",text:"Is there a route or plan that still leads to safety?",yes_no:true,field:"fallback_path_available",yes_val:true,no_val:false},
+    {id:"q_time",text:"How many hours before the situation becomes irreversible?",numeric:true,field:"time_remaining_seconds",mult:3600},
+  ],
+};
+
+function selectPlainDomain(domain, label) {
+  plainDomain = domain;
+  plainAnswers = {};
+  document.getElementById("plainStep1").style.display = "none";
+  document.getElementById("plainStep2").style.display = "block";
+  document.getElementById("plainDomainLabel").textContent = label;
+
+  const qs = PLAIN_QUESTIONS[domain] || [];
+  document.getElementById("plainQuestions").innerHTML = qs.map(q=>`
+    <div style="margin-bottom:20px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;">
+      <div style="font-size:13px;margin-bottom:12px;">${q.text}</div>
+      ${q.yes_no ? `
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost" style="flex:1;" onclick="setPlainAnswer('${q.id}',true,'${q.field}',${JSON.stringify(q.yes_val)},this.parentElement)">YES</button>
+          <button class="btn btn-ghost" style="flex:1;" onclick="setPlainAnswer('${q.id}',false,'${q.field}',${JSON.stringify(q.no_val)},this.parentElement)">NO</button>
+        </div>` : `
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input type="number" id="plain_${q.id}" placeholder="Enter number…" style="flex:1;" onchange="setPlainNumAnswer('${q.id}','${q.field}',${q.mult||1},this.value)"/>
+          <span style="color:var(--text3);font-size:12px;">hours</span>
+        </div>`}
+    </div>`).join("");
+}
+
+function setPlainAnswer(qid, value, field, mappedVal, container) {
+  plainAnswers[qid] = {field, value: mappedVal};
+  container.querySelectorAll("button").forEach(b=>b.style.background="");
+  const btn = value ? container.querySelector("button:first-child") : container.querySelector("button:last-child");
+  if (btn) btn.style.background = "var(--accent)";
+}
+
+function setPlainNumAnswer(qid, field, mult, val) {
+  plainAnswers[qid] = {field, value: Number(val) * mult};
+}
+
+async function runPlainEval() {
+  if (!plainDomain) return;
+  const state = {};
+  for (const ans of Object.values(plainAnswers)) {
+    state[ans.field] = ans.value;
+  }
+  // Derive recoverability conditions
+  const t = state.time_remaining_seconds || 0;
+  state.recovery_path_exists = state.fallback_path_available || false;
+  state.recovery_path_reachable = state.human_authority_reachable || false;
+  state.failure_detectable_in_time = true;
+  state.response_possible_in_time = t > 3600;
+  state.recovery_executable_in_time = t > 7200;
+  state.no_irreversible_transition_before_recovery = t > 0;
+
+  const caseObj = {domain: plainDomain, label: `Plain language — ${plainDomain}`, state};
+  let result;
+  if (isOnline) {
+    try {
+      const res = await fetch(`${API_BASE}/api/plain/evaluate`, {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({domain:plainDomain, answers:plainAnswers, label:`Plain language — ${plainDomain}`})
+      });
+      const data = await res.json();
+      result = data.evaluation;
+    } catch { result = offlineEvaluate(caseObj); }
+  } else {
+    result = offlineEvaluate(caseObj);
+  }
+
+  lastResult = result;
+  document.getElementById("plainStep2").style.display = "none";
+  document.getElementById("plainStep3").style.display = "block";
+
+  const s = result.boundary_state;
+  const PLAIN_EXPLAIN = {
+    "CONTINUE": {h:"Your situation appears manageable right now.", e:"The key conditions for continuing safely appear to be in place. Keep monitoring — contact your support if anything changes.", c:"var(--cont)"},
+    "DEGRADED": {h:"Your situation is weakened. Action needed soon.", e:"One or more important conditions are not fully in place. You are not yet in a crisis, but your safety margin has reduced. Act before it reduces further.", c:"var(--deg)"},
+    "NON-ADMISSIBLE": {h:"Your situation cannot continue as it is.", e:"The conditions needed for a safe outcome are not in place. This must be escalated to someone who can help. Do not continue without support.", c:"var(--non)"},
+    "NON-EXECUTABLE": {h:"This is a crisis. You need help right now.", e:"Your situation cannot continue and time is running out. This is an emergency. Contact emergency services or your crisis support immediately.", c:"var(--esc)"},
+  };
+  const ex = PLAIN_EXPLAIN[s] || PLAIN_EXPLAIN["NON-ADMISSIBLE"];
+  const failed = result.failed_conditions || [];
+
+  document.getElementById("plainResult").innerHTML = `
+    <div class="big-status ${s}">
+      <div class="big-status-label ${s}">${s.replace(/-/g," ")}</div>
+      <div class="big-status-explain" style="font-size:15px;font-weight:500;color:${ex.c};margin-top:8px;">${ex.h}</div>
+      <div class="big-status-explain" style="margin-top:8px;">${ex.e}</div>
+    </div>
+    ${failed.length ? `<div style="margin-top:16px;">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;">WHAT'S WRONG:</div>
+      ${failed.map(f=>`<div style="background:var(--surface);border-left:3px solid var(--non);padding:10px 14px;border-radius:4px;margin-bottom:8px;font-size:12px;color:var(--text2);">${f.reason}</div>`).join("")}
+    </div>` : ""}
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-danger" onclick="triggerEscalation()">TRIGGER ESCALATION</button>
+      <button class="btn btn-ghost" onclick="saveLastIncident()">SAVE THIS CASE</button>
+    </div>`;
+}
+
+function plainBack() {
+  document.getElementById("plainStep1").style.display = "block";
+  document.getElementById("plainStep2").style.display = "none";
+}
+
+function plainReset() {
+  document.getElementById("plainStep1").style.display = "block";
+  document.getElementById("plainStep2").style.display = "none";
+  document.getElementById("plainStep3").style.display = "none";
+  plainDomain = null; plainAnswers = {};
+}
+
+// ─────────────────────────────────────────────
+// FEATURE 6: Research Corpus
+// ─────────────────────────────────────────────
+async function loadCorpusPatterns() {
+  const el = document.getElementById("corpusPatterns");
+  let patterns = {};
+  if (isOnline) {
+    try {
+      patterns = await fetch(`${API_BASE}/api/corpus/patterns`).then(r=>r.json());
+    } catch {}
+  } else {
+    const decisions = getLocalDecisions();
+    // Simple offline pattern summary
+    const byState = {};
+    decisions.forEach(d=>{ byState[d.boundary_state]=(byState[d.boundary_state]||0)+1; });
+    patterns = {total_records_analysed:decisions.length, non_admissible_count:(byState["NON-ADMISSIBLE"]||0)+(byState["NON-EXECUTABLE"]||0), patterns:[], offline:true};
+  }
+
+  el.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px;">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:12px;text-transform:uppercase;">CORPUS ANALYSIS</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div><div style="font-family:var(--mono);font-size:22px;color:var(--text);">${patterns.total_records_analysed||0}</div><div style="font-size:10px;color:var(--text3);">RECORDS ANALYSED</div></div>
+        <div><div style="font-family:var(--mono);font-size:22px;color:var(--non);">${patterns.non_admissible_count||0}</div><div style="font-size:10px;color:var(--text3);">NON-ADMISSIBLE</div></div>
+        <div><div style="font-family:var(--mono);font-size:22px;color:var(--deg);">${patterns.escalation_gap_rate?Math.round(patterns.escalation_gap_rate*100)+"%":"—"}</div><div style="font-size:10px;color:var(--text3);">ESCALATION GAP RATE</div></div>
+        <div><div style="font-family:var(--mono);font-size:22px;color:var(--text);">${patterns.avg_hours_at_non_admissible||"—"}</div><div style="font-size:10px;color:var(--text3);">AVG HRS AT NON-ADMISSIBLE</div></div>
+      </div>
+      ${(patterns.patterns||[]).length ? `
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:8px;">DETECTED PATTERNS</div>
+        ${patterns.patterns.map(p=>`
+          <div style="background:var(--surface2);border-left:3px solid var(--accent);padding:10px 14px;border-radius:4px;margin-bottom:8px;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--accent);">${p.pattern_id} — ${p.type}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:4px;">${p.description}</div>
+          </div>`).join("")}` : `<div style="font-size:12px;color:var(--text3);">No patterns detected yet. More evaluations needed.</div>`}
+    </div>`;
+}
+
+async function exportCorpusJSON() {
+  let data;
+  if (isOnline) {
+    try {
+      data = await fetch(`${API_BASE}/api/corpus/export`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({anonymise:true})}).then(r=>r.json());
+    } catch {}
+  }
+  if (!data) {
+    data = {corpus_id:crypto.randomUUID(),exported_at:new Date().toISOString(),anonymised:true,records:getLocalDecisions(),source:"offline"};
+  }
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `boundary-corpus-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+async function generateRegulatoryPack() {
+  let data;
+  if (isOnline) {
+    try {
+      data = await fetch(`${API_BASE}/api/corpus/regulatory`,{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"}).then(r=>r.json());
+    } catch {}
+  }
+  if (!data) { alert("Regulatory pack requires backend connection."); return; }
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `boundary-regulatory-pack-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+// Boot
+window.addEventListener("load", () => {
+  init();
+  initPlainLanguage();
+  ensureEnforcementPanel();
+  // Populate clock and accountability domain selects
+  const domains = Object.keys(DOMAIN_FIELDS);
+  ["clockDomain","accDomain"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    domains.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d; opt.textContent = d.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+      el.appendChild(opt);
+    });
+  });
+});
+</script>
+</body>
+</html>
