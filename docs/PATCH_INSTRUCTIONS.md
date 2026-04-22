@@ -1,4 +1,4 @@
-# Boundary v4.1 Patch Instructions
+﻿# Boundary v4.1 Patch Instructions
 
 ## What this patch changes
 This patch keeps Boundary as an evaluation and escalation platform.
@@ -7,7 +7,7 @@ It adds an optional forwarding layer to the external enforcement module.
 ## File placement
 Copy these files into the matching folders in your project:
 
-- `app/enforcement_connector.js` -> `app/`
+- `web/app.js` -> `web/` (integrate equivalent connector logic into the current RECOVS UI)
 - `engine/enforcement_client.py` -> `engine/`
 - `api/enforcement_routes_patch.py` -> `api/`
 - `config/enforcement_integration.json` -> `config/`
@@ -15,15 +15,15 @@ Copy these files into the matching folders in your project:
 
 ---
 
-## Option A — UI patch
+## Option A â€” UI patch (current RECOVS surface)
 
-Use this when the final result is produced in `app/index.html`.
+Use this when the final result is produced in `web/index.html`.
 
 ### 1. Load the connector script
-Add near the end of `app/index.html`:
+Add near the end of `web/index.html`:
 
 ```html
-<script src="./enforcement_connector.js"></script>
+<script src="./app.js"></script>
 ```
 
 ### 2. Enable when you want forwarding
@@ -62,7 +62,7 @@ right after your platform computes the final evaluation output.
 
 ---
 
-## Option B — API patch
+## Option B â€” API patch
 
 Use this when the backend route is the main source of evaluation results.
 
@@ -115,3 +115,4 @@ Switch to true only when:
 3. Start the external enforcement module
 4. Enable forwarding
 5. Test with one NON-ADMISSIBLE case
+

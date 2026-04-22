@@ -1,4 +1,4 @@
-# Boundary Platform v4.1 — Recoverability-Constrained Execution System
+﻿# Boundary Platform v4.1 â€” Recoverability-Constrained Execution System
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19674392.svg)](https://doi.org/10.5281/zenodo.19674392)
 
@@ -66,7 +66,7 @@ Execution is admissible only if all six conditions hold:
 
 If any condition fails: `NON-ADMISSIBLE`.
 If the time window has collapsed or human authority is unreachable: `NON-EXECUTABLE`.
-If a field is unknown: treated as unestablished recoverability — `NON-ADMISSIBLE`, not `DEGRADED`.
+If a field is unknown: treated as unestablished recoverability â€” `NON-ADMISSIBLE`, not `DEGRADED`.
 
 ---
 
@@ -100,7 +100,7 @@ bash scripts/install_and_run.sh
 ```
 
 Then open:
-- `app/index.html` — full UI, works offline and online
+- `web/index.html` â€” public RECOVS UI, works offline and online
 
 Backend runs at:
 - `http://127.0.0.1:8787`
@@ -111,37 +111,37 @@ Backend runs at:
 
 ```
 boundary-v4/
-├── engine/
-│   ├── boundary_engine.py          Core evaluation engine
-│   ├── continuity_monitor.py       Cross-institutional continuity monitor
-│   ├── ponr_clock.py               Point-of-no-return clock registry
-│   ├── override_accountability.py  Formal tamper-evident override records
-│   ├── plain_language.py           Plain-language case builder
-│   ├── research_corpus.py          Pattern detection, anonymisation, regulatory export
-│   └── population_view.py          Population-level cohort evaluation
-├── api/
-│   └── server.py                   FastAPI REST server
-├── observability/
-│   └── observability.py            Decision trace, residue, audit, incident library
-├── app/
-│   └── index.html                  Full UI — expert, simple, and offline modes
-├── docs/
-│   ├── BOUNDARY_SPEC.md            Open protocol specification
-│   ├── FEATURES.md                 Six feature modules
-│   ├── API_REFERENCE.md            Complete API reference
-│   ├── DEPLOYMENT.md               Deployment guide
-│   ├── REGULATORY_MAPPINGS.md      Regulatory mapping
-│   ├── PLATFORM_RECORD.md          Citable technical record
-│   └── CHANGELOG.md                Version history
-├── tests/
-│   └── test_engine.py
-├── scenarios/
-│   └── example_cases.json
-├── scripts/
-│   ├── install_and_run.bat
-│   └── install_and_run.sh
-├── logs/                           Auto-created at runtime
-└── requirements.txt
+â”œâ”€â”€ engine/
+â”‚   â”œâ”€â”€ boundary_engine.py          Core evaluation engine
+â”‚   â”œâ”€â”€ continuity_monitor.py       Cross-institutional continuity monitor
+â”‚   â”œâ”€â”€ ponr_clock.py               Point-of-no-return clock registry
+â”‚   â”œâ”€â”€ override_accountability.py  Formal tamper-evident override records
+â”‚   â”œâ”€â”€ plain_language.py           Plain-language case builder
+â”‚   â”œâ”€â”€ research_corpus.py          Pattern detection, anonymisation, regulatory export
+â”‚   â””â”€â”€ population_view.py          Population-level cohort evaluation
+â”œâ”€â”€ api/
+â”‚   â””â”€â”€ server.py                   FastAPI REST server
+â”œâ”€â”€ observability/
+â”‚   â””â”€â”€ observability.py            Decision trace, residue, audit, incident library
+â”œâ”€â”€ app/
+â”‚   â””â”€â”€ index.html                  Full UI â€” expert, simple, and offline modes
+â”œâ”€â”€ docs/
+â”‚   â”œâ”€â”€ BOUNDARY_SPEC.md            Open protocol specification
+â”‚   â”œâ”€â”€ FEATURES.md                 Six feature modules
+â”‚   â”œâ”€â”€ API_REFERENCE.md            Complete API reference
+â”‚   â”œâ”€â”€ DEPLOYMENT.md               Deployment guide
+â”‚   â”œâ”€â”€ REGULATORY_MAPPINGS.md      Regulatory mapping
+â”‚   â”œâ”€â”€ PLATFORM_RECORD.md          Citable technical record
+â”‚   â””â”€â”€ CHANGELOG.md                Version history
+â”œâ”€â”€ tests/
+â”‚   â””â”€â”€ test_engine.py
+â”œâ”€â”€ scenarios/
+â”‚   â””â”€â”€ example_cases.json
+â”œâ”€â”€ scripts/
+â”‚   â”œâ”€â”€ install_and_run.bat
+â”‚   â””â”€â”€ install_and_run.sh
+â”œâ”€â”€ logs/                           Auto-created at runtime
+â””â”€â”€ requirements.txt
 ```
 
 ---
@@ -186,15 +186,15 @@ RC-006  no_irreversible_transition_before_recovery
 ### Layered evaluation
 
 ```
-Layer 1 — Six Recoverability Conditions (RC-001 to RC-006)
-Layer 2 — Execution Gate Conditions (human authority, timing window)
-Layer 3 — Domain-Specific Rules
+Layer 1 â€” Six Recoverability Conditions (RC-001 to RC-006)
+Layer 2 â€” Execution Gate Conditions (human authority, timing window)
+Layer 3 â€” Domain-Specific Rules
 ```
 
-Critical failure at any layer → `NON-ADMISSIBLE`.
-Critical failure + execution gate failure or time < 1 hour → `NON-EXECUTABLE`.
-Major failures only → `DEGRADED`.
-All conditions met → `CONTINUE`.
+Critical failure at any layer â†’ `NON-ADMISSIBLE`.
+Critical failure + execution gate failure or time < 1 hour â†’ `NON-EXECUTABLE`.
+Major failures only â†’ `DEGRADED`.
+All conditions met â†’ `CONTINUE`.
 
 ### Unknown = NON-ADMISSIBLE
 
@@ -202,43 +202,43 @@ An unknown field on a critical rule is unestablished recoverability. Unestablish
 
 ---
 
-## New in v4.1 — Six Feature Modules
+## New in v4.1 â€” Six Feature Modules
 
 ### 1. Cross-Institutional Continuity Monitor
 
 Evaluates a person across all active domains simultaneously. Detects when the combined picture is non-admissible even when no single institution has triggered an alert. Detects compound non-admissibility and cascading domain dependencies.
 
-`engine/continuity_monitor.py` — `POST /api/monitor/subject`
+`engine/continuity_monitor.py` â€” `POST /api/monitor/subject`
 
 ### 2. Point-of-No-Return Clock
 
-A live countdown per case before the next irreversible transition. Four thresholds: monitor → degraded → warning → critical → CROSSED. Shows detection, response, and recovery timing margins separately.
+A live countdown per case before the next irreversible transition. Four thresholds: monitor â†’ degraded â†’ warning â†’ critical â†’ CROSSED. Shows detection, response, and recovery timing margins separately.
 
-`engine/ponr_clock.py` — `GET /api/clock/all`, `POST /api/clock/register`
+`engine/ponr_clock.py` â€” `GET /api/clock/all`, `POST /api/clock/register`
 
 ### 3. Override Accountability Record
 
 A formal, tamper-evident record of every override. SHA-256 integrity hash. All attribution fields mandatory. Suitable for regulatory review and legal proceedings. A record without full attribution is itself a boundary violation.
 
-`engine/override_accountability.py` — `POST /api/override/formal`
+`engine/override_accountability.py` â€” `POST /api/override/formal`
 
 ### 4. Plain-Language Case Builder
 
 Step-by-step question flow in ordinary words. Translates answers into a formal recoverability evaluation. Returns results in plain language. Same engine, same states, same rule trace as expert evaluation.
 
-`engine/plain_language.py` — `POST /api/plain/evaluate`
+`engine/plain_language.py` â€” `POST /api/plain/evaluate`
 
 ### 5. Research Corpus
 
-The incident library as a structured dataset. Anonymisation pipeline. Pattern detection — failure conditions, escalation gap rate, domain clustering, timing. Export: JSON, CSV, regulatory packs.
+The incident library as a structured dataset. Anonymisation pipeline. Pattern detection â€” failure conditions, escalation gap rate, domain clustering, timing. Export: JSON, CSV, regulatory packs.
 
-`engine/research_corpus.py` — `GET /api/corpus/patterns`, `POST /api/corpus/regulatory`
+`engine/research_corpus.py` â€” `GET /api/corpus/patterns`, `POST /api/corpus/regulatory`
 
 ### 6. Population-Level Continuity View
 
 Evaluates a cohort simultaneously. Aggregate counts, domain clustering (3+ subjects failing the same domain = systemic signal), cascade risk, snapshot trend comparison: WORSENING / IMPROVING / STABLE.
 
-`engine/population_view.py` — `POST /api/cohort/evaluate`
+`engine/population_view.py` â€” `POST /api/cohort/evaluate`
 
 ---
 
@@ -307,18 +307,18 @@ Full platform interface. Evaluation with domain field builder, full rule trace, 
 
 ### Simple mode
 
-For non-expert users. Situation type selection → step-by-step plain-language questions → single large result display with plain-language explanation and recommended action.
+For non-expert users. Situation type selection â†’ step-by-step plain-language questions â†’ single large result display with plain-language explanation and recommended action.
 
 ### Offline mode
 
-The full evaluation engine runs in-browser as a JavaScript mirror of the Python engine. No backend required. All four states, all six RC conditions, and all domain rules are available. Offline mode performs evaluation only — it does not execute or trigger external actions. All offline evaluations are stored in session storage for audit.
+The full evaluation engine runs in-browser as a JavaScript mirror of the Python engine. No backend required. All four states, all six RC conditions, and all domain rules are available. Offline mode performs evaluation only â€” it does not execute or trigger external actions. All offline evaluations are stored in session storage for audit.
 
 ---
 
 ## Observability and Audit
 
 Every evaluation produces:
-- Full rule trace — every rule evaluated, its weight, result, and reason
+- Full rule trace â€” every rule evaluated, its weight, result, and reason
 - Time-to-irreversibility estimate with margin warning
 - Residue record for every non-admissible result
 - Override record with integrity hash for every override
@@ -366,3 +366,4 @@ Pharmacological domain:
 ## Important
 
 Boundary evaluates recoverability and produces admissibility states. It does not make or enforce clinical, legal, financial, or operational decisions. All outputs require action by a responsible human authority. This build does not include live credentials and does not execute real-world actions.
+

@@ -1,6 +1,6 @@
-@echo off
+﻿@echo off
 echo ============================================
-echo  Boundary Platform v4.0 — Windows Installer
+echo  RECOVS â€” Windows Installer
 echo ============================================
 
 echo.
@@ -24,12 +24,13 @@ IF %ERRORLEVEL% NEQ 0 (
 echo [3/3] Starting Boundary API server...
 echo.
 echo  Backend:  http://127.0.0.1:8787
-echo  UI:       Open app\index.html in your browser
+echo  UI:       Open web\index.html in your browser
 echo.
 echo  Press Ctrl+C to stop.
 echo.
 
-start "" app\index.html
+start "" web\index.html
 python -m uvicorn api.server:app --host 127.0.0.1 --port 8787 --reload
 
 pause
+

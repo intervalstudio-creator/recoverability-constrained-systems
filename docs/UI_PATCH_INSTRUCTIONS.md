@@ -1,11 +1,11 @@
-# UI Patch Instructions
+﻿# UI Patch Instructions (legacy notes updated for RECOVS)
 
-## 1. Copy files into Boundary app folder
-Copy into your existing `app/` folder:
+## 1. Copy files into the RECOVS web folder
+Copy equivalent UI assets or logic into your existing `web/` folder:
 - `ui_enforcement_upgrade.js`
 - `ui_enforcement_upgrade.css`
 
-## 2. Load CSS and JS in `app/index.html`
+## 2. Load CSS and JS in `web/index.html`
 Add in the `<head>`:
 ```html
 <link rel="stylesheet" href="./ui_enforcement_upgrade.css">
@@ -37,3 +37,4 @@ The UI will now show:
 
 ## 5. Safe default
 Forwarding is still disabled unless you enable it.
+

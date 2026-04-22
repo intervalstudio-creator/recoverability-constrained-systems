@@ -1,10 +1,10 @@
-# Boundary Platform v4.1 — Recoverability-Constrained Execution System (Technical Record and Executable Release)
+﻿# Boundary Platform v4.1 â€” Recoverability-Constrained Execution System (Technical Record and Executable Release)
 
 **Framework:** Recoverability-Constrained Systems
-**Type:** Platform Technical Record — Executable Release
+**Type:** Platform Technical Record â€” Executable Release
 **Version:** 4.1
 **Repository:** https://github.com/intervalstudio-creator/recoverability-constrained-systems
-**Status:** Executable Platform — Technical Record
+**Status:** Executable Platform â€” Technical Record
 
 ---
 
@@ -50,7 +50,7 @@ Evaluated for every case, in every domain, before domain-specific rules:
 
 ## 3. Supported Domains (v4.1)
 
-pharmacological · healthcare · identity · finance · housing · legal · labour · education · infrastructure · disaster · transport · energy · communications · food_water · supply_chain
+pharmacological Â· healthcare Â· identity Â· finance Â· housing Â· legal Â· labour Â· education Â· infrastructure Â· disaster Â· transport Â· energy Â· communications Â· food_water Â· supply_chain
 
 ---
 
@@ -58,22 +58,22 @@ pharmacological · healthcare · identity · finance · housing · legal · labo
 
 ```
 engine/
-├── boundary_engine.py          Core evaluation engine
-├── continuity_monitor.py       Cross-institutional continuity monitor
-├── ponr_clock.py               Point-of-no-return clock registry
-├── override_accountability.py  Formal tamper-evident override records
-├── plain_language.py           Plain-language case builder
-├── research_corpus.py          Pattern detection and regulatory export
-└── population_view.py          Population-level cohort evaluation
+â”œâ”€â”€ boundary_engine.py          Core evaluation engine
+â”œâ”€â”€ continuity_monitor.py       Cross-institutional continuity monitor
+â”œâ”€â”€ ponr_clock.py               Point-of-no-return clock registry
+â”œâ”€â”€ override_accountability.py  Formal tamper-evident override records
+â”œâ”€â”€ plain_language.py           Plain-language case builder
+â”œâ”€â”€ research_corpus.py          Pattern detection and regulatory export
+â””â”€â”€ population_view.py          Population-level cohort evaluation
 
 api/server.py                   FastAPI REST server (35+ endpoints)
-app/index.html                  Full UI — expert, simple, and offline modes
+web/index.html                  Public RECOVS UI â€” records, evaluation, and exports
 observability/observability.py  Decision trace, residue, audit, incident library
 ```
 
 ---
 
-## 5. New in v4.1 — Six Feature Modules
+## 5. New in v4.1 â€” Six Feature Modules
 
 ### 5.1 Cross-Institutional Continuity Monitor
 
@@ -81,7 +81,7 @@ Evaluates a person as a continuity object across all active domains simultaneous
 
 ### 5.2 Point-of-No-Return Clock
 
-Live countdown per case before irreversible transition. Four thresholds: monitor → degraded → warning → critical → CROSSED. Tracks detection, response, and recovery timing margins separately.
+Live countdown per case before irreversible transition. Four thresholds: monitor â†’ degraded â†’ warning â†’ critical â†’ CROSSED. Tracks detection, response, and recovery timing margins separately.
 
 ### 5.3 Override Accountability Record
 
@@ -129,8 +129,8 @@ The full evaluation engine runs in-browser as a JavaScript mirror of the Python 
 
 This platform operationalizes:
 
-- Recoverability-Constrained Execution — Universal Constraint on Autonomous, Human, and Hybrid Systems (Closed Form): https://doi.org/10.5281/zenodo.19670123
-- Recoverability-Constrained Systems — Universal Execution Constraint and Cross-Domain Continuity Architecture (Ultimate Unified Closed Form): https://doi.org/10.5281/zenodo.19671515
+- Recoverability-Constrained Execution â€” Universal Constraint on Autonomous, Human, and Hybrid Systems (Closed Form): https://doi.org/10.5281/zenodo.19670123
+- Recoverability-Constrained Systems â€” Universal Execution Constraint and Cross-Domain Continuity Architecture (Ultimate Unified Closed Form): https://doi.org/10.5281/zenodo.19671515
 - Universal Admissibility Evaluation Standard (UAES): https://doi.org/10.5281/zenodo.19644299
 - Master Deployment Module (MDM-001): https://doi.org/10.5281/zenodo.19655998
 - Master Index: https://doi.org/10.5281/zenodo.19583410
@@ -146,10 +146,11 @@ Pharmacological domain records:
 
 When citing the Boundary platform in academic, regulatory, or institutional contexts, reference this record and the repository:
 
-> Boundary Platform v4.1 — Recoverability-Constrained Execution System. Recoverability-Constrained Systems framework. Repository: https://github.com/intervalstudio-creator/recoverability-constrained-systems. [This Zenodo DOI].
+> Boundary Platform v4.1 â€” Recoverability-Constrained Execution System. Recoverability-Constrained Systems framework. Repository: https://github.com/intervalstudio-creator/recoverability-constrained-systems. [This Zenodo DOI].
 
 ---
 
 ## 10. Important
 
 Boundary evaluates recoverability and produces admissibility states. It does not make or enforce clinical, legal, financial, or operational decisions. All outputs require action by a responsible human authority. This build does not include live credentials and does not execute real-world actions.
+

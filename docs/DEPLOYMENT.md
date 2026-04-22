@@ -1,4 +1,4 @@
-# Boundary Deployment Guide
+﻿# Boundary Deployment Guide
 
 ---
 
@@ -30,13 +30,13 @@ pip install -r requirements.txt
 python -m uvicorn api.server:app --host 127.0.0.1 --port 8787 --reload
 ```
 
-Then open `app/index.html` in your browser.
+Then open `web/index.html` in your browser.
 
 ---
 
 ## Offline mode
 
-`app/index.html` works without any backend. The full evaluation engine runs in the browser as a JavaScript mirror of the Python engine. All four states are available. Results are stored in session storage.
+`web/index.html` works without any backend. The full evaluation engine runs in the browser as a JavaScript mirror of the Python engine. All four states are available. Results are stored in session storage.
 
 The offline banner appears automatically when the backend is unreachable. All UI functions that require the backend (audit export, accountability reports, corpus patterns) indicate their status clearly.
 
@@ -46,9 +46,9 @@ The offline banner appears automatically when the backend is unreachable. All UI
 
 ### NHS / Hospital
 
-Deploy the backend on a local server within the institution's network. Open `app/index.html` from any browser on the same network. No internet connection required once deployed.
+Deploy the backend on a local server within the institution's network. Open `web/index.html` from any browser on the same network. No internet connection required once deployed.
 
-Set the backend URL in `app/index.html`:
+Set the backend URL in `web/index.html`:
 
 ```javascript
 const API_BASE = "http://your-server-ip:8787";
@@ -66,7 +66,7 @@ Use the portable mode: copy the full `boundary-v4/` folder to a USB drive or lap
 
 ### NGO / settlement
 
-Same as field deployment. Multiple operators can use the same backend if connected to the same local network. Each operator opens `app/index.html` in their browser.
+Same as field deployment. Multiple operators can use the same backend if connected to the same local network. Each operator opens `web/index.html` in their browser.
 
 ---
 
@@ -76,11 +76,11 @@ Logs are written to `./logs/` relative to the working directory:
 
 ```
 logs/
-├── decisions.jsonl          All evaluation results
-├── residue.jsonl            Unresolved residue records
-├── incidents.jsonl          Saved incident library entries
-├── overrides.jsonl          Simple override log
-└── override_records/        Formal accountability records (one JSON per record)
+â”œâ”€â”€ decisions.jsonl          All evaluation results
+â”œâ”€â”€ residue.jsonl            Unresolved residue records
+â”œâ”€â”€ incidents.jsonl          Saved incident library entries
+â”œâ”€â”€ overrides.jsonl          Simple override log
+â””â”€â”€ override_records/        Formal accountability records (one JSON per record)
 ```
 
 Logs are append-only JSONL files. They can be backed up, exported, or analysed independently.
@@ -122,4 +122,5 @@ Consider adding authentication appropriate to your deployment context. The platf
 
 ## Upgrading
 
-Replace all files except the `logs/` directory. Logs are backward-compatible — JSONL format does not change between versions.
+Replace all files except the `logs/` directory. Logs are backward-compatible â€” JSONL format does not change between versions.
+
