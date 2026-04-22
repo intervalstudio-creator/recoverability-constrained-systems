@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-pydantic
-sqlalchemy
-python-jose
-requests
-reportlab
-passlib[bcrypt]
