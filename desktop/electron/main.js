@@ -80,18 +80,7 @@ function startBackend() {
 }
 
 async function createWindow() {
-  startBackend();
-
-  try {
-    await waitForBackend("http://127.0.0.1:8787/api/runtime-status");
-  } catch (err) {
-    await dialog.showMessageBox({
-      type: "error",
-      title: "Boundary backend failed",
-      message: "The packaged backend did not start automatically.",
-      detail: String(err)
-    });
-  }
+  // Public release: desktop surface opens without backend startup requirements.
 
   const win = new BrowserWindow({
     width: 1400,

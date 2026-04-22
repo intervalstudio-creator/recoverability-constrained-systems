@@ -1,13 +1,13 @@
-## Misuse and Boundary Condition
+## Use Boundary
 
-This system is valid only when the recoverability constraint is preserved.
+Boundary is a public evaluation layer.
 
-Any implementation that:
+It is not a control, enforcement, or autonomous execution system.
 
-- removes recoverability verification
-- weakens enforcement conditions
-- simulates admissibility without real recoverability
+This public release intentionally excludes sensitive implementation details, including operational orchestration, enforcement logic, timing calibration, integration pathways, and deployment mechanisms.
 
-is non-admissible and invalid.
+Any use that weakens the recoverability condition or converts the framework into a system of unreviewable control, exclusion, or irreversible action is invalid.
 
-This repository intentionally excludes certain implementation details to prevent misuse in contexts where harm cannot be detected, stopped, and reversed in time.
+A system may only act where recoverability can be established in time under real conditions.
+
+If not, continuation is non-admissible.
